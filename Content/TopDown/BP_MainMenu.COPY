@@ -1,0 +1,720 @@
+Begin Object Class=/Script/UMGEditor.WidgetBlueprint Name="BP_MainMenu"
+   Begin Object Class=/Script/UMG.WidgetTree Name="WidgetTree" Archetype=WidgetTree'/Script/UMGEditor.Default__WidgetBlueprint:WidgetTree'
+      Begin Object Class=/Script/UMG.Overlay Name="Overlay_1358"
+         Begin Object Class=/Script/UMG.OverlaySlot Name="OverlaySlot_2"
+         End Object
+         Begin Object Class=/Script/UMG.OverlaySlot Name="OverlaySlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.Image Name="Image_308"
+      End Object
+      Begin Object Class=/Script/UMG.WidgetSwitcher Name="MenuSwitcher"
+         Begin Object Class=/Script/UMG.WidgetSwitcherSlot Name="WidgetSwitcherSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.WidgetSwitcherSlot Name="WidgetSwitcherSlot_2"
+         End Object
+         Begin Object Class=/Script/UMG.WidgetSwitcherSlot Name="WidgetSwitcherSlot_3"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="MainMenu"
+         Begin Object Class=/Script/UMG.SizeBoxSlot Name="SizeBoxSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.CanvasPanel Name="CanvasPanel_0"
+         Begin Object Class=/Script/UMG.CanvasPanelSlot Name="CanvasPanelSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.CanvasPanelSlot Name="CanvasPanelSlot_3"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.Overlay Name="Overlay_2"
+         Begin Object Class=/Script/UMG.OverlaySlot Name="OverlaySlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.VerticalBox Name="VerticalBox_109"
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_29"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_27"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_0"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_116"
+      End Object
+      Begin Object Class=/Script/UMG.HorizontalBox Name="HorizontalBox_1182"
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_2"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_5"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_6"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_1"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_1797"
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="HostButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_48"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_332"
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="JoinButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_1566"
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="QuitButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_128"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="JoinMenu"
+         Begin Object Class=/Script/UMG.SizeBoxSlot Name="SizeBoxSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.Overlay Name="Overlay_0"
+         Begin Object Class=/Script/UMG.OverlaySlot Name="OverlaySlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.VerticalBox Name="VerticalBox_65"
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_16"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_17"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_1"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_2"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_19"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_7"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_2"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_783"
+      End Object
+      Begin Object Class=/Game/MenuSystem/BP_ServerRow.BP_ServerRow_C Name="BP_ServerRow"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_0"
+         Begin Object Class=/Script/UMG.SizeBoxSlot Name="SizeBoxSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.ScrollBox Name="ServerList"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox"
+      End Object
+      Begin Object Class=/Script/UMG.HorizontalBox Name="HorizontalBox_210"
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_3"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_1"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="CancelJoinMenuButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_1"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_360"
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="ConfirmJoinMenuButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_3"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="HostMenu"
+         Begin Object Class=/Script/UMG.SizeBoxSlot Name="SizeBoxSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.CanvasPanel Name="CanvasPanel"
+         Begin Object Class=/Script/UMG.CanvasPanelSlot Name="CanvasPanelSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.Overlay Name="Overlay"
+         Begin Object Class=/Script/UMG.OverlaySlot Name="OverlaySlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.VerticalBox Name="VerticalBox"
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_29"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.VerticalBoxSlot Name="VerticalBoxSlot_27"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_4"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_1"
+         Begin Object Class=/Script/UMG.SizeBoxSlot Name="SizeBoxSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.EditableTextBox Name="ServerHostName"
+      End Object
+      Begin Object Class=/Script/UMG.HorizontalBox Name="HorizontalBox"
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_5"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_0"
+         End Object
+         Begin Object Class=/Script/UMG.HorizontalBoxSlot Name="HorizontalBoxSlot_6"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="CancelHostMenuButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_5"
+      End Object
+      Begin Object Class=/Script/UMG.SizeBox Name="SizeBox_3"
+      End Object
+      Begin Object Class=/Script/UMG.Button Name="ConfirmHostMenuButton"
+         Begin Object Class=/Script/UMG.ButtonSlot Name="ButtonSlot_0"
+         End Object
+      End Object
+      Begin Object Class=/Script/UMG.TextBlock Name="TextBlock_6"
+      End Object
+   End Object
+   Begin Object Class=/Script/Engine.EdGraph Name="EventGraph"
+      Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_0"
+      End Object
+      Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_1"
+      End Object
+      Begin Object Class=/Script/BlueprintGraph.K2Node_Event Name="K2Node_Event_2"
+      End Object
+   End Object
+   Begin Object Name="WidgetTree"
+      Begin Object Name="Overlay_1358"
+         Begin Object Name="OverlaySlot_2"
+            HorizontalAlignment=HAlign_Fill
+            VerticalAlignment=VAlign_Fill
+            Parent=Overlay'"BP_MainMenu:WidgetTree.Overlay_1358"'
+            Content=Image'"BP_MainMenu:WidgetTree.Image_308"'
+         End Object
+         Begin Object Name="OverlaySlot_0"
+            HorizontalAlignment=HAlign_Fill
+            VerticalAlignment=VAlign_Fill
+            Parent=Overlay'"BP_MainMenu:WidgetTree.Overlay_1358"'
+            Content=WidgetSwitcher'"BP_MainMenu:WidgetTree.MenuSwitcher"'
+         End Object
+         Slots(0)=OverlaySlot'"OverlaySlot_2"'
+         Slots(1)=OverlaySlot'"OverlaySlot_0"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="Image_308"
+         Brush=(TintColor=(SpecifiedColor=(R=0.000000,G=0.000000,B=0.000000,A=1.000000)))
+      End Object
+      Begin Object Name="MenuSwitcher"
+         Begin Object Name="WidgetSwitcherSlot_0"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=WidgetSwitcher'"BP_MainMenu:WidgetTree.MenuSwitcher"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.MainMenu"'
+         End Object
+         Begin Object Name="WidgetSwitcherSlot_2"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=WidgetSwitcher'"BP_MainMenu:WidgetTree.MenuSwitcher"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.JoinMenu"'
+         End Object
+         Begin Object Name="WidgetSwitcherSlot_3"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=WidgetSwitcher'"BP_MainMenu:WidgetTree.MenuSwitcher"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.HostMenu"'
+         End Object
+         Slots(0)=WidgetSwitcherSlot'"WidgetSwitcherSlot_0"'
+         Slots(1)=WidgetSwitcherSlot'"WidgetSwitcherSlot_2"'
+         Slots(2)=WidgetSwitcherSlot'"WidgetSwitcherSlot_3"'
+         bExpandedInDesigner=True
+         DisplayLabel="MenuSwitcher"
+      End Object
+      Begin Object Name="MainMenu"
+         Begin Object Name="SizeBoxSlot_0"
+            Parent=SizeBox'"BP_MainMenu:WidgetTree.MainMenu"'
+            Content=CanvasPanel'"BP_MainMenu:WidgetTree.CanvasPanel_0"'
+         End Object
+         WidthOverride=906.458435
+         HeightOverride=422.128571
+         bOverride_WidthOverride=True
+         bOverride_HeightOverride=True
+         Slots(0)=SizeBoxSlot'"SizeBoxSlot_0"'
+         DisplayLabel="MainMenu"
+      End Object
+      Begin Object Name="CanvasPanel_0"
+         Begin Object Name="CanvasPanelSlot_0"
+            LayoutData=(Anchors=(Minimum=(X=0.500000,Y=0.500000),Maximum=(X=0.500000,Y=0.500000)),Alignment=(X=0.500000,Y=0.500000))
+            bAutoSize=True
+            Parent=CanvasPanel'"BP_MainMenu:WidgetTree.CanvasPanel_0"'
+            Content=Overlay'"BP_MainMenu:WidgetTree.Overlay_2"'
+         End Object
+         Begin Object Name="CanvasPanelSlot_3"
+            LayoutData=(Offsets=(Left=225.541565,Top=-320.000000,Right=272.172180,Bottom=108.078079),Anchors=(Minimum=(X=1.000000,Y=0.000000),Maximum=(X=1.000000,Y=0.000000)))
+            Parent=CanvasPanel'"BP_MainMenu:WidgetTree.CanvasPanel_0"'
+            Content=Button'"BP_MainMenu:WidgetTree.QuitButton"'
+         End Object
+         Slots(0)=CanvasPanelSlot'"CanvasPanelSlot_0"'
+         Slots(1)=CanvasPanelSlot'"CanvasPanelSlot_3"'
+      End Object
+      Begin Object Name="Overlay_2"
+         Begin Object Name="OverlaySlot_0"
+            Parent=Overlay'"BP_MainMenu:WidgetTree.Overlay_2"'
+            Content=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_109"'
+         End Object
+         Slots(0)=OverlaySlot'"OverlaySlot_0"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="VerticalBox_109"
+         Begin Object Name="VerticalBoxSlot_29"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_109"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_0"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_0"
+            Size=(SizeRule=Fill)
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_109"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_116"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_27"
+            Size=(SizeRule=Fill)
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_109"'
+            Content=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_1182"'
+         End Object
+         Slots(0)=VerticalBoxSlot'"VerticalBoxSlot_29"'
+         Slots(1)=VerticalBoxSlot'"VerticalBoxSlot_0"'
+         Slots(2)=VerticalBoxSlot'"VerticalBoxSlot_27"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="TextBlock_0"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "EB60E6D3402948800C788B98288B2925", "Main Menu")
+         ColorAndOpacity=(SpecifiedColor=(R=0.216254,G=1.000000,B=0.940253,A=1.000000))
+         Font=(Size=120)
+         Justification=Center
+      End Object
+      Begin Object Name="SizeBox_116"
+         WidthOverride=898.875549
+         bOverride_WidthOverride=True
+      End Object
+      Begin Object Name="HorizontalBox_1182"
+         Begin Object Name="HorizontalBoxSlot_2"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_1182"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_1797"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_5"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_1182"'
+            Content=Button'"BP_MainMenu:WidgetTree.HostButton"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_0"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_1182"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_332"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_6"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_1182"'
+            Content=Button'"BP_MainMenu:WidgetTree.JoinButton"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_1"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_1182"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_1566"'
+         End Object
+         Slots(0)=HorizontalBoxSlot'"HorizontalBoxSlot_2"'
+         Slots(1)=HorizontalBoxSlot'"HorizontalBoxSlot_5"'
+         Slots(2)=HorizontalBoxSlot'"HorizontalBoxSlot_0"'
+         Slots(3)=HorizontalBoxSlot'"HorizontalBoxSlot_6"'
+         Slots(4)=HorizontalBoxSlot'"HorizontalBoxSlot_1"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="SizeBox_1797"
+         HeightOverride=225.407227
+         bOverride_HeightOverride=True
+      End Object
+      Begin Object Name="HostButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.HostButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_48"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="HostButton"
+      End Object
+      Begin Object Name="TextBlock_48"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "7EB488D047E92F9C0EE07B8B59475DCB", "Host")
+         ColorAndOpacity=(SpecifiedColor=(R=0.363219,G=0.960183,B=1.000000,A=1.000000))
+         Font=(Size=48)
+      End Object
+      Begin Object Name="SizeBox_332"
+      End Object
+      Begin Object Name="JoinButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.JoinButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="JoinButton"
+      End Object
+      Begin Object Name="TextBlock"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "EC6C53684C0607832B12F1A1CBD3EC58", "Join")
+         ColorAndOpacity=(SpecifiedColor=(R=0.268160,G=1.000000,B=0.940244,A=1.000000))
+         Font=(Size=48)
+         DisplayLabel="TextBlock"
+      End Object
+      Begin Object Name="SizeBox_1566"
+      End Object
+      Begin Object Name="QuitButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.QuitButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_128"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="QuitButton"
+      End Object
+      Begin Object Name="TextBlock_128"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "DF7FA010407D7C637C8F8DB5B6703614", "QUIT")
+         Font=(Size=48)
+      End Object
+      Begin Object Name="JoinMenu"
+         Begin Object Name="SizeBoxSlot_0"
+            Parent=SizeBox'"BP_MainMenu:WidgetTree.JoinMenu"'
+            Content=Overlay'"BP_MainMenu:WidgetTree.Overlay_0"'
+         End Object
+         Slots(0)=SizeBoxSlot'"SizeBoxSlot_0"'
+         DisplayLabel="JoinMenu"
+      End Object
+      Begin Object Name="Overlay_0"
+         Begin Object Name="OverlaySlot_0"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=Overlay'"BP_MainMenu:WidgetTree.Overlay_0"'
+            Content=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+         End Object
+         Slots(0)=OverlaySlot'"OverlaySlot_0"'
+      End Object
+      Begin Object Name="VerticalBox_65"
+         Begin Object Name="VerticalBoxSlot_16"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_2"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_17"
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_783"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_1"
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+            Content=BP_ServerRow_C'"BP_MainMenu:WidgetTree.BP_ServerRow"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_2"
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_0"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_19"
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_7"
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox_65"'
+            Content=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_210"'
+         End Object
+         Slots(0)=VerticalBoxSlot'"VerticalBoxSlot_16"'
+         Slots(1)=VerticalBoxSlot'"VerticalBoxSlot_17"'
+         Slots(2)=VerticalBoxSlot'"VerticalBoxSlot_1"'
+         Slots(3)=VerticalBoxSlot'"VerticalBoxSlot_2"'
+         Slots(4)=VerticalBoxSlot'"VerticalBoxSlot_19"'
+         Slots(5)=VerticalBoxSlot'"VerticalBoxSlot_7"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="TextBlock_2"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "72A4E0B54E8565B1A0CCD6A6766EB20D", "Join a Game")
+         ColorAndOpacity=(SpecifiedColor=(R=0.216254,G=1.000000,B=0.940253,A=1.000000))
+         Font=(Size=120)
+         Justification=Center
+      End Object
+      Begin Object Name="SizeBox_783"
+         HeightOverride=71.520287
+         bOverride_HeightOverride=True
+      End Object
+      Begin Object Name="BP_ServerRow"
+         IsHeader=True
+      End Object
+      Begin Object Name="SizeBox_0"
+         Begin Object Name="SizeBoxSlot_0"
+            Parent=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_0"'
+            Content=ScrollBox'"BP_MainMenu:WidgetTree.ServerList"'
+         End Object
+         HeightOverride=320.018585
+         bOverride_HeightOverride=True
+         Slots(0)=SizeBoxSlot'"SizeBoxSlot_0"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="ServerList"
+         DisplayLabel="ServerList"
+      End Object
+      Begin Object Name="SizeBox"
+         HeightOverride=71.520287
+         bOverride_HeightOverride=True
+      End Object
+      Begin Object Name="HorizontalBox_210"
+         Begin Object Name="HorizontalBoxSlot_0"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_210"'
+            Content=Button'"BP_MainMenu:WidgetTree.CancelJoinMenuButton"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_3"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_210"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_360"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_1"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox_210"'
+            Content=Button'"BP_MainMenu:WidgetTree.ConfirmJoinMenuButton"'
+         End Object
+         Slots(0)=HorizontalBoxSlot'"HorizontalBoxSlot_0"'
+         Slots(1)=HorizontalBoxSlot'"HorizontalBoxSlot_3"'
+         Slots(2)=HorizontalBoxSlot'"HorizontalBoxSlot_1"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="CancelJoinMenuButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.CancelJoinMenuButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_1"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="CancelJoinMenuButton"
+      End Object
+      Begin Object Name="TextBlock_1"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "DA1E26CC49C20E69452540980679E0F4", "Cancel")
+         ColorAndOpacity=(SpecifiedColor=(R=0.363219,G=0.960183,B=1.000000,A=1.000000))
+         Font=(Size=48)
+      End Object
+      Begin Object Name="SizeBox_360"
+         WidthOverride=13.308167
+      End Object
+      Begin Object Name="ConfirmJoinMenuButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.ConfirmJoinMenuButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_3"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="ConfirmJoinMenuButton"
+      End Object
+      Begin Object Name="TextBlock_3"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "0EF76E964EA4F1600410D6A30860D7CC", "Join")
+         ColorAndOpacity=(SpecifiedColor=(R=0.363219,G=0.960183,B=1.000000,A=1.000000))
+         Font=(Size=48)
+      End Object
+      Begin Object Name="HostMenu"
+         Begin Object Name="SizeBoxSlot_0"
+            Parent=SizeBox'"BP_MainMenu:WidgetTree.HostMenu"'
+            Content=CanvasPanel'"BP_MainMenu:WidgetTree.CanvasPanel"'
+         End Object
+         WidthOverride=906.458435
+         HeightOverride=422.128571
+         bOverride_WidthOverride=True
+         bOverride_HeightOverride=True
+         Slots(0)=SizeBoxSlot'"SizeBoxSlot_0"'
+         DisplayLabel="HostMenu"
+      End Object
+      Begin Object Name="CanvasPanel"
+         Begin Object Name="CanvasPanelSlot_0"
+            LayoutData=(Anchors=(Minimum=(X=0.500000,Y=0.500000),Maximum=(X=0.500000,Y=0.500000)),Alignment=(X=0.500000,Y=0.500000))
+            bAutoSize=True
+            Parent=CanvasPanel'"BP_MainMenu:WidgetTree.CanvasPanel"'
+            Content=Overlay'"BP_MainMenu:WidgetTree.Overlay"'
+         End Object
+         Slots(0)=CanvasPanelSlot'"CanvasPanelSlot_0"'
+      End Object
+      Begin Object Name="Overlay"
+         Begin Object Name="OverlaySlot_0"
+            Parent=Overlay'"BP_MainMenu:WidgetTree.Overlay"'
+            Content=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox"'
+         End Object
+         Slots(0)=OverlaySlot'"OverlaySlot_0"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="VerticalBox"
+         Begin Object Name="VerticalBoxSlot_29"
+            HorizontalAlignment=HAlign_Center
+            VerticalAlignment=VAlign_Center
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_4"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_0"
+            Size=(SizeRule=Fill)
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_1"'
+         End Object
+         Begin Object Name="VerticalBoxSlot_27"
+            Size=(SizeRule=Fill)
+            Parent=VerticalBox'"BP_MainMenu:WidgetTree.VerticalBox"'
+            Content=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox"'
+         End Object
+         Slots(0)=VerticalBoxSlot'"VerticalBoxSlot_29"'
+         Slots(1)=VerticalBoxSlot'"VerticalBoxSlot_0"'
+         Slots(2)=VerticalBoxSlot'"VerticalBoxSlot_27"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="TextBlock_4"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "EB60E6D3402948800C788B98288B2925", "Main Menu")
+         ColorAndOpacity=(SpecifiedColor=(R=0.216254,G=1.000000,B=0.940253,A=1.000000))
+         Font=(Size=120)
+         Justification=Center
+      End Object
+      Begin Object Name="SizeBox_1"
+         Begin Object Name="SizeBoxSlot_0"
+            Parent=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_1"'
+            Content=EditableTextBox'"BP_MainMenu:WidgetTree.ServerHostName"'
+         End Object
+         WidthOverride=898.875549
+         bOverride_WidthOverride=True
+         Slots(0)=SizeBoxSlot'"SizeBoxSlot_0"'
+      End Object
+      Begin Object Name="ServerHostName"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "C6F748DB4C7B1A35393834B76832C441", "Server Name")
+         WidgetStyle=(Font=(Size=97),BackgroundColor=(SpecifiedColor=(R=0.000000,G=0.000000,B=0.000000,A=1.000000)))
+         DisplayLabel="ServerHostName"
+      End Object
+      Begin Object Name="HorizontalBox"
+         Begin Object Name="HorizontalBoxSlot_5"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox"'
+            Content=Button'"BP_MainMenu:WidgetTree.CancelHostMenuButton"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_0"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox"'
+            Content=SizeBox'"BP_MainMenu:WidgetTree.SizeBox_3"'
+         End Object
+         Begin Object Name="HorizontalBoxSlot_6"
+            Size=(SizeRule=Fill)
+            Parent=HorizontalBox'"BP_MainMenu:WidgetTree.HorizontalBox"'
+            Content=Button'"BP_MainMenu:WidgetTree.ConfirmHostMenuButton"'
+         End Object
+         Slots(0)=HorizontalBoxSlot'"HorizontalBoxSlot_5"'
+         Slots(1)=HorizontalBoxSlot'"HorizontalBoxSlot_0"'
+         Slots(2)=HorizontalBoxSlot'"HorizontalBoxSlot_6"'
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="CancelHostMenuButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.CancelHostMenuButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_5"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="CancelHostMenuButton"
+      End Object
+      Begin Object Name="TextBlock_5"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "A84C330449FD029EE2B80F8218FCEEBA", "Cancel")
+         ColorAndOpacity=(SpecifiedColor=(R=0.363219,G=0.960183,B=1.000000,A=1.000000))
+         Font=(Size=48)
+      End Object
+      Begin Object Name="SizeBox_3"
+         HeightOverride=221.942719
+         bOverride_HeightOverride=True
+         bExpandedInDesigner=True
+      End Object
+      Begin Object Name="ConfirmHostMenuButton"
+         Begin Object Name="ButtonSlot_0"
+            Parent=Button'"BP_MainMenu:WidgetTree.ConfirmHostMenuButton"'
+            Content=TextBlock'"BP_MainMenu:WidgetTree.TextBlock_6"'
+         End Object
+         WidgetStyle=(Normal=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button.button"'),Hovered=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_highlighted.button_highlighted"'),Pressed=(ImageSize=(X=174.000000,Y=87.000000),ResourceObject=Texture2D'"/Game/MenuSystem/Button/button_clicked.button_clicked"'))
+         Slots(0)=ButtonSlot'"ButtonSlot_0"'
+         bExpandedInDesigner=True
+         DisplayLabel="ConfirmHostMenuButton"
+      End Object
+      Begin Object Name="TextBlock_6"
+         Text=NSLOCTEXT("[143E754149FCECC05AB4BEB22029F65A]", "275128804BBF86147E606DABAE4D6F3B", "Host")
+         ColorAndOpacity=(SpecifiedColor=(R=0.268160,G=1.000000,B=0.940244,A=1.000000))
+         Font=(Size=48)
+         DisplayLabel="TextBlock_6"
+      End Object
+      RootWidget=Overlay'"Overlay_1358"'
+   End Object
+   Begin Object Name="EventGraph"
+      Begin Object Name="K2Node_Event_0"
+         EventReference=(MemberParent=Class'"/Script/UMG.UserWidget"',MemberName="PreConstruct")
+         bOverrideFunction=True
+         EnabledState=Disabled
+         bCommentBubblePinned=True
+         bCommentBubbleVisible=True
+         NodeComment="This node is disabled and will not be called.\nDrag off pins to build functionality."
+         NodeGuid=D918CBDD49EE4A77884AC68AD3700F9A
+         CustomProperties Pin (PinId=0A5A3260467C3F64B0AEFC9B6DF8F076,PinName="OutputDelegate",Direction="EGPD_Output",PinType.PinCategory="delegate",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(MemberParent=Class'"/Script/UMG.UserWidget"',MemberName="PreConstruct"),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+         CustomProperties Pin (PinId=AF24A6E44A139828523638B922094990,PinName="then",Direction="EGPD_Output",PinType.PinCategory="exec",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+         CustomProperties Pin (PinId=86A0F03C44173CC3B964BD9866D45F7B,PinName="IsDesignTime",PinToolTip="IsDesignTime\nBoolean",Direction="EGPD_Output",PinType.PinCategory="bool",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,DefaultValue="false",AutogeneratedDefaultValue="false",PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+      End Object
+      Begin Object Name="K2Node_Event_1"
+         EventReference=(MemberParent=Class'"/Script/UMG.UserWidget"',MemberName="Construct")
+         bOverrideFunction=True
+         NodePosY=208
+         EnabledState=Disabled
+         bCommentBubblePinned=True
+         bCommentBubbleVisible=True
+         NodeComment="This node is disabled and will not be called.\nDrag off pins to build functionality."
+         NodeGuid=2FFF3CBF46231B00AF6393AA785300F5
+         CustomProperties Pin (PinId=7B91161F40F56613AC5EFA921AED13E9,PinName="OutputDelegate",Direction="EGPD_Output",PinType.PinCategory="delegate",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(MemberParent=Class'"/Script/UMG.UserWidget"',MemberName="Construct"),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+         CustomProperties Pin (PinId=F58BBB534D2E17598947EB8B8316D7BB,PinName="then",Direction="EGPD_Output",PinType.PinCategory="exec",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+      End Object
+      Begin Object Name="K2Node_Event_2"
+         EventReference=(MemberParent=Class'"/Script/UMG.UserWidget"',MemberName="Tick")
+         bOverrideFunction=True
+         NodePosY=416
+         EnabledState=Disabled
+         bCommentBubblePinned=True
+         bCommentBubbleVisible=True
+         NodeComment="This node is disabled and will not be called.\nDrag off pins to build functionality."
+         NodeGuid=2949250641028C00E50E87B364853288
+         CustomProperties Pin (PinId=443371BA4D80F6FDA3391E8C0D9F5247,PinName="OutputDelegate",Direction="EGPD_Output",PinType.PinCategory="delegate",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(MemberParent=Class'"/Script/UMG.UserWidget"',MemberName="Tick"),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+         CustomProperties Pin (PinId=300CBCB4459AC4258207DABCE3420D82,PinName="then",Direction="EGPD_Output",PinType.PinCategory="exec",PinType.PinSubCategory="",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+         CustomProperties Pin (PinId=A50F78924C1148CADC0C8399BDBB3DE2,PinName="MyGeometry",PinToolTip="MyGeometry\nGeometry Structure\n\nThe space allotted for this widget",Direction="EGPD_Output",PinType.PinCategory="struct",PinType.PinSubCategory="",PinType.PinSubCategoryObject=ScriptStruct'"/Script/SlateCore.Geometry"',PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+         CustomProperties Pin (PinId=91154BA1445779FC4BE08F91CBF128D7,PinName="InDeltaTime",PinToolTip="InDeltaTime\nFloat (single-precision)\n\nReal time passed since last tick",Direction="EGPD_Output",PinType.PinCategory="real",PinType.PinSubCategory="float",PinType.PinSubCategoryObject=None,PinType.PinSubCategoryMemberReference=(),PinType.PinValueType=(),PinType.ContainerType=None,PinType.bIsReference=False,PinType.bIsConst=False,PinType.bIsWeakPointer=False,PinType.bIsUObjectWrapper=False,PinType.bSerializeAsSinglePrecisionFloat=False,DefaultValue="0.0",AutogeneratedDefaultValue="0.0",PersistentGuid=00000000000000000000000000000000,bHidden=False,bNotConnectable=False,bDefaultValueIsReadOnly=False,bDefaultValueIsIgnored=False,bAdvancedView=False,bOrphanedPin=False,)
+      End Object
+      Schema=Class'"/Script/BlueprintGraph.EdGraphSchema_K2"'
+      Nodes(0)=K2Node_Event'"K2Node_Event_0"'
+      Nodes(1)=K2Node_Event'"K2Node_Event_1"'
+      Nodes(2)=K2Node_Event'"K2Node_Event_2"'
+      bAllowDeletion=False
+      GraphGuid=A55190CA4DD904FD58BA62A6967EA271
+   End Object
+   TickPrediction=WillTick
+   TickPredictionReason="Native"
+   ParentClass=Class'"/Script/MultiplayerTest.MainMenu"'
+   BlueprintSystemVersion=2
+   UbergraphPages(0)=EdGraph'"EventGraph"'
+   CategorySorting(0)="Event Graph"
+   CategorySorting(1)="BP Main Menu"
+   LastEditedDocuments(0)=(EditedObjectPath="/Game/MenuSystem/BP_MainMenu.BP_MainMenu:EventGraph",SavedViewOffset=(X=-785.235291,Y=-230.625000),SavedZoomAmount=1.000000)
+   GeneratedClass=WidgetBlueprintGeneratedClass'"BP_MainMenu_C"'
+   bLegacyNeedToPurgeSkelRefs=False
+   BlueprintGuid=E5E6A75A4EA707EE73CF6D8F4784320B
+End Object

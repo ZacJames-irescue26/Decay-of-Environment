@@ -20,18 +20,19 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(0, 0, 400));
+	static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
+	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> characterDisplay(TEXT("WidgetBlueprint'/Game/TopDown/Blueprints/CharacterDetails.CharacterDetails_C'"));
-
-	if (characterDisplay.Class != nullptr)
-	{
-		characterUItemplate = characterDisplay.Class;
-	}
+	UserInterfaceClass = UserInterfaceBPClass.Class;
 }
 
 void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
+	
+
+
+
 
 	GetHitResultUnderCursor(ECC_Visibility, true, hit);
 	if(leftMouseDown)
@@ -57,17 +58,13 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 void ADecay_of_environmentPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	UE_LOG(LogTemp, Warning, TEXT("Adding player"));
+	if (!ensure(UserInterfaceClass != nullptr)) return;
+	UserInterface = CreateWidget<UUserInterface>(this, UserInterfaceClass);
+	if (!ensure(UserInterface != nullptr)) return;
 
-	if (characterUItemplate != nullptr)
-	{
-		characterUI = CreateWidget<UCharacterDetails>(this, characterUItemplate);
-		characterUI->AddToViewport();
-		characterUI->SetVisibility(ESlateVisibility::Visible);
+	UserInterface->Setup();
 
-		//FCharacterStats cs;
-		//cs.currentHealth = damagable->GetHealth();
-		//characterUI->SetStats(cs);
-	}
 }
 
 void ADecay_of_environmentPlayerController::SetupInputComponent()
@@ -167,10 +164,6 @@ void ADecay_of_environmentPlayerController::RightClick()
 
 			IDamagableInterface* damagable = GetDamagable(targetFound);
 
-			FCharacterStats cs;
-			cs.currentHealth = damagable->GetHealth();
-			characterUI->SetStats(cs);
-
 			if (damagable->GetHealth() > 0)
 			{
 				ITeamInterface* team = GetTeam(targetFound);
@@ -265,3 +258,9 @@ AOverseerer* ADecay_of_environmentPlayerController::GetOverseerer()
 	}
 	return overseerer;
 }
+
+void ADecay_of_environmentPlayerController::ClientRPCFunction_Implementation()
+{
+
+}
+

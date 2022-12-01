@@ -11,6 +11,8 @@
 #include "ResourceInterface.h"
 #include "DamagableInterface.h"
 #include "CharacterDetails.h"
+#include "UI/UserInterface.h"
+#include <Blueprint/UserWidget.h>
 #include "Decay_of_environmentPlayerController.generated.h"
 
 
@@ -59,6 +61,8 @@ protected:
 	AOverseerer* GetOverseerer();
 	IDamagableInterface* GetDamagable(AActor* other);
 
+
+
 private:
 	
 	void SelectUnits();
@@ -81,10 +85,18 @@ private:
 	FVector mouseEnd;
 
 	FHitResult hit;
+	UFUNCTION(Client, Reliable)
+	void ClientRPCFunction();
+	bool Test = false;
+
 
 	TArray<AActor*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;
+
+private:
+	TSubclassOf<class UUserWidget> UserInterfaceClass;
+	class UUserInterface* UserInterface;
 };
 
 

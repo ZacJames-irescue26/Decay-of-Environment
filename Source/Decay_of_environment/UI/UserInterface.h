@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "Blueprint/UserWidget.h" 
 #include "Components/GridPanel.h"
 
 #include "Components/ScrollBox.h"
 #include "UserInterfaceWidget.h"
+#include <Components/Button.h>
 #include "UserInterface.generated.h"
 
 /**
@@ -19,11 +20,18 @@ class DECAY_OF_ENVIRONMENT_API UUserInterface : public UUserInterfaceWidget
 	GENERATED_BODY()
 public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
+private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UGridPanel* UnitGridPanel;
-	UPROPERTY(meta = (BindWidet))
+
+	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* UnitScrollBox;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* BuildingButton;
+
+
 
 
 };

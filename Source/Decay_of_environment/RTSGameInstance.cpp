@@ -31,6 +31,7 @@ URTSGameInstance::URTSGameInstance(const FObjectInitializer& ObjectInitializer)
 }
 void URTSGameInstance::Init()
 {
+	Super::Init();
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem != nullptr)
 	{
@@ -57,7 +58,7 @@ void URTSGameInstance::Init()
 	//UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
 	if (GEngine != nullptr)
 	{
-		//GEngine->OnNetworkFailure().AddUObject(this, &URTSGameInstance::OnNetworkFailure);
+		GEngine->OnNetworkFailure().AddUObject(this, &URTSGameInstance::HandleNetworkFailure);
 	}
 }
 void URTSGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
@@ -192,10 +193,10 @@ void URTSGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCo
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
 
-//void URTSGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const Fstring& ErrorString)
-//{
-//	LoadMainMenu();
-//}
+void URTSGameInstance::HandleNetworkFailure(UWorld* World, class UNetDriver* InNetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString)
+{
+	LoadMainMenu();
+}
 
 void URTSGameInstance::RefreshServerList()
 {

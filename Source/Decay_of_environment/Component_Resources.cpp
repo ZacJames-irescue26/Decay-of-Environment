@@ -7,3 +7,12 @@ AComponent_Resources::AComponent_Resources()
 {
 	stats.resourceType = EResourceType::Components;
 }
+
+void AComponent_Resources::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (stats.amount == 0)
+	{
+		Destroy();
+	}
+}

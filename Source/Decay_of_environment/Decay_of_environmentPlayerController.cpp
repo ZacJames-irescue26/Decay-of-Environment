@@ -30,7 +30,7 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 	
-
+	MousePos = hit.Location;
 
 
 
@@ -48,10 +48,6 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 
 		DrawDebugBox(GetWorld(), centerMouseLocation, selectionSize, FQuat(0,0,0,0), FColor::Black);
 
-	}
-	else
-	{
-		
 	}
 }
 
@@ -259,8 +255,4 @@ AOverseerer* ADecay_of_environmentPlayerController::GetOverseerer()
 	return overseerer;
 }
 
-void ADecay_of_environmentPlayerController::ClientRPCFunction_Implementation()
-{
-
-}
 

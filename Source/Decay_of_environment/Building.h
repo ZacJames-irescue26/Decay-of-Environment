@@ -26,7 +26,7 @@ protected:
 	FBuildingStats buildingStats;
 
 public:	
-
+	bool IsPlaced = false;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void TakeDamage(float damage) override;

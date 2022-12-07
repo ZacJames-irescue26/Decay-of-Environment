@@ -2,6 +2,7 @@
 
 
 #include "Building.h"
+#include "Decay_of_environmentPlayerController.h"
 
 ABuilding::ABuilding()
 {
@@ -23,7 +24,24 @@ void ABuilding::BeginPlay()
 void ABuilding::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (!IsPlaced)
+	{
+		UWorld* World = GetWorld();
+		if (!ensure(World != nullptr)) return;
+		ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
+		if (!ensure(PlayerController != nullptr)) return;
+		FVector mPos;
+		mPos = PlayerController->MousePos;
+		SetActorLocation(mPos);
+		if (PlayerController->leftMouseDown)
+		{
+			if(PlayerController->leftMouseDown)
+			{
+				IsPlaced = true;
+			}
+			
+		}
+	}
 }
 
 void ABuilding::TakeDamage(float damage)

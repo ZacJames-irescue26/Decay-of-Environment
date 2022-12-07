@@ -35,7 +35,8 @@ public:
 	/** FX Class that we will spawn when clicking */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UNiagaraSystem* FXCursor;
-
+	FVector MousePos;
+	bool leftMouseDown; // Input is bring pressed
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -61,6 +62,7 @@ protected:
 	AOverseerer* GetOverseerer();
 	IDamagableInterface* GetDamagable(AActor* other);
 
+	
 
 
 private:
@@ -71,7 +73,6 @@ private:
 
 private:
 
-	bool leftMouseDown; // Input is bring pressed
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
 
@@ -83,18 +84,12 @@ private:
 	AOverseerer* overseerer;
 	FVector mouseStart;
 	FVector mouseEnd;
-
 	FHitResult hit;
-	UFUNCTION(Client, Reliable)
-	void ClientRPCFunction();
-	bool Test = false;
-
 
 	TArray<AActor*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;
 
-private:
 	TSubclassOf<class UUserWidget> UserInterfaceClass;
 	class UUserInterface* UserInterface;
 };

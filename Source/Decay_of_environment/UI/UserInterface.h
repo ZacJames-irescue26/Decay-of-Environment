@@ -9,6 +9,7 @@
 #include "Components/ScrollBox.h"
 #include "UserInterfaceWidget.h"
 #include <Components/Button.h>
+#include "../Building.h"
 #include "UserInterface.generated.h"
 
 /**
@@ -20,6 +21,8 @@ class DECAY_OF_ENVIRONMENT_API UUserInterface : public UUserInterfaceWidget
 	GENERATED_BODY()
 public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
+protected:
+	virtual bool Initialize() override;
 private:
 
 	UPROPERTY(meta = (BindWidget))
@@ -31,7 +34,11 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BuildingButton;
 
+	UFUNCTION()
+	void SpawnBuilding();
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> BuildingToSpawn;
 
 
 };

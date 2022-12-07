@@ -13,6 +13,7 @@ UCLASS()
 class DECAY_OF_ENVIRONMENT_API AComponent_Resources : public AResource
 {
 	GENERATED_BODY()
+public:
 	AComponent_Resources();
-	
+	virtual void Tick(float DeltaSeconds) override;
 };

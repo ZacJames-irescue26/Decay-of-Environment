@@ -11,8 +11,6 @@
 #include "ResourceInterface.h"
 #include "DamagableInterface.h"
 #include "CharacterDetails.h"
-#include "UI/UserInterface.h"
-#include <Blueprint/UserWidget.h>
 #include "Decay_of_environmentPlayerController.generated.h"
 
 

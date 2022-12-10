@@ -26,6 +26,7 @@ protected:
 	FBuildingStats buildingStats;
 
 public:	
+	UPROPERTY(EditAnywhere)
 	bool IsPlaced = false;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

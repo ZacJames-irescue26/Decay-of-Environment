@@ -12,6 +12,7 @@
 #include "BaseAI.h"
 #include "DamagableInterface.h"
 #include "ResourceInterface.h"
+#include "UI/UserInterface.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {

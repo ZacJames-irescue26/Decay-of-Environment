@@ -9,6 +9,9 @@
 #include "Components/ScrollBox.h"
 #include "UserInterfaceWidget.h"
 #include <Components/Button.h>
+#include <Engine/World.h>
+
+#include "../Decay_of_environmentPlayerController.h"
 #include "../Building.h"
 #include "UserInterface.generated.h"
 
@@ -40,5 +43,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> BuildingToSpawn;
 
+	ADecay_of_environmentPlayerController* PlayerController;
+	UWorld* World;
 
 };

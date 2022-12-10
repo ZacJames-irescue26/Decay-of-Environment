@@ -2,9 +2,9 @@
 
 
 #include "UserInterface.h"
-#include "../Decay_of_environmentPlayerController.h"
+
 #include <GameFramework/Actor.h>
-#include <Engine/World.h>
+
 
 UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
 {
@@ -17,16 +17,16 @@ bool UUserInterface::Initialize()
 
 	if(!ensure(BuildingButton != nullptr)) return false;
 	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
-
+	World = GetWorld();
+	if (!ensure(World != nullptr)) return false;
+	PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
 	return true;
 }
 
 void UUserInterface::SpawnBuilding()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Spawning Building"));
-	UWorld* World = GetWorld();
-	if (!ensure(World != nullptr)) return;
-	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
+	
 	UE_LOG(LogTemp, Warning, TEXT("Controllers: %d"), World->GetNumPlayerControllers());
 	//for (auto Player : World->GetPlayerControllerIterator())
 	//{

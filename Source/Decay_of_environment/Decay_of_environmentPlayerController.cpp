@@ -217,9 +217,12 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 
 void ADecay_of_environmentPlayerController::MoveUnits(FVector loc)
 {
-	if (selectedUnits.Num() > 0) {
-		for (AActor* a : selectedUnits) {
-			if (a->IsA(ADecay_of_environmentCharacter::StaticClass())) {
+	if (selectedUnits.Num() > 0)
+	{
+		for (AActor* a : selectedUnits)
+		{
+			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
+			{
 				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
 
 				if (c->GetPlayerOwner() != -1) {

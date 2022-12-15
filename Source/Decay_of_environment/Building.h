@@ -28,6 +28,8 @@ protected:
 public:	
 	UPROPERTY(EditAnywhere)
 	bool IsPlaced = false;
+	UPROPERTY(EditAnywhere)
+	bool IsMainBuilding = false;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void TakeDamage(float damage) override;

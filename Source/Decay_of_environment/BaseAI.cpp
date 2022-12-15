@@ -35,6 +35,8 @@ void ABaseAI::MoveAI(FVector loc)
 {
 	targetActor = nullptr;
 	MoveToLocation(loc);
+	/*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
+	bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
 	currentAction = EActionType::Move;
 }
 

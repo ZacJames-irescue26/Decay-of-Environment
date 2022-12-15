@@ -37,13 +37,22 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* BuildingButton;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* UnitButton;
+
 	UFUNCTION()
 	void SpawnBuilding();
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> BuildingToSpawn;
+	UFUNCTION()
+	void SpawnUnit();
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABuilding> BuildingToSpawn;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> UnitToSpawn;
 	ADecay_of_environmentPlayerController* PlayerController;
 	UWorld* World;
+
+	TArray<ABuilding*> Buildings;
 
 };

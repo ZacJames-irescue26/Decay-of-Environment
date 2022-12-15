@@ -15,11 +15,13 @@ bool UUserInterface::Initialize()
 {
 	bool Success = Super::Initialize();
 
-	if(!ensure(BuildingButton != nullptr)) return false;
-	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
 	World = GetWorld();
 	if (!ensure(World != nullptr)) return false;
 	PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
+	if(!ensure(BuildingButton != nullptr)) return false;
+	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
+	if (!ensure(UnitButton != nullptr)) return false;
+	UnitButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnUnit);
 	return true;
 }
 
@@ -41,7 +43,23 @@ void UUserInterface::SpawnBuilding()
 	Location = PlayerController->MousePos;
 	UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 	FRotator Rotation = {0,0,0};
-	World->SpawnActor<AActor>(BuildingToSpawn, Location, Rotation);
-
+	ABuilding* Building = World->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
+	Buildings.Add(Building);
 	
+}
+
+void UUserInterface::SpawnUnit()
+{
+	for (auto& Building : Buildings)
+	{
+		if (Building->IsMainBuilding)
+		{
+			FVector Location = Building->GetActorLocation();
+			Location.X = Location.X + 20;
+			UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+			FRotator Rotation = {0,0,0};
+			World->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
+			break;
+		}
+	}
 }

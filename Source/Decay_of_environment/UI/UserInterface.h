@@ -54,5 +54,6 @@ private:
 	UWorld* World;
 
 	TArray<ABuilding*> Buildings;
+	TArray<AActor*> ActorBuildings;
 
 };

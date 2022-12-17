@@ -168,6 +168,7 @@ void ABaseAI::DepositeResource() {
 	if (!GetTargetActor()->Implements<UStorageInterface>()) {
 		TArray<AActor*> storageActors;
 		UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UStorageInterface::StaticClass(), storageActors);
+		
 
 		for (AActor* store : storageActors) {
 			ITeamInterface* team = Cast<ITeamInterface>(store);

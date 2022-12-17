@@ -4,6 +4,8 @@
 #include "UserInterface.h"
 
 #include <GameFramework/Actor.h>
+#include <GameFramework/Character.h>
+#include "Kismet/GameplayStatics.h"
 
 
 UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
@@ -22,6 +24,11 @@ bool UUserInterface::Initialize()
 	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
 	if (!ensure(UnitButton != nullptr)) return false;
 	UnitButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnUnit);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(),ABuilding::StaticClass(), ActorBuildings);
+	for (auto& Building : ActorBuildings)
+	{
+		Buildings.Add(Cast<ABuilding>(Building));
+	}
 	return true;
 }
 
@@ -59,6 +66,7 @@ void UUserInterface::SpawnUnit()
 			UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 			FRotator Rotation = {0,0,0};
 			World->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
+		
 			break;
 		}
 	}

@@ -45,9 +45,11 @@ public:
 
 	int32 GetTeam() const { return team; }
 	void SetTeam(int32 val) { team = val; }
-	int32 GetPlayerOwner() const { return owner; }
-	void SetPlayerOwner(int32 val) { owner = val; }
-
+	int32 GetPlayerOwner() const { return PlayerOwner; }
+	void SetPlayerOwner(int32 val) { PlayerOwner = val; }
+	UPROPERTY(EditAnywhere)
 	int32 team;
-	int32 owner;
+	UPROPERTY(EditAnywhere)
+	int32 PlayerOwner;
+	//TODO setup player owner on spawn
 };

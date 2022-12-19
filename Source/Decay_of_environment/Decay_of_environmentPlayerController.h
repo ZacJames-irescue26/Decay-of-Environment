@@ -58,6 +58,8 @@ protected:
 	ITeamInterface* GetTeam(AActor* other);
 	IResourceInterface* GetResource(AActor* other);
 	AOverseerer* GetOverseerer();
+	void ZoomIn();
+	void ZoomOut();
 	IDamagableInterface* GetDamagable(AActor* other);
 
 	
@@ -70,6 +72,10 @@ private:
 	void MoveUnits(FVector loc);
 
 private:
+	
+	float MaxZoom; 
+	float MinZoom;
+	float ZoomRate;
 
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
@@ -84,7 +90,7 @@ private:
 	FVector mouseEnd;
 	FHitResult hit;
 
-	TArray<AActor*> selectedUnits;
+	TArray<ADecay_of_environmentCharacter*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;
 

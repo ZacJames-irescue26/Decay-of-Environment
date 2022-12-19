@@ -19,6 +19,10 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 
+	MaxZoom = 4000;
+	MinZoom = 500;
+	ZoomRate = 100;
+
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(0, 0, 400));
 	static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
@@ -73,6 +77,11 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Released, this, &ADecay_of_environmentPlayerController::OnSetDestinationReleased);
 
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
+	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
+
+	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomIn);
+	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
+
 	// support touch devices 
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ADecay_of_environmentPlayerController::OnTouchPressed);
 	InputComponent->BindTouch(EInputEvent::IE_Released, this, &ADecay_of_environmentPlayerController::OnTouchReleased);
@@ -197,7 +206,9 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 	selectionArea->SetWorldLocation(mouseEnd);
 	selectionArea->SetBoxExtent(selectionSize);
 	TArray<AActor*> actors;
+
 	selectionArea->GetOverlappingActors(actors);
+
 	if (actors.Num() > 0)
 	{
 		for (AActor* a : actors)
@@ -207,7 +218,11 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 				ADecay_of_environmentCharacter* character = Cast<ADecay_of_environmentCharacter>(a);
 				if (character->GetType() != ECharacterType::Animal)
 				{
-					selectedUnits.Add(a);
+					if (character->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
+					{
+						selectedUnits.Add(character);
+					}
+					
 				}
 			}
 		}
@@ -257,6 +272,25 @@ AOverseerer* ADecay_of_environmentPlayerController::GetOverseerer()
 		overseerer = Cast<AOverseerer>(GetPawn());
 	}
 	return overseerer;
+}
+
+void ADecay_of_environmentPlayerController::ZoomIn()
+{
+	GetOverseerer()->GetCameraBoom()->TargetArmLength -= ZoomRate;
+
+	if (GetOverseerer()->GetCameraBoom()->TargetArmLength < MinZoom)
+	{
+		GetOverseerer()->GetCameraBoom()->TargetArmLength = MinZoom;
+	}
+}
+
+void ADecay_of_environmentPlayerController::ZoomOut()
+{
+	GetOverseerer()->GetCameraBoom()->TargetArmLength += ZoomRate;
+
+	if (GetOverseerer()->GetCameraBoom()->TargetArmLength > MaxZoom) {
+		GetOverseerer()->GetCameraBoom()->TargetArmLength = MaxZoom;
+	}
 }
 
 

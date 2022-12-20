@@ -13,7 +13,7 @@ class DECAY_OF_ENVIRONMENT_API ACubeGridManager : public AActor
 	GENERATED_BODY()
 protected:
 
-	TArray<TArray<ACubeTile*>> CubeGrid2DArray;
+	TArray<TArray<int32>> CubeGrid2DArray;
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
 	int32 GridWidth;
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")

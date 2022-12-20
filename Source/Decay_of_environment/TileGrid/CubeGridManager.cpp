@@ -21,11 +21,6 @@ void ACubeGridManager::BeginPlay()
 	FString FilePathFromContent = "TopDown/Maps/Map_txt_files/";
 	UE_LOG(LogTemp, Warning, TEXT("Path: %s"), *(FPaths::EngineContentDir() + FilePathFromContent + "MapTest.txt"));
 	
-	CubeGrid2DArray.SetNumZeroed(GridWidth);
-	for (int32 i = 0; i < CubeGrid2DArray.Num(); i++)
-	{
-		CubeGrid2DArray[i].SetNumZeroed(GridHeight);
-	}
 
 	FString FilePath = FPaths::ProjectContentDir() + FilePathFromContent + "MapTest.txt";
 	FString RetString;
@@ -44,35 +39,55 @@ void ACubeGridManager::BeginPlay()
 	TArray<FString> Parsed;
 	const TCHAR *Delims[]={TEXT(","), TEXT("\n"), TEXT("\r")};
 	
-	RetString.ParseIntoArray(Parsed, Delims, true);
-	
-	for (int i = 0; i < Parsed.Num(); i++)
-	{
-		if (i == 0)
-		{
-			GridWidth = FCString::Atoi(*Parsed[i]);
-		}
-		if (i == 1)
-		{
-			GridHeight = FCString::Atoi(*Parsed[i]);
-		}
-		UE_LOG(LogTemp, Warning, TEXT("File: %s"), *Parsed[i]);
-	}
-	
-	/*for (auto i = 0; i < RetArray.Num(); i++)
-	{
-		 
-		UE_LOG(LogTemp, Warning, TEXT("File: %i"), RetArray[i]);
-		if(i = 0)
-	}*/
-	/*for (int i = 0; i < RetString.Len(); i++)
-	{
-		if (RetString[i] >= 48 && RetString[i] <= 57)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("File: %s"), RetString.);
-		}
-	}*/
 
+	
+	RetString.ParseIntoArray(Parsed, Delims, true);
+
+	GridWidth = FCString::Atoi(*Parsed[0]);
+	GridHeight = FCString::Atoi(*Parsed[1]);
+
+	CubeGrid2DArray.SetNumZeroed(GridWidth);
+	for (int32 i = 0; i < CubeGrid2DArray.Num(); i++)
+	{
+		CubeGrid2DArray[i].SetNumZeroed(GridHeight);
+	}
+	int32 temp = 2;
+
+	for (int32 y = 0; y < GridHeight; y++)
+	{
+		for (int32 x = 0; x < GridWidth; x++)
+		{
+			if (temp < Parsed.Num())
+			{
+				CubeGrid2DArray[x][y] = FCString::Atoi(*Parsed[temp]);
+				temp++;
+			}
+			
+		}
+	}
+	/*for (int i = 0; i < Parsed.Num(); i++)
+	{
+		if(i > 1)
+		{
+			if (i < GridWidth && temp < GridHeight)
+			{
+				CubeGrid2DArray[i][temp] = FCString::Atoi(*Parsed[i]);
+				if (i > GridWidth)
+				{
+					temp++;
+				}
+			}
+
+		}
+		UE_LOG(LogTemp, Warning, TEXT("File: %i"), FCString::Atoi(*Parsed[i]));
+	}*/
+	for (int32 y = 0; y < GridHeight; y++)
+	{
+		for (int32 x = 0; x < GridWidth; x++)
+		{
+			UE_LOG(LogTemp, Warning, TEXT(" %i: %i, %i: %i"),GridWidth,CubeGrid2DArray[x][y]);
+		}
+	}
 
 	for (int32 y = 0; y < GridHeight; y++)
 	{
@@ -80,16 +95,17 @@ void ACubeGridManager::BeginPlay()
 		{
 			const float xPos = x * TileHorizontalOffset;
 			const float yPos = y * TileVerticalOffset;
-			TSubclassOf<ACubeTile> tiletoSpawn = GrassCubeTile;
-			if (FMath::RandRange(0.0f, 1.0f) <= ChanceOfWater)
+			TSubclassOf<ACubeTile> tiletoSpawn;
+			if(CubeGrid2DArray[x][y] == 0)
+			{
+				tiletoSpawn = GrassCubeTile;
+			}
+			if (CubeGrid2DArray[x][y] == 1)
 			{
 				tiletoSpawn = WaterCubeTile;
 			}
 			ACubeTile* NewTile = GetWorld()->SpawnActor<ACubeTile>(tiletoSpawn, FVector(FIntPoint(xPos, yPos)),FRotator::ZeroRotator);
 			
-			NewTile->TileIndex = FIntPoint(x, y);
-			NewTile->SetActorLabel(FString::Printf(TEXT("Tile_%d-%d"), x, y));
-			//CubeGrid2DArray[x][y] = NewTile;
 		}
 	}
 }

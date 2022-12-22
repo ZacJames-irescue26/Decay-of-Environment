@@ -49,7 +49,7 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 		FollowTime = 0.f;
 		centerMouseLocation = FVector((mouseStart+mouseEnd)/2);
 		dist = FVector::Dist(mouseEnd, mouseStart) / 2;
-		selectionSize = FVector(dist,dist,100);
+		selectionSize = FVector(dist,dist,1000);
 
 		DrawDebugBox(GetWorld(), centerMouseLocation, selectionSize, FQuat(0,0,0,0), FColor::Black);
 

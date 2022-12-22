@@ -11,17 +11,22 @@ UCLASS()
 class DECAY_OF_ENVIRONMENT_API ACubeGridManager : public AActor
 {
 	GENERATED_BODY()
-protected:
+public:
 
-	TArray<TArray<int32>> CubeGrid2DArray;
-	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
-	int32 GridWidth;
-	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
-	int32 GridHeight;
+	TArray<TArray<ACubeTile*>> CubeGrid;
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
 	float TileHorizontalOffset;
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
 	float TileVerticalOffset;
+
+protected:
+
+	TArray<TArray<int32>> CubeGrid2DArray;
+	
+	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
+	int32 GridWidth;
+	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
+	int32 GridHeight;
 
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Setup")
 	TSubclassOf<ACubeTile> GrassCubeTile;
@@ -34,7 +39,6 @@ protected:
 public:	
 	// Sets default values for this actor's properties
 	ACubeGridManager();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -51,6 +51,12 @@ void ACubeGridManager::BeginPlay()
 	{
 		CubeGrid2DArray[i].SetNumZeroed(GridHeight);
 	}
+
+	CubeGrid.SetNumZeroed(GridWidth);
+	for (int32 i = 0; i < CubeGrid.Num(); i++)
+	{
+		CubeGrid[i].SetNumZeroed(GridHeight);
+	}
 	int32 temp = 2;
 
 	for (int32 y = 0; y < GridHeight; y++)
@@ -65,29 +71,7 @@ void ACubeGridManager::BeginPlay()
 			
 		}
 	}
-	/*for (int i = 0; i < Parsed.Num(); i++)
-	{
-		if(i > 1)
-		{
-			if (i < GridWidth && temp < GridHeight)
-			{
-				CubeGrid2DArray[i][temp] = FCString::Atoi(*Parsed[i]);
-				if (i > GridWidth)
-				{
-					temp++;
-				}
-			}
 
-		}
-		UE_LOG(LogTemp, Warning, TEXT("File: %i"), FCString::Atoi(*Parsed[i]));
-	}*/
-	for (int32 y = 0; y < GridHeight; y++)
-	{
-		for (int32 x = 0; x < GridWidth; x++)
-		{
-			UE_LOG(LogTemp, Warning, TEXT(" %i: %i, %i: %i"),GridWidth,CubeGrid2DArray[x][y]);
-		}
-	}
 
 	for (int32 y = 0; y < GridHeight; y++)
 	{
@@ -105,7 +89,8 @@ void ACubeGridManager::BeginPlay()
 				tiletoSpawn = WaterCubeTile;
 			}
 			ACubeTile* NewTile = GetWorld()->SpawnActor<ACubeTile>(tiletoSpawn, FVector(FIntPoint(xPos, yPos)),FRotator::ZeroRotator);
-			
+			NewTile->SetActorLabel(FString::Printf(TEXT("Tile %d-%d"), x, y));
+			CubeGrid[x][y] = NewTile;
 		}
 	}
 }

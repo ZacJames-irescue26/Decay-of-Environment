@@ -28,6 +28,9 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Tile")
 	FIntPoint TileIndex;
 
+	UPROPERTY(EditAnywhere)
+	bool IsOccupied = false;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Tile")
 	ECubeTileType TileType;

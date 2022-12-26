@@ -43,17 +43,21 @@ void ABuilding::Tick(float DeltaTime)
 		GridPos.Y = AlignToGrid(mPos.Y, GridManager->TileVerticalOffset);
 		GridPos.Z = mPos.Z;
 		UE_LOG(LogTemp, Warning, TEXT("X: %f Y: %f Z: %f"), GridPos.X, GridPos.Y, GridPos.Z);
-		SetActorLocation(GridPos);
-		if (PlayerController->leftMouseDown)
+		if (GridPos.X / GridManager->TileHorizontalOffset >= 0 && GridPos.Y/GridManager->TileVerticalOffset >= 0)
 		{
-			if(PlayerController->leftMouseDown)
+			SetActorLocation(GridPos);
+			if (PlayerController->leftMouseDown)
 			{
-				IsPlaced = true;
+				if (PlayerController->leftMouseDown)
+				{
+					IsPlaced = true;
+					GridManager->CubeGrid[GridPos.X / GridManager->TileHorizontalOffset][GridPos.Y / GridManager->TileVerticalOffset]->IsOccupied = true;
+				}
+
+
 			}
-			
 		}
 	}
-		
 }
 float ABuilding::AlignToGrid(float value, float size)
 {

@@ -35,33 +35,30 @@ void ABuilding::Tick(float DeltaTime)
 		ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
 		if (!ensure(PlayerController != nullptr)) return;
 		
-		//ACubeTile.GetActorLocation()
+		//ACubeTile.GetActorLocation().X
 		
 		mPos = PlayerController->MousePos;
 		
-		GridPos.X = AlignToGrid(mPos.X, GridManager->TileHorizontalOffset);
-		GridPos.Y = AlignToGrid(mPos.Y, GridManager->TileVerticalOffset);
-		GridPos.Z = mPos.Z;
-		UE_LOG(LogTemp, Warning, TEXT("X: %f Y: %f Z: %f"), GridPos.X, GridPos.Y, GridPos.Z);
-		if (GridPos.X / GridManager->TileHorizontalOffset >= 0 && GridPos.Y/GridManager->TileVerticalOffset >= 0)
+		GridManager->GridPos.X = GridManager->AlignToGrid(mPos.X, GridManager->TileHorizontalOffset);
+		GridManager->GridPos.Y = GridManager->AlignToGrid(mPos.Y, GridManager->TileVerticalOffset);
+		GridManager->GridPos.Z = mPos.Z;
+
+		UE_LOG(LogTemp, Warning, TEXT("X: %f Y: %f Z: %f"), GridManager->GridPos.X, GridManager->GridPos.Y, GridManager->GridPos.Z);
+		if (GridManager->GridPos.X / GridManager->TileHorizontalOffset >= 0 && GridManager->GridPos.Y/GridManager->TileVerticalOffset >= 0)
 		{
-			SetActorLocation(GridPos);
+			SetActorLocation(GridManager->GridPos);
 			if (PlayerController->leftMouseDown)
 			{
 				if (PlayerController->leftMouseDown)
 				{
 					IsPlaced = true;
-					GridManager->CubeGrid[GridPos.X / GridManager->TileHorizontalOffset][GridPos.Y / GridManager->TileVerticalOffset]->IsOccupied = true;
+					GridManager->CubeGrid[GridManager->GridPos.X / GridManager->TileHorizontalOffset][GridManager->GridPos.Y / GridManager->TileVerticalOffset]->IsOccupied = true;
 				}
 
 
 			}
 		}
 	}
-}
-float ABuilding::AlignToGrid(float value, float size)
-{
-	return std::floor(value / size) * size;
 }
 
 void ABuilding::TakeDamage(float damage)

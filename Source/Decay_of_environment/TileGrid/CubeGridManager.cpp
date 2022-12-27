@@ -18,6 +18,9 @@ ACubeGridManager::ACubeGridManager()
 void ACubeGridManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+
+
 	FString FilePathFromContent = "TopDown/Maps/Map_txt_files/";
 	UE_LOG(LogTemp, Warning, TEXT("Path: %s"), *(FPaths::EngineContentDir() + FilePathFromContent + "MapTest.txt"));
 	
@@ -93,6 +96,11 @@ void ACubeGridManager::BeginPlay()
 			CubeGrid[x][y] = NewTile;
 		}
 	}
+
 }
 
+float ACubeGridManager::AlignToGrid(float value, float size)
+{
+	return std::floor(value / size) * size;
+}
 

@@ -18,7 +18,10 @@ public:
 	float TileHorizontalOffset;
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
 	float TileVerticalOffset;
+	
+	FVector GridPos;
 
+	float AlignToGrid(float value, float size);
 protected:
 
 	TArray<TArray<int32>> CubeGrid2DArray;
@@ -34,8 +37,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Setup")
 	TSubclassOf<ACubeTile> WaterCubeTile;
 
-	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
-	float ChanceOfWater;
+	
 public:	
 	// Sets default values for this actor's properties
 	ACubeGridManager();

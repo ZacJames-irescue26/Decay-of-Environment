@@ -32,11 +32,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool IsMainBuilding = false;
 	ACubeGridManager* GridManager;
-	FVector GridPos;
+	
 	FVector mPos;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	float AlignToGrid(float value, float size);
+	
 	virtual void TakeDamage(float damage) override;
 	virtual float GetHealth()override;
 	virtual float GetMaxHealth() override;

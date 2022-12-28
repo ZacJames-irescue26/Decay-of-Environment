@@ -7,6 +7,7 @@
 #include "Enums_Structs.h"
 #include "Components/BoxComponent.h"
 #include "Decay_of_environmentCharacter.h"
+#include "TileGrid/CubeGridManager.h"
 #include "BaseAI.generated.h"
 
 class ADecay_of_environmentCharacter;
@@ -22,7 +23,7 @@ class DECAY_OF_ENVIRONMENT_API ABaseAI : public AAIController
 public:
 	ABaseAI();
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void BeginPlay() override;
 	const FString EnumToString(const TCHAR* Enum, int32 EnumValue);
 	void DepositeResource();
 	void Gather();
@@ -39,7 +40,7 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 
 private:
-
+	ACubeGridManager* GridManager;
 	FTimerHandle ActionRate;
 	AActor* previousTarget;
 	AActor* targetActor;

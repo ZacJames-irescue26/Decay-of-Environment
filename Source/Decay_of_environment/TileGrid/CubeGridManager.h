@@ -18,6 +18,10 @@ public:
 	float TileHorizontalOffset;
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
 	float TileVerticalOffset;
+	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
+	int32 GridWidth;
+	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
+	int32 GridHeight;
 	
 	FVector GridPos;
 
@@ -26,10 +30,6 @@ protected:
 
 	TArray<TArray<int32>> CubeGrid2DArray;
 	
-	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
-	int32 GridWidth;
-	UPROPERTY(EditAnywhere, Category = "CubeGrid|Layout")
-	int32 GridHeight;
 
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Setup")
 	TSubclassOf<ACubeTile> GrassCubeTile;

@@ -11,18 +11,18 @@ void AA_star_AIController::BeginPlay()
 	
 }
 
-bool AA_star_AIController::isValid(int x, int y)
+bool AA_star_AIController::isValid(int x, int y, int32 MapXSize, int32 MapYSize)
 {
-	if(x < 0 || y < 0)
+	if(x < 0 || y < 0 || x >= MapXSize || y >= MapYSize)
 	{
 		return false;
 	}
 	return true;
 }
 
-bool AA_star_AIController::IsDestination(int x, int y, ACubeTile* TileDest)
+bool AA_star_AIController::IsDestination(int x, int y, ACubeTile* TileDest, float TileHorizontalOffset, float TileVerticalOffset)
 {
-	if (x == TileDest->GetActorLocation().X || y == TileDest->GetActorLocation().Y)
+	if (x == TileDest->GetActorLocation().X/TileHorizontalOffset && y == TileDest->GetActorLocation().Y/TileVerticalOffset)
 	{
 		return true;
 
@@ -38,10 +38,10 @@ float AA_star_AIController::CalculatehCost(int x, int y, ACubeTile* TileDest)
 	return hCost;
 }
 
-TArray<ACubeTile*> AA_star_AIController::A_star(ACubeTile* start, ACubeTile* end,int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap )
+TArray<ACubeTile*> AA_star_AIController::A_star(ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap )
 {
 	TArray<ACubeTile*> empty;
-	if (isValid(end->GetActorLocation().X, end->GetActorLocation().Y) == false)
+	if (isValid(end->GetActorLocation().X/ TileHorizontalOffset, end->GetActorLocation().Y/TileVerticalOffset, MapXSize, MapYSize) == false)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Destination is an obstacle"));
 		return empty;
@@ -66,8 +66,10 @@ TArray<ACubeTile*> AA_star_AIController::A_star(ACubeTile* start, ACubeTile* end
 		}
 	}
 	
-	int x = start->GetActorLocation().X/MapXSize;
-	int y = start->GetActorLocation().Y/MapYSize;
+	int x = start->GetActorLocation().X/ TileHorizontalOffset;
+	/*UE_LOG(LogTemp, Warning, TEXT("X: %f / %f"), start->GetActorLocation().X, TileHorizontalOffset);*/
+	int y = start->GetActorLocation().Y/ TileVerticalOffset;
+	/*UE_LOG(LogTemp, Warning, TEXT("Y: %f / %f"), start->GetActorLocation().Y, TileVerticalOffset);*/
 
 	AllMap[x][y]->fCost = 0.0f;
 	AllMap[x][y]->gCost = 0.0f;
@@ -77,32 +79,99 @@ TArray<ACubeTile*> AA_star_AIController::A_star(ACubeTile* start, ACubeTile* end
 
 	TArray<ACubeTile*> OpenList;
 	OpenList.Add(AllMap[x][y]);
-
-	/*while (!OpenList.empty() && OpenList.size() < MapXSize * MapYSize)
+	bool DestinationFound = false;
+	while (!OpenList.IsEmpty() && OpenList.Num() < MapYSize * MapXSize)
 	{
-		ACubeTile Tile;
-		do
+		ACubeTile* Tile = nullptr;
+		do 
 		{
 			float temp = FLT_MAX;
-			TArray<ACubeTile*>::CreateIterator() itTile;
-			for (TArray<ACubeTile*>::CreateIterator() it = OpenList.begin(); it != OpenList.end(); it = next(it))
+			ACubeTile* itTile = nullptr;
+			for(int32 i = 0; i < OpenList.Num(); i++)
 			{
-				ACubeTile T = *it;
-				if (t.fCost < temp)
+				if(OpenList[i]->fCost < temp)
 				{
-					temp = t.fCost;
-					itTile = it;
+					temp = OpenList[i]->fCost;
+					itTile = OpenList[i];
 				}
 			}
-			Tile = *itTile;
-			OpenList.erase(itTile);
-		}while (isValid(Tile.GetActorLocation().X / MapXSize, Tile.GetActorLocation().Y / MapYSize) == false);
-		x = Tile.GetActorLocation().X / MapXSize;
-		y = Tile.GetActorLocation().Y / MapYSize;
-		ClosedList[x][y] == true;
+			Tile = itTile;
+			OpenList.Remove(Tile);
+		} while (isValid(Tile->GetActorLocation().X / TileHorizontalOffset, Tile->GetActorLocation().Y / TileVerticalOffset, MapXSize, MapYSize) == false);
+		x = Tile->GetActorLocation().X / TileHorizontalOffset;
+		y = Tile->GetActorLocation().Y / TileVerticalOffset;
+		ClosedList[x][y] = true;
+		
+		for (int32 newX = -1; newX <= 1; newX++)
+		{
+			for (int32 newY = -1; newY <= 1; newY++)
+			{
+				float gNew, hNew, fNew;
+				if (isValid(x + newX, y + newY, MapXSize, MapYSize))
+				{
+					if (IsDestination(x + newX, y + newY, end, TileHorizontalOffset, TileVerticalOffset))
+					{
+						AllMap[x + newX][y + newY]->ParentX = x;
+						AllMap[x + newX][y + newY]->ParentY = y;
+						DestinationFound = true;
+						return MakePath(AllMap, TileHorizontalOffset, TileVerticalOffset, end);
+					}
+					else if (ClosedList[x + newX][y + newY] == false)
+					{
+						gNew = Tile->gCost + 1;
+						hNew = CalculatehCost(x + newX, y + newY, end);
+						fNew = gNew + hNew;
+						if (AllMap[x + newX][y + newY]->fCost == FLT_MAX || AllMap[x + newX][y + newY]->fCost > fNew)
+						{
+							AllMap[x + newX][y + newY]->fCost = fNew;
+							AllMap[x + newX][y + newY]->gCost = gNew;
+							AllMap[x + newX][y + newY]->hCost = hNew;
+							AllMap[x + newX][y + newY]->ParentX = x;
+							AllMap[x + newX][y + newY]->ParentY = y;
+							OpenList.Add(AllMap[x + newX][y + newY]);
+						}
+					}
+				}
+			}
+		}
+	}
+	if (DestinationFound == false)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Destination not found"));
+		return empty;
+	}
+	return empty;
+}
 
-	}*/
-	 return empty;
+TArray<ACubeTile*> AA_star_AIController::MakePath(TArray<TArray<ACubeTile*>> map, float TileHorizontalOffset, float TileVerticalOffset, ACubeTile* end)
+{
+	/*auto pred = [](AA_star_AIController const& lhs, AA_star_AIController const& rhs)
+	{
+		return lhs.GetFValue < rhs.GetFValue();
+	};*/
+	UE_LOG(LogTemp, Warning, TEXT("Path found"));
+
+	int x = end->GetActorLocation().X / TileHorizontalOffset;
+	int y = end->GetActorLocation().Y / TileVerticalOffset;
+	TArray<ACubeTile*> path;
+	TArray<ACubeTile*> usablePath;
+	while (!(map[x][y]->ParentX == x && map[x][y]->ParentY == y) && map[x][y]->GetActorLocation().X / TileHorizontalOffset != -1 && map[x][y]->GetActorLocation().Y / TileVerticalOffset != -1)
+	{
+		path.Add(map[x][y]);
+		int tempX = map[x][y]->ParentX;
+		int tempY = map[x][y]->ParentY;
+		x = tempX;
+		y = tempY;
+
+	}
+	path.Add(map[x][y]);
 	
+	/*while (!path.IsEmpty()) {
+		ACubeTile* top;
+		path.FindLast(top);
+		path.Remove(top);
+		usablePath.Add(top);
+	}*/
+	return usablePath;
 }
 

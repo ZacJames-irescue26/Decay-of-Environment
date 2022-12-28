@@ -9,6 +9,7 @@
 #include "ResourceInterface.h"
 #include <AIController.h>
 #include "Components/BoxComponent.h"
+#include "AI/A_star_AIController.h"
 
 #define MIN(a,b)(a<b)?(a):(b)
 #define MAX(a,b)(a>b)?(a):(b)
@@ -33,11 +34,15 @@ void ABaseAI::SetTargetActor(AActor* val)
 
 void ABaseAI::MoveAI(FVector loc)
 {
-	targetActor = nullptr;
-	MoveToLocation(loc);
-	/*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
-	bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
-	currentAction = EActionType::Move;
+	//targetActor = nullptr;
+	//MoveToLocation(loc);
+	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
+	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
+	//currentAction = EActionType::Move;
+
+	AA_star_AIController::A_star(GridManager->CubeGrid[2][2], GridManager->CubeGrid[2][5], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
+
 }
 
 void ABaseAI::OnPossess(APawn* InPawn)
@@ -85,6 +90,12 @@ void ABaseAI::Tick(float DeltaTime)
 	}
 }
 
+
+void ABaseAI::BeginPlay()
+{
+	Super::BeginPlay();
+	GridManager = Cast<ACubeGridManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACubeGridManager::StaticClass()));
+}
 
 void ABaseAI::Gather() {
 	IResourceInterface* ri = Cast<IResourceInterface>(GetTargetActor());

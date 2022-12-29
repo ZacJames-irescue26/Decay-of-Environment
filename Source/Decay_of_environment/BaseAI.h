@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "Decay_of_environmentCharacter.h"
 #include "TileGrid/CubeGridManager.h"
+#include "TileGrid/CubeTile.h"
 #include "BaseAI.generated.h"
 
 class ADecay_of_environmentCharacter;
@@ -36,24 +37,34 @@ public:
 
 	AActor* GetTargetActor() const { return targetActor; }
 	void SetTargetActor(AActor* val);
-	void MoveAI(FVector loc);
+	void MoveAI(FVector loc, AActor* a);
+	void CanMove();
+	bool Canmove = false;
 	virtual void OnPossess(APawn* InPawn) override;
 
 private:
 	ACubeGridManager* GridManager;
 	FTimerHandle ActionRate;
+	FTimerHandle MoveRate;
 	AActor* previousTarget;
 	AActor* targetActor;
 	EActionType currentAction;
 	UBoxComponent* selectionArea;
 
 	float actionDelay;
+	float MoveDelay;
 	FVector bbLocation;
 	FVector bbExtent;
 
+	UPROPERTY(EditAnywhere, Category = "Lerp")
+	float LerpDuration = 3;
+	float TimeElapsed = 0;
+	float _DeltaTime;
+	float Speed = 20;
 	FVector characterBBLocation;
 	FVector characterBBExtent;
-
+	TArray<ACubeTile*> Path;
+	AActor* Actor;
 	ADecay_of_environmentCharacter* rtsCharacter;
 
 	bool canPerformActions;

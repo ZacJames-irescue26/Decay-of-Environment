@@ -13,6 +13,8 @@
 #include "DamagableInterface.h"
 #include "ResourceInterface.h"
 #include "UI/UserInterface.h"
+#include "AI/A_star_AIController.h"
+#include "TileGrid/CubeTile.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -242,7 +244,7 @@ void ADecay_of_environmentPlayerController::MoveUnits(FVector loc)
 
 				if (c->GetPlayerOwner() != -1) {
 					ABaseAI* con = Cast<ABaseAI>(c->GetController());
-					con->MoveAI(loc);
+					con->MoveAI(loc, a);
 				}
 			}
 		}

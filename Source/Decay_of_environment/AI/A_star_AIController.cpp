@@ -165,13 +165,17 @@ TArray<ACubeTile*> AA_star_AIController::MakePath(TArray<TArray<ACubeTile*>> map
 
 	}
 	path.Add(map[x][y]);
-	
+	/*for (int i = path.Num(); i >= 0; i--)
+	{
+		usablePath.Add(path[i]);
+	}*/
+	//path.Empty();
 	/*while (!path.IsEmpty()) {
 		ACubeTile* top;
 		path.FindLast(top);
 		path.Remove(top);
 		usablePath.Add(top);
 	}*/
-	return usablePath;
+	return path;
 }
 

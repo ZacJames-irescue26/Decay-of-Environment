@@ -18,6 +18,7 @@ ABaseAI::ABaseAI()
 {
 	canPerformActions = true;
 	actionDelay = 0.5f;
+	MoveDelay = 1.0f;
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(1500, 1500, 1000));
 }
@@ -32,19 +33,41 @@ void ABaseAI::SetTargetActor(AActor* val)
 	}
 }
 
-void ABaseAI::MoveAI(FVector loc)
+void ABaseAI::MoveAI(FVector loc, AActor* a)
 {
 	//targetActor = nullptr;
-	//MoveToLocation(loc);
+	MoveToLocation(loc);
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
 	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
 	//currentAction = EActionType::Move;
 
-	AA_star_AIController::A_star(GridManager->CubeGrid[2][2], GridManager->CubeGrid[2][5], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+	Path = AA_star_AIController::A_star(GridManager->CubeGrid[2][2], GridManager->CubeGrid[2][5], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+	Actor = a;
 	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
+	//Canmove = true;
+	//int i = 0;
+	//while(i < Path.Num())
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("CanMove: %i, Timer"), Canmove);
+	//	//Canmove = false;
+	//	for (float j = 0; j < 1; j = j + 0.1)
+	//	{
+	//		a->SetActorLocation(FMath::Lerp(a->GetActorLocation(), Path[i]->GetActorLocation(),j));
+	//		//a->SetActorLocation(Path[i]->GetActorLocation());
+	//		UE_LOG(LogTemp, Warning, TEXT("CanMove: %i"), Canmove);
+	//		
+
+	//	}
+	//	i++;
+	//}
+
+
 
 }
-
+void ABaseAI::CanMove()
+{
+	Canmove = true;
+}
 void ABaseAI::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -55,7 +78,6 @@ void ABaseAI::OnPossess(APawn* InPawn)
 void ABaseAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	if (canPerformActions && GetTargetActor() != nullptr) {
 		int32 minDistance = bbExtent.GetAbsMax() + characterBBExtent.GetAbsMax();
 		float dist = FVector::Distance(GetCharacter()->GetActorLocation(), targetActor->GetActorLocation());
@@ -87,6 +109,23 @@ void ABaseAI::Tick(float DeltaTime)
 		else {
 			MoveToActor(GetTargetActor());
 		}
+	}
+	if (Actor != nullptr)
+	{
+		int i = 0;
+		float JourneyLength = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).Size();
+		FVector Location = Actor->GetActorLocation();
+		if (Actor->GetActorLocation() != Path[i]->GetActorLocation())
+		{
+			FVector Direction = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).GetSafeNormal();
+			Location += Speed * DeltaTime * Direction;
+			Actor->SetActorLocation(Location);
+			if (Actor->GetActorLocation().X == Path[i]->GetActorLocation().X && Actor->GetActorLocation().Y == Path[i]->GetActorLocation().Y && i < Path.Num())
+			{
+				i++;
+			}
+		}
+
 	}
 }
 

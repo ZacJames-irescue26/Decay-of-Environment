@@ -60,7 +60,8 @@ private:
 	float LerpDuration = 3;
 	float TimeElapsed = 0;
 	float _DeltaTime;
-	float Speed = 20;
+	float Speed = 100;
+	int i = 0;
 	FVector characterBBLocation;
 	FVector characterBBExtent;
 	TArray<ACubeTile*> Path;

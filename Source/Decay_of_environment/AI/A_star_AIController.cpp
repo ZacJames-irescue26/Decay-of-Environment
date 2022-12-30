@@ -46,6 +46,11 @@ TArray<ACubeTile*> AA_star_AIController::A_star(ACubeTile* start, ACubeTile* end
 		UE_LOG(LogTemp, Warning, TEXT("Destination is an obstacle"));
 		return empty;
 	}
+	if (IsDestination(start->GetActorLocation().X, start->GetActorLocation().Y, end, TileHorizontalOffset, TileVerticalOffset))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You are the destination"));
+		return empty;	
+	}
 	TArray<TArray<bool>> ClosedList;
 	ClosedList.SetNumZeroed(MapXSize);
 	for (int32 i = 0; i < ClosedList.Num(); i++)

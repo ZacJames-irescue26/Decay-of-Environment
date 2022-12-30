@@ -21,6 +21,7 @@ ABaseAI::ABaseAI()
 	MoveDelay = 1.0f;
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(1500, 1500, 1000));
+	i = 0;
 }
 
 void ABaseAI::SetTargetActor(AActor* val)
@@ -40,8 +41,12 @@ void ABaseAI::MoveAI(FVector loc, AActor* a)
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
 	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
 	//currentAction = EActionType::Move;
-
-	Path = AA_star_AIController::A_star(GridManager->CubeGrid[2][2], GridManager->CubeGrid[2][5], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+	int XPos = a->GetActorLocation().X/GridManager->TileHorizontalOffset;
+	int YPos = a->GetActorLocation().Y/GridManager->TileVerticalOffset;
+	if (XPos > 0 && YPos > 0)
+	{
+		Path = AA_star_AIController::A_star(GridManager->CubeGrid[XPos][YPos], GridManager->CubeGrid[2][5], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+	}
 	Actor = a;
 	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
 	//Canmove = true;
@@ -112,16 +117,16 @@ void ABaseAI::Tick(float DeltaTime)
 	}
 	if (Actor != nullptr)
 	{
-		int i = 0;
-		float JourneyLength = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).Size();
+		//float JourneyLength = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).Size();
 		FVector Location = Actor->GetActorLocation();
-		if (Actor->GetActorLocation() != Path[i]->GetActorLocation())
+		if (i < Path.Num())
 		{
-			FVector Direction = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).GetSafeNormal();
+			FVector Direction = (Path[Path.Num() - 1 - i]->GetActorLocation() - Actor->GetActorLocation()).GetSafeNormal();
 			Location += Speed * DeltaTime * Direction;
 			Actor->SetActorLocation(Location);
-			if (Actor->GetActorLocation().X == Path[i]->GetActorLocation().X && Actor->GetActorLocation().Y == Path[i]->GetActorLocation().Y && i < Path.Num())
+			if (Actor->GetActorLocation().X == Path[Path.Num() - 1 - i]->GetActorLocation().X && Actor->GetActorLocation().Y == Path[Path.Num() - 1 - i]->GetActorLocation().Y && i < Path.Num())
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Added to i: %i"), i);
 				i++;
 			}
 		}

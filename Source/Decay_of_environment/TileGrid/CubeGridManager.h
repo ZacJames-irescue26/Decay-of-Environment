@@ -36,7 +36,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Setup")
 	TSubclassOf<ACubeTile> WaterCubeTile;
-
+	
+	/*UPROPERTY(EditAnywhere, Category = "Units|Spawn")
+	TSubclassOf<ADecay_of_environmentCharacter> basicUnitSpawn;*/
 	
 public:	
 	// Sets default values for this actor's properties

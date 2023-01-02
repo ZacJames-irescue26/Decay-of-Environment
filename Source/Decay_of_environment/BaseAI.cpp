@@ -36,18 +36,21 @@ void ABaseAI::SetTargetActor(AActor* val)
 
 void ABaseAI::MoveAI(FVector loc, AActor* a)
 {
-	//targetActor = nullptr;
+	targetActor = nullptr;
 	MoveToLocation(loc);
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
 	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
-	//currentAction = EActionType::Move;
-	int XPos = a->GetActorLocation().X/GridManager->TileHorizontalOffset;
-	int YPos = a->GetActorLocation().Y/GridManager->TileVerticalOffset;
-	if (XPos > 0 && YPos > 0)
-	{
-		Path = AA_star_AIController::A_star(GridManager->CubeGrid[XPos][YPos], GridManager->CubeGrid[2][5], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
-	}
-	Actor = a;
+	currentAction = EActionType::Move;
+	
+	//int XPos = a->GetActorLocation().X/GridManager->TileHorizontalOffset;
+	//int YPos = a->GetActorLocation().Y/GridManager->TileVerticalOffset;
+	//int FinalXPos = loc.X / GridManager->TileHorizontalOffset;
+	//int FinalYPos = loc.Y / GridManager->TileVerticalOffset;
+	//if (XPos > 0 && YPos > 0 && FinalXPos > 0 && FinalYPos > 0)
+	//{
+	//	Path = AA_star_AIController::A_star(GridManager->CubeGrid[XPos][YPos], GridManager->CubeGrid[FinalXPos][FinalYPos], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+	//}
+	//Actor = a;
 	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
 	//Canmove = true;
 	//int i = 0;
@@ -115,23 +118,28 @@ void ABaseAI::Tick(float DeltaTime)
 			MoveToActor(GetTargetActor());
 		}
 	}
-	if (Actor != nullptr)
-	{
-		//float JourneyLength = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).Size();
-		FVector Location = Actor->GetActorLocation();
-		if (i < Path.Num())
-		{
-			FVector Direction = (Path[Path.Num() - 1 - i]->GetActorLocation() - Actor->GetActorLocation()).GetSafeNormal();
-			Location += Speed * DeltaTime * Direction;
-			Actor->SetActorLocation(Location);
-			if (Actor->GetActorLocation().X == Path[Path.Num() - 1 - i]->GetActorLocation().X && Actor->GetActorLocation().Y == Path[Path.Num() - 1 - i]->GetActorLocation().Y && i < Path.Num())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Added to i: %i"), i);
-				i++;
-			}
-		}
+	//if (Actor != nullptr)
+	//{
+	//	//float JourneyLength = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).Size();
+	//	FVector Location = Actor->GetActorLocation();
+	//	if (i < Path.Num())
+	//	{
+	//		FVector Direction = (Path[Path.Num() - 1 - i]->GetActorLocation() - Actor->GetActorLocation()).GetSafeNormal();
+	//		Location += Speed * DeltaTime * Direction;
+	//		Actor->SetActorLocation(Location);
+	//		if (Actor->GetActorLocation().X > Path[Path.Num() - 1 - i]->GetActorLocation().X -10 && Actor->GetActorLocation().X < Path[Path.Num() - 1 - i]->GetActorLocation().X + 10 
+	//			&& Actor->GetActorLocation().Y  > Path[Path.Num() - 1 - i]->GetActorLocation().Y - 10 && Actor->GetActorLocation().Y < Path[Path.Num() - 1 - i]->GetActorLocation().Y + 10  && i < Path.Num())
+	//		{
+	//			UE_LOG(LogTemp, Warning, TEXT("Added to i: %i"), i);
+	//			i++;
+	//		}
+	//	}
+	//	else if(i >= Path.Num())
+	//	{
+	//		i = 0;
+	//	}
 
-	}
+	//}
 }
 
 

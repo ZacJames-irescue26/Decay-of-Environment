@@ -10,7 +10,22 @@
 
 /**
  *
+ 
  */
+
+USTRUCT(BlueprintType)
+struct FSaveData
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	FString X;
+	FString Y;
+	FString Z;
+	FString team;
+	FString Owner;
+
+};
+
 UCLASS()
 class DECAY_OF_ENVIRONMENT_API UInGameMenu : public UMenuWidget
 {

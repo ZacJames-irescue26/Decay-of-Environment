@@ -5,6 +5,8 @@
 #include <Misc/FileHelper.h>
 #include <Kismet/GameplayStatics.h>
 #include "../TeamInterface.h"
+#include "../Decay_of_environmentCharacter.h"
+#include "../Building.h"
 
 bool UInGameMenu::Initialize()
 {
@@ -44,20 +46,45 @@ void UInGameMenu::SaveLevel()
 	FString FilePathFromContent = "TopDown/Maps/Map_txt_files/";
 	FString FinalString = "";
 	TArray<AActor*> AllActors;
-	UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UTeamInterface::StaticClass(), AllActors);
-	TArray<FString> SaveText;
-	for (int i = 0; i < 10; i++)
+	TArray<AActor*> AllCharacters;
+	TArray<AActor*> AllBuildings;
+	//UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UTeamInterface::StaticClass(), AllActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), AllCharacters);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), AllBuildings);
+	TArray<FSaveData> SaveText;
+
+	for (AActor* Actor : AllCharacters)
 	{
-		SaveText.Add("Test");
-	}
-	for (AActor* Actor : AllActors)
-	{
-		SaveText.Add(FString::SanitizeFloat(Actor->GetActorLocation().X));
+		ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(Actor);
+		FSaveData data;
+		data.X = FString::SanitizeFloat(Character->GetActorLocation().X);
+		data.Y = FString::SanitizeFloat(Character->GetActorLocation().Y);
+		data.Z = FString::SanitizeFloat(Character->GetActorLocation().Z);
+		data.team = FString::FromInt(Character->GetPlayerTeam());
+		data.Owner = FString::FromInt(Character->GetPlayerOwner());
+		SaveText.Add(data);
 
 	}
-	for (FString& string : SaveText)
+	for (AActor* Actor : AllBuildings)
 	{
-		FinalString += string;
+		ABuilding* Character = Cast<ABuilding>(Actor);
+		FSaveData data;
+		data.X = FString::SanitizeFloat(Character->GetActorLocation().X);
+		data.Y = FString::SanitizeFloat(Character->GetActorLocation().Y);
+		data.Z = FString::SanitizeFloat(Character->GetActorLocation().Z);
+		data.team = FString::FromInt(Character->GetPlayerTeam());
+		data.Owner = FString::FromInt(Character->GetPlayerOwner());
+		SaveText.Add(data);
+
+	}
+	for (FSaveData& string : SaveText)
+	{
+		FinalString += string.X;
+		FinalString += TEXT(",");
+		FinalString += string.Y;
+		FinalString += TEXT(",");
+		FinalString += string.Z;
+		//FinalString += string->team;
 		FinalString += LINE_TERMINATOR;
 	}
 	FString SavePath = FPaths::ProjectContentDir() + FilePathFromContent + "test.txt";

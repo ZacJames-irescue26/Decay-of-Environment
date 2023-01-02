@@ -22,14 +22,20 @@ protected:
 private:
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* CancelButton;
+	class UButton* CancelButton;
 
 	UPROPERTY(meta = (BindWidget))
-		class UButton* QuitButton;
+	class UButton* QuitButton;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* SaveButton;
 
 	UFUNCTION()
-		void CancelPressed();
+	void CancelPressed();
 
 	UFUNCTION()
-		void QuitPressed();
+	void QuitPressed();
+
+	UFUNCTION()
+	void SaveLevel();
 };

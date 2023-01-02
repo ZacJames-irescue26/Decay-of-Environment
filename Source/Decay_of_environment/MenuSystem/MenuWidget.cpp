@@ -12,12 +12,12 @@ void UMenuWidget::Setup()
 	APlayerController* PlayerController = World->GetFirstPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
 
-	FInputModeUIOnly InputModeData;
-	InputModeData.SetWidgetToFocus(this->TakeWidget());
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	//FInputModeUIOnly InputModeData;
+	//InputModeData.SetWidgetToFocus(this->TakeWidget());
+	//InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 
-	PlayerController->SetInputMode(InputModeData);
-	PlayerController->bShowMouseCursor = true;
+	//PlayerController->SetInputMode(InputModeData);
+	//PlayerController->bShowMouseCursor = true;
 }
 
 void UMenuWidget::Teardown()
@@ -28,9 +28,9 @@ void UMenuWidget::Teardown()
 
 	APlayerController* PlayerController = World->GetFirstPlayerController();
 	if (!ensure(PlayerController != nullptr)) return;
-	FInputModeGameOnly InputModeData;
-	PlayerController->SetInputMode(InputModeData);
-	PlayerController->bShowMouseCursor = false;
+	//FInputModeGameOnly InputModeData;
+	//PlayerController->SetInputMode(InputModeData);
+	//PlayerController->bShowMouseCursor = true;
 }
 void UMenuWidget::SetMenuInterface(IManuInterface* _MenuInterface)
 {

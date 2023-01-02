@@ -42,19 +42,7 @@ void ACubeGridManager::BeginPlay()
 	TArray<FString> Parsed;
 	const TCHAR *Delims[]={TEXT(","), TEXT("\n"), TEXT("\r")};
 	
-	FString FinalString = "";
-	TArray<FString> SaveText;
-	for (int i = 0; i < 10; i++)
-	{
-		SaveText.Add("Test");
-	}
-	for (FString& string : SaveText)
-	{
-		FinalString += string;
-		FinalString += LINE_TERMINATOR;
-	}
-	FString SavePath = FPaths::ProjectContentDir() + FilePathFromContent + "test.txt";
-	FFileHelper::SaveStringToFile(FinalString, *SavePath);
+
 	
 	RetString.ParseIntoArray(Parsed, Delims, true);
 

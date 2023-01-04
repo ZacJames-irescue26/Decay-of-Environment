@@ -11,6 +11,7 @@
 #include "ResourceInterface.h"
 #include "DamagableInterface.h"
 #include "CharacterDetails.h"
+#include "Net/UnrealNetwork.h"
 #include "Decay_of_environmentPlayerController.generated.h"
 
 
@@ -35,6 +36,9 @@ public:
 	UNiagaraSystem* FXCursor;
 	FVector MousePos;
 	bool leftMouseDown; // Input is bring pressed
+	void Test();
+	UFUNCTION(Client, Reliable)
+	void MoveUnits(FVector loc);
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -69,7 +73,6 @@ private:
 	
 	void SelectUnits();
 	
-	void MoveUnits(FVector loc);
 
 private:
 	

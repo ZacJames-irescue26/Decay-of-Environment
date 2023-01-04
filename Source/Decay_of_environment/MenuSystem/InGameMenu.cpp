@@ -57,28 +57,38 @@ void UInGameMenu::SaveLevel()
 	{
 		ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(Actor);
 		FSaveData data;
+		data.Name = Character->GetName();
 		data.X = FString::SanitizeFloat(Character->GetActorLocation().X);
 		data.Y = FString::SanitizeFloat(Character->GetActorLocation().Y);
 		data.Z = FString::SanitizeFloat(Character->GetActorLocation().Z);
 		data.team = FString::FromInt(Character->GetPlayerTeam());
 		data.Owner = FString::FromInt(Character->GetPlayerOwner());
+		
+		data.UnitTypeId = TEXT("10");
 		SaveText.Add(data);
+		
+		/*UGameplayStatics::GetPlayerController()
+		UGameplayStatics::SaveGameToSlot()*/
 
 	}
 	for (AActor* Actor : AllBuildings)
 	{
-		ABuilding* Character = Cast<ABuilding>(Actor);
+		ABuilding* Building = Cast<ABuilding>(Actor);
 		FSaveData data;
-		data.X = FString::SanitizeFloat(Character->GetActorLocation().X);
-		data.Y = FString::SanitizeFloat(Character->GetActorLocation().Y);
-		data.Z = FString::SanitizeFloat(Character->GetActorLocation().Z);
-		data.team = FString::FromInt(Character->GetPlayerTeam());
-		data.Owner = FString::FromInt(Character->GetPlayerOwner());
+		data.Name = Building->GetName();
+		data.X = FString::SanitizeFloat(Building->GetActorLocation().X);
+		data.Y = FString::SanitizeFloat(Building->GetActorLocation().Y);
+		data.Z = FString::SanitizeFloat(Building->GetActorLocation().Z);
+		data.team = FString::FromInt(Building->GetPlayerTeam());
+		data.Owner = FString::FromInt(Building->GetPlayerOwner());
+		data.UnitTypeId = FString::FromInt(Building->buildingStats.BuildingTypeId);
 		SaveText.Add(data);
 
 	}
 	for (FSaveData& string : SaveText)
 	{
+		FinalString += string.UnitTypeId;
+		FinalString += TEXT(",");
 		FinalString += string.X;
 		FinalString += TEXT(",");
 		FinalString += string.Y;

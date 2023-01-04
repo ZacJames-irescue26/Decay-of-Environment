@@ -18,11 +18,13 @@ struct FSaveData
 {
 	GENERATED_USTRUCT_BODY()
 public:
+	FString Name;
 	FString X;
 	FString Y;
 	FString Z;
 	FString team;
 	FString Owner;
+	FString UnitTypeId;
 
 };
 
@@ -44,6 +46,9 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* SaveButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* LoadButton;
 
 	UFUNCTION()
 	void CancelPressed();

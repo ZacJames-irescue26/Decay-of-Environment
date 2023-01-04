@@ -23,8 +23,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats")
-	FBuildingStats buildingStats;
 
 public:	
 	UPROPERTY(EditAnywhere)
@@ -32,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool IsMainBuilding = false;
 	ACubeGridManager* GridManager;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats")
+	FBuildingStats buildingStats;
 	
 	FVector mPos;
 	// Called every frame

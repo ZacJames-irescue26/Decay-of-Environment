@@ -37,12 +37,22 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "CubeGrid|Setup")
 	TSubclassOf<ACubeTile> WaterCubeTile;
 	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> DefaultBuilding;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> Base;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> DefaultCharacter;
 	/*UPROPERTY(EditAnywhere, Category = "Units|Spawn")
 	TSubclassOf<ADecay_of_environmentCharacter> basicUnitSpawn;*/
 	
 public:	
 	// Sets default values for this actor's properties
 	ACubeGridManager();
+	void LoadLevel();
+	void LoadUnitsAndBuildings();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

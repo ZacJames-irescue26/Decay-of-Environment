@@ -79,7 +79,7 @@ void URTSGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
 
 	UWorld* world = GetWorld();
 	if (!ensure(world != nullptr)) return;
-	world->ServerTravel("/Game/TopDown/Maps/TopDownMap?listen");
+	world->ServerTravel("/Game/TopDown/Maps/Tilegrid?listen");
 }
 
 void URTSGameInstance::Host(FString Servername)

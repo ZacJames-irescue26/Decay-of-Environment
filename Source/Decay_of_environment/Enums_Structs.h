@@ -104,6 +104,8 @@ struct FBuildingStats : public FUnitStats
 {
 	GENERATED_USTRUCT_BODY()
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	int32 BuildingTypeId;
 };
 
 USTRUCT(BlueprintType)

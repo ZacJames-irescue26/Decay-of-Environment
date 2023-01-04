@@ -72,6 +72,10 @@ void ABaseAI::MoveAI(FVector loc, AActor* a)
 
 
 }
+//void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("Moving actor"));
+//}
 void ABaseAI::CanMove()
 {
 	Canmove = true;

@@ -27,10 +27,10 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(0, 0, 400));
-	static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
+	/*static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
-	UserInterfaceClass = UserInterfaceBPClass.Class;
+	UserInterfaceClass = UserInterfaceBPClass.Class;*/
 }
 
 void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
@@ -61,12 +61,18 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 void ADecay_of_environmentPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Adding player"));
-	if (!ensure(UserInterfaceClass != nullptr)) return;
-	UserInterface = CreateWidget<UUserInterface>(this, UserInterfaceClass);
-	if (!ensure(UserInterface != nullptr)) return;
 
-	UserInterface->Setup();
+	/*for (int i = 0; i < UGameplayStatics::GetNumPlayerControllers(GetWorld()); i++)
+	{
+		auto Controller = UGameplayStatics::GetPlayerController(GetWorld(), i);
+		
+	}*/
+	//UE_LOG(LogTemp, Warning, TEXT("Adding player"));
+	//if (!ensure(UserInterfaceClass != nullptr)) return;
+	//UserInterface = CreateWidget<UUserInterface>(this, UserInterfaceClass);
+	//if (!ensure(UserInterface != nullptr)) return;
+
+	//UserInterface->Setup();
 
 }
 
@@ -232,7 +238,25 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 
 }
 
-void ADecay_of_environmentPlayerController::MoveUnits(FVector loc)
+//void ADecay_of_environmentPlayerController::MoveUnits(FVector loc)
+//{
+//	if (selectedUnits.Num() > 0)
+//	{
+//		for (AActor* a : selectedUnits)
+//		{
+//			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
+//			{
+//				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
+//
+//				if (c->GetPlayerOwner() != -1) {
+//					ABaseAI* con = Cast<ABaseAI>(c->GetController());
+//					con->MoveAI(loc, a);
+//				}
+//			}
+//		}
+//	}
+//}
+void ADecay_of_environmentPlayerController::MoveUnits_Implementation(FVector loc)
 {
 	if (selectedUnits.Num() > 0)
 	{

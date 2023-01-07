@@ -10,6 +10,7 @@
 #include <AIController.h>
 #include "Components/BoxComponent.h"
 #include "AI/A_star_AIController.h"
+#include "Decay_of_environmentPlayerController.h"
 
 #define MIN(a,b)(a<b)?(a):(b)
 #define MAX(a,b)(a>b)?(a):(b)
@@ -236,29 +237,38 @@ bool ABaseAI::FindResource(EResourceType resType, TArray<AActor*> actors) {
 	return resFound;
 }
 
-void ABaseAI::DepositeResource() {
-	if (!GetTargetActor()->Implements<UStorageInterface>()) {
+void ABaseAI::DepositeResource() 
+{
+	if (!GetTargetActor()->Implements<UStorageInterface>()) 
+	{
 		TArray<AActor*> storageActors;
 		UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UStorageInterface::StaticClass(), storageActors);
 		
 
 		for (AActor* store : storageActors) {
 			ITeamInterface* team = Cast<ITeamInterface>(store);
-			if (team->GetPlayerOwner() == GetRTSCharacter()->GetPlayerOwner()) {
+			if (team->GetPlayerOwner() == GetRTSCharacter()->GetPlayerOwner()) 
+			{
 				SetTargetActor(store);
 			}
 		}
 	}
-	else {
+	else 
+	{
 		IStorageInterface* storage = Cast<IStorageInterface>(GetTargetActor());
 
-		for (FItem& item : GetRTSCharacter()->GetStats().inventory.items) {
+		for (FItem& item : GetRTSCharacter()->GetStats().inventory.items) 
+		{
 			storage->AddItem(item.itemName, item.amount);
+			ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
+			PlayerController->GetOverseerer()->ComponentsValue += item.amount;
+
 		}
 
 		GetRTSCharacter()->GetStats().inventory.items.Empty();
-
-		if (previousTarget->Implements<UResourceInterface>()) {
+		
+		if (previousTarget->Implements<UResourceInterface>()) 
+		{
 			SetTargetActor(previousTarget);
 			currentAction = EActionType::Gather;
 		}

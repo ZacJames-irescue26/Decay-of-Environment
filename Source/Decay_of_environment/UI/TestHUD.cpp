@@ -24,4 +24,11 @@ void ATestHUD::BeginPlay()
 	if (!ensure(UserInterface != nullptr)) return;
 
 	UserInterface->Setup();
+	
+	
+}
+
+void ATestHUD::Tick(float DeltaSeconds)
+{
+	UserInterface->UpdateText();
 }

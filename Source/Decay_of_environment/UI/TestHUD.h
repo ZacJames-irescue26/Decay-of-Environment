@@ -19,6 +19,7 @@ class DECAY_OF_ENVIRONMENT_API ATestHUD : public AHUD
 	
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
 	TSubclassOf<class UUserWidget> UserInterfaceClass;
 	class UUserInterface* UserInterface;
 };

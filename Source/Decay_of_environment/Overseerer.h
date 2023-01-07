@@ -52,4 +52,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	int32 PlayerOwner;
 	//TODO setup player owner on spawn
+	UPROPERTY(EditAnywhere)
+	int32 ComponentsValue = 0;
 };

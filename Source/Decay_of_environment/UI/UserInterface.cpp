@@ -6,6 +6,7 @@
 #include <GameFramework/Actor.h>
 #include <GameFramework/Character.h>
 #include "Kismet/GameplayStatics.h"
+#include "../Overseerer.h"
 
 
 UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
@@ -30,6 +31,14 @@ bool UUserInterface::Initialize()
 		Buildings.Add(Cast<ABuilding>(Building));
 	}
 	return true;
+	
+}
+
+
+void UUserInterface::UpdateText()
+{
+	
+	ComponentsValue->SetText(FText::FromString(FString::FromInt(PlayerController->GetOverseerer()->ComponentsValue)));
 }
 
 void UUserInterface::SpawnBuilding()

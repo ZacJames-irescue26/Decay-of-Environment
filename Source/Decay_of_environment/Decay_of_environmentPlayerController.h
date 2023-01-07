@@ -40,6 +40,7 @@ public:
 	void Test();
 	UFUNCTION(Client, Reliable)
 	void MoveUnits(FVector loc);
+	AOverseerer* GetOverseerer();
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -62,7 +63,6 @@ protected:
 
 	ITeamInterface* GetTeam(AActor* other);
 	IResourceInterface* GetResource(AActor* other);
-	AOverseerer* GetOverseerer();
 	void ZoomIn();
 	void ZoomOut();
 	IDamagableInterface* GetDamagable(AActor* other);

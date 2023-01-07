@@ -13,6 +13,7 @@
 
 #include "../Decay_of_environmentPlayerController.h"
 #include "../Building.h"
+#include <Components/TextBlock.h>
 #include "UserInterface.generated.h"
 
 /**
@@ -24,8 +25,11 @@ class DECAY_OF_ENVIRONMENT_API UUserInterface : public UUserInterfaceWidget
 	GENERATED_BODY()
 public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
+	void UpdateText();
+
 protected:
 	virtual bool Initialize() override;
+
 private:
 
 	UPROPERTY(meta = (BindWidget))
@@ -39,6 +43,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UButton* UnitButton;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* ComponentsValue;
 
 	UFUNCTION()
 	void SpawnBuilding();

@@ -37,7 +37,7 @@ public:
 
 	AActor* GetTargetActor() const { return targetActor; }
 	void SetTargetActor(AActor* val);
-	
+	UFUNCTION(NetMulticast, Reliable)
 	void MoveAI(FVector loc, AActor* a);
 	void CanMove();
 	bool Canmove = false;

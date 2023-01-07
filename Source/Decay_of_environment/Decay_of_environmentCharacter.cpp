@@ -112,3 +112,13 @@ int32 ADecay_of_environmentCharacter::GetPlayerOwner()
 {
 	return stats.owner;
 }
+
+void ADecay_of_environmentCharacter::SetPlayerTeam(int32 Value)
+{
+	stats.team = Value;
+}
+
+void ADecay_of_environmentCharacter::SetPlayerOwner(int32 Value)
+{
+	stats.owner = Value;
+}

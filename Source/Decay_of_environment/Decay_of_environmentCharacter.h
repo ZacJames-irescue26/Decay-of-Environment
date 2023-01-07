@@ -42,6 +42,8 @@ public:
 
 	virtual int32 GetPlayerTeam() override;
 	virtual int32 GetPlayerOwner() override;
+	virtual void SetPlayerTeam(int32 Value) override;
+	virtual void SetPlayerOwner(int32 Value) override;
 
 };
 

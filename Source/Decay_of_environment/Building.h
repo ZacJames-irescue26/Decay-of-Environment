@@ -43,6 +43,8 @@ public:
 	virtual float GetMaxHealth() override;
 	virtual int32 GetPlayerTeam() override;
 	virtual int32 GetPlayerOwner() override;
+	virtual void SetPlayerTeam(int32 Value) override;
+	virtual void SetPlayerOwner(int32 Value) override;
 public:
 	FBuildingStats GetBuildingStats() const { return buildingStats; }
 	void SetBuildingStats(FBuildingStats val) { buildingStats = val; }

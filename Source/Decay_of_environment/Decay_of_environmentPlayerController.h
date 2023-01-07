@@ -25,6 +25,7 @@ class ADecay_of_environmentPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	
 	ADecay_of_environmentPlayerController();
 
 	/** Time Threshold to know if it was a short press */

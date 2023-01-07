@@ -160,6 +160,7 @@ void ACubeGridManager::LoadUnitsAndBuildings()
 			case 10:
 				ActorToSpawn = DefaultCharacter;
 				NewCharacter = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(ActorToSpawn, Pos, FRotator::ZeroRotator);
+				
 				break;
 			default:
 				break;
@@ -167,7 +168,6 @@ void ACubeGridManager::LoadUnitsAndBuildings()
 			i += 4;
 		}
 	}*/
-
 
 
 

@@ -86,4 +86,14 @@ int32 ABuilding::GetPlayerOwner()
 	return buildingStats.owner;
 }
 
+void ABuilding::SetPlayerTeam(int32 Value)
+{
+	buildingStats.team = Value;
+}
+
+void ABuilding::SetPlayerOwner(int32 Value)
+{
+	buildingStats.owner = Value;
+}
+
 

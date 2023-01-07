@@ -34,48 +34,53 @@ void ABaseAI::SetTargetActor(AActor* val)
 	}
 }
 
-void ABaseAI::MoveAI(FVector loc, AActor* a)
+//void ABaseAI::MoveAI(FVector loc, AActor* a)
+//{
+//	targetActor = nullptr;
+//	MoveToLocation(loc);
+//	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
+//	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
+//	currentAction = EActionType::Move;
+//	
+//	//int XPos = a->GetActorLocation().X/GridManager->TileHorizontalOffset;
+//	//int YPos = a->GetActorLocation().Y/GridManager->TileVerticalOffset;
+//	//int FinalXPos = loc.X / GridManager->TileHorizontalOffset;
+//	//int FinalYPos = loc.Y / GridManager->TileVerticalOffset;
+//	//if (XPos > 0 && YPos > 0 && FinalXPos > 0 && FinalYPos > 0)
+//	//{
+//	//	Path = AA_star_AIController::A_star(GridManager->CubeGrid[XPos][YPos], GridManager->CubeGrid[FinalXPos][FinalYPos], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
+//	//}
+//	//Actor = a;
+//	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
+//	//Canmove = true;
+//	//int i = 0;
+//	//while(i < Path.Num())
+//	//{
+//	//	UE_LOG(LogTemp, Warning, TEXT("CanMove: %i, Timer"), Canmove);
+//	//	//Canmove = false;
+//	//	for (float j = 0; j < 1; j = j + 0.1)
+//	//	{
+//	//		a->SetActorLocation(FMath::Lerp(a->GetActorLocation(), Path[i]->GetActorLocation(),j));
+//	//		//a->SetActorLocation(Path[i]->GetActorLocation());
+//	//		UE_LOG(LogTemp, Warning, TEXT("CanMove: %i"), Canmove);
+//	//		
+//
+//	//	}
+//	//	i++;
+//	//}
+//
+//
+//
+//}
+void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
 {
 	targetActor = nullptr;
 	MoveToLocation(loc);
+	
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
 	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
 	currentAction = EActionType::Move;
-	
-	//int XPos = a->GetActorLocation().X/GridManager->TileHorizontalOffset;
-	//int YPos = a->GetActorLocation().Y/GridManager->TileVerticalOffset;
-	//int FinalXPos = loc.X / GridManager->TileHorizontalOffset;
-	//int FinalYPos = loc.Y / GridManager->TileVerticalOffset;
-	//if (XPos > 0 && YPos > 0 && FinalXPos > 0 && FinalYPos > 0)
-	//{
-	//	Path = AA_star_AIController::A_star(GridManager->CubeGrid[XPos][YPos], GridManager->CubeGrid[FinalXPos][FinalYPos], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
-	//}
-	//Actor = a;
-	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
-	//Canmove = true;
-	//int i = 0;
-	//while(i < Path.Num())
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("CanMove: %i, Timer"), Canmove);
-	//	//Canmove = false;
-	//	for (float j = 0; j < 1; j = j + 0.1)
-	//	{
-	//		a->SetActorLocation(FMath::Lerp(a->GetActorLocation(), Path[i]->GetActorLocation(),j));
-	//		//a->SetActorLocation(Path[i]->GetActorLocation());
-	//		UE_LOG(LogTemp, Warning, TEXT("CanMove: %i"), Canmove);
-	//		
-
-	//	}
-	//	i++;
-	//}
-
-
-
 }
-//void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
-//{
-//	UE_LOG(LogTemp, Warning, TEXT("Moving actor"));
-//}
 void ABaseAI::CanMove()
 {
 	Canmove = true;

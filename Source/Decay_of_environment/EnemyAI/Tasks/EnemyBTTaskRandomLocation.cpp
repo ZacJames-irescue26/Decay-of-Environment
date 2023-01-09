@@ -30,6 +30,7 @@ EBTNodeResult::Type UEnemyBTTaskRandomLocation::ExecuteTask(UBehaviorTreeCompone
 	const UNavigationSystemV1* NavSystem {UNavigationSystemV1::GetCurrent(GetWorld())};
 	if (IsValid(NavSystem) && NavSystem->GetRandomPointInNavigableRadius(Origin, SearchRadius, Location))
 	{
+		
 		AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, Location.Location);
 		//FNavLocation EnemyLocation	= FNavLocation( FVector(220.0, 1170.0, 416.0 ));
 		//AIController->GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, EnemyLocation.Location);

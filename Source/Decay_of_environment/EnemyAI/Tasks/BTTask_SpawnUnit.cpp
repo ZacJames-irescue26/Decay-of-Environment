@@ -14,7 +14,7 @@ UBTTask_SpawnUnit::UBTTask_SpawnUnit()
 EBTNodeResult::Type UBTTask_SpawnUnit::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
-	for (auto Building : MyController->EnemyBuildings)
+	for (auto Building : MyController->GameInstance->EnemyBuildings)
 	{
 		if (MyController->GameInstance->EnemyComponentValue >= 10)
 		{
@@ -29,7 +29,9 @@ EBTNodeResult::Type UBTTask_SpawnUnit::ExecuteTask(UBehaviorTreeComponent& Owner
 				{
 					Unit->SetPlayerOwner(-1);
 					Unit->SetPlayerTeam(-1);
+					MyController->GameInstance->EnemyUnits.Add(Unit);
 					MyController->GameInstance->EnemyComponentValue -= 10;
+					FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 					return EBTNodeResult::Succeeded;
 
 				}
@@ -37,6 +39,7 @@ EBTNodeResult::Type UBTTask_SpawnUnit::ExecuteTask(UBehaviorTreeComponent& Owner
 
 		}
 	}
+	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
 

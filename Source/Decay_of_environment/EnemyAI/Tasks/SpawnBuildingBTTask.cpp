@@ -27,11 +27,12 @@ EBTNodeResult::Type USpawnBuildingBTTask::ExecuteTask(UBehaviorTreeComponent& Ow
 			Building->SetPlayerOwner(-1);
 			Building->SetPlayerTeam(-1);
 			Building->IsPlaced = true;
-			MyController->EnemyBuildings.Add(Building);
+			MyController->GameInstance->EnemyBuildings.Add(Building);
 			MyController->GameInstance->EnemyComponentValue -= 10;
 		}
 
 	}
+	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
 

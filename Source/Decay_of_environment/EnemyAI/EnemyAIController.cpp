@@ -32,7 +32,7 @@ void AEnemyAIController::BeginPlay()
 		ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
 		if (c->GetPlayerOwner() == -1)
 		{
-			EnemyUnits.Add(c);
+			GameInstance->EnemyUnits.Add(c);
 		}
 	}
 	TArray<AActor*> Buildings;
@@ -42,7 +42,7 @@ void AEnemyAIController::BeginPlay()
 		ABuilding* c = Cast<ABuilding>(b);
 		if (c->GetPlayerOwner() == -1)
 		{
-			EnemyBuildings.Add(c);
+			GameInstance->EnemyBuildings.Add(c);
 		}
 	}
 

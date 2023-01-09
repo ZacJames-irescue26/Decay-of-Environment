@@ -26,6 +26,10 @@ public:
 
 	URTSGameInstance(const FObjectInitializer& ObjectInitializer);
 	int32 EnemyComponentValue = 100;
+	UPROPERTY(EditAnywhere)
+	TArray<ABuilding*> EnemyBuildings;
+	TArray<FNavLocation> Waypoint;
+	TArray<ADecay_of_environmentCharacter*> EnemyUnits;
 public:
 		virtual void Init();
 

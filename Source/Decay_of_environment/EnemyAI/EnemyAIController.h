@@ -23,9 +23,7 @@ public:
 	AEnemyAIController();
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
-	UPROPERTY(EditAnywhere)
-	TArray<ABuilding*> EnemyBuildings;
-	TArray<ADecay_of_environmentCharacter*> EnemyUnits;
+	
 	TSubclassOf<class ADecay_of_environmentCharacter> UnitClass;
 	URTSGameInstance* GameInstance;
 

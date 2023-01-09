@@ -6,6 +6,7 @@
 #include <AIController.h>
 #include <BehaviorTree/Blackboard/BlackboardKeyType_Vector.h>
 #include <BehaviorTree/BTNode.h>
+#include "../EnemyAIController.h"
 
 USpawnBuildingBTTask::USpawnBuildingBTTask()
 {
@@ -15,15 +16,22 @@ USpawnBuildingBTTask::USpawnBuildingBTTask()
 EBTNodeResult::Type USpawnBuildingBTTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	const UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent();
-	AAIController* MyController = OwnerComp.GetAIOwner();
+	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
+	if (MyController->GameInstance->EnemyComponentValue >= 10)
+	{
+		const FVector TargetLocation = MyBlackboard->GetValue<UBlackboardKeyType_Vector>(BlackboardKey.GetSelectedKeyID());
+		FRotator Rotation = { 0,0,0 };
+		ABuilding* Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, TargetLocation, Rotation);
+		if (Building != nullptr)
+		{
+			Building->SetPlayerOwner(-1);
+			Building->SetPlayerTeam(-1);
+			Building->IsPlaced = true;
+			MyController->EnemyBuildings.Add(Building);
+			MyController->GameInstance->EnemyComponentValue -= 10;
+		}
 
-	const FVector TargetLocation = MyBlackboard->GetValue<UBlackboardKeyType_Vector>(BlackboardKey.GetSelectedKeyID());
-	FRotator Rotation = { 0,0,0 };
-	ABuilding* Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, TargetLocation, Rotation);
-	Building->IsPlaced = true;
-	Building->SetPlayerOwner(-1);
-	Building->SetPlayerTeam(-1);
-	
+	}
 	return EBTNodeResult::Succeeded;
 }
 

@@ -55,12 +55,16 @@ void UUserInterface::SpawnBuilding()
 	//	}
 	//}
 	if (!ensure(PlayerController != nullptr)) return;
-	FVector Location;
-	Location = PlayerController->MousePos;
-	UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-	FRotator Rotation = {0,0,0};
-	ABuilding* Building = World->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
-	Buildings.Add(Building);
+	if (PlayerController->GetOverseerer()->ComponentsValue >= 10)
+	{
+		FVector Location;
+		Location = PlayerController->MousePos;
+		UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+		FRotator Rotation = {0,0,0};
+		ABuilding* Building = World->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
+		Buildings.Add(Building);
+		PlayerController->GetOverseerer()->ComponentsValue -= 10;
+	}
 	
 }
 
@@ -70,13 +74,17 @@ void UUserInterface::SpawnUnit()
 	{
 		if (Building->IsMainBuilding)
 		{
-			FVector Location = Building->GetActorLocation();
-			Location.X = Location.X + 20;
-			UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-			FRotator Rotation = {0,0,0};
-			World->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
-		
-			break;
+			if (PlayerController->GetOverseerer()->ComponentsValue >= 10)
+			{
+				FVector Location = Building->GetActorLocation();
+				Location.X = Location.X + 20;
+				UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+				FRotator Rotation = {0,0,0};
+				World->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
+				PlayerController->GetOverseerer()->ComponentsValue -= 10;
+				break;
+
+			}
 		}
 	}
 }

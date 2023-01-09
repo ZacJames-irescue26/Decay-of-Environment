@@ -25,6 +25,7 @@ class DECAY_OF_ENVIRONMENT_API URTSGameInstance : public UGameInstance, public I
 public:
 
 	URTSGameInstance(const FObjectInitializer& ObjectInitializer);
+	int32 EnemyComponentValue = 100;
 public:
 		virtual void Init();
 
@@ -62,5 +63,7 @@ private:
 	void CreateSession();
 
 	FString DesiredServerName;
+
+
 };
 

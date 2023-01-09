@@ -4,33 +4,47 @@
 #include "EnemyAIController.h"
 #include "../Decay_of_environmentCharacter.h"
 #include <Kismet/GameplayStatics.h>
+#include <UObject/ConstructorHelpers.h>
+#include "../RTSGameInstance.h"
 
 AEnemyAIController::AEnemyAIController()
 {
 	BehaviourTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("Behaviour tree component"));
 	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("Blackboard component"));
+
 }
 void AEnemyAIController::BeginPlay()
 {
+	GameInstance = Cast<URTSGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
 	Super::BeginPlay();
+
+
 	if (IsValid(BehaviourTree))
 	{
 		RunBehaviorTree(BehaviourTree);
 		BehaviourTreeComponent->StartTree(*BehaviourTree);
 	}
-	//TArray<AActor*> Actors;
-	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), Actors);
-	//for (auto a : Actors)
-	//{
-	//	ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
-	//	if (c->GetPlayerOwner() == -1)
-	//	{
-	//		EnemyArray.Add(c);
-	//		/*AEnemyAIController* con = Cast<AEnemyAIController>(c->GetController());
-	//		con->MoveToLocation(FVector(220.0, 1170.0, 416.0));*/
-	//		UE_LOG(LogTemp, Warning, TEXT("Added enemy"));
-	//	}
-	//}
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), Actors);
+	for (auto a : Actors)
+	{
+		ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
+		if (c->GetPlayerOwner() == -1)
+		{
+			EnemyUnits.Add(c);
+		}
+	}
+	TArray<AActor*> Buildings;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), Buildings);
+	for (auto b : Buildings)
+	{
+		ABuilding* c = Cast<ABuilding>(b);
+		if (c->GetPlayerOwner() == -1)
+		{
+			EnemyBuildings.Add(c);
+		}
+	}
 
 }
 

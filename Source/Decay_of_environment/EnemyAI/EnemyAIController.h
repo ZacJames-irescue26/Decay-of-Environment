@@ -8,6 +8,8 @@
 #include <BehaviorTree/BehaviorTree.h>
 #include <BehaviorTree/BehaviorTreeComponent.h>
 #include <BehaviorTree/BlackboardComponent.h>
+#include "../Building.h"
+#include "../RTSGameInstance.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -17,10 +19,15 @@ UCLASS()
 class DECAY_OF_ENVIRONMENT_API AEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
+public:
 	AEnemyAIController();
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
-	TArray<ADecay_of_environmentCharacter*>  EnemyArray;
+	UPROPERTY(EditAnywhere)
+	TArray<ABuilding*> EnemyBuildings;
+	TArray<ADecay_of_environmentCharacter*> EnemyUnits;
+	TSubclassOf<class ADecay_of_environmentCharacter> UnitClass;
+	URTSGameInstance* GameInstance;
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI", meta = (AllowprivateAccess = true))
@@ -31,5 +38,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowprivateAccess = true))
 	TObjectPtr<UBlackboardComponent> BlackboardComponent;
+
 
 };

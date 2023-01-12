@@ -6,6 +6,11 @@
 #include <NavigationSystem.h>
 
 
+UBTTask_MoveToWaypoint::UBTTask_MoveToWaypoint()
+{
+	NodeName = TEXT("Move to Waypoint");
+}
+
 EBTNodeResult::Type UBTTask_MoveToWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	

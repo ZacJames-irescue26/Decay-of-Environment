@@ -8,7 +8,7 @@
 
 UBTTask_SpawnUnit::UBTTask_SpawnUnit()
 {
-	
+	NodeName = TEXT("Spawn Unit");
 }
 
 EBTNodeResult::Type UBTTask_SpawnUnit::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

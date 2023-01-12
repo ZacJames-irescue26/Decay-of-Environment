@@ -14,6 +14,7 @@ class DECAY_OF_ENVIRONMENT_API UBTTask_PawnLocation : public UBTTask_BlackboardB
 {
 	GENERATED_BODY()
 public:
+	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual FString GetStaticDescription() const override;
 };

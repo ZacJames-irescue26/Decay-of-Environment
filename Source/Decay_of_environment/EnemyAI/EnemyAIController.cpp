@@ -7,6 +7,8 @@
 #include <UObject/ConstructorHelpers.h>
 #include "../RTSGameInstance.h"
 
+
+
 AEnemyAIController::AEnemyAIController()
 {
 	BehaviourTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("Behaviour tree component"));
@@ -56,4 +58,19 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 	{
 		Blackboard->InitializeBlackboard(*BehaviourTree->BlackboardAsset);
 	}
+}
+
+ADecay_of_environmentCharacter* AEnemyAIController::GetRTSCharacter()
+{
+	if (rtsCharacter == nullptr)
+	{
+		rtsCharacter = Cast<ADecay_of_environmentCharacter>(GetCharacter());
+	}
+	return rtsCharacter;
+}
+
+void AEnemyAIController::SetTargetActor(AActor* val)
+{
+	previousTarget = targetActor;
+	targetActor = val;
 }

@@ -10,7 +10,7 @@
 
 USpawnBuildingBTTask::USpawnBuildingBTTask()
 {
-
+	NodeName = TEXT("Spawn Building");
 }
 
 EBTNodeResult::Type USpawnBuildingBTTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

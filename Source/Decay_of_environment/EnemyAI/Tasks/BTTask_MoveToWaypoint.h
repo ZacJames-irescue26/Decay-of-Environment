@@ -15,6 +15,7 @@ class DECAY_OF_ENVIRONMENT_API UBTTask_MoveToWaypoint : public UBTTask_Blackboar
 	GENERATED_BODY()
 	
 public:
+	UBTTask_MoveToWaypoint();
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual FString GetStaticDescription() const override;
 };

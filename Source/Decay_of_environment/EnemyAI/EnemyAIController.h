@@ -23,7 +23,9 @@ public:
 	AEnemyAIController();
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
-	
+	ADecay_of_environmentCharacter* rtsCharacter;
+	ADecay_of_environmentCharacter* GetRTSCharacter();
+	void SetTargetActor(AActor* val);
 	TSubclassOf<class ADecay_of_environmentCharacter> UnitClass;
 	URTSGameInstance* GameInstance;
 
@@ -37,5 +39,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowprivateAccess = true))
 	TObjectPtr<UBlackboardComponent> BlackboardComponent;
 
+	AActor* previousTarget;
+	AActor* targetActor;
 
 };

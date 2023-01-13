@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "../../Enums_Structs.h"
+#include "../../Decay_of_environmentCharacter.h"
 #include "BTTask_CollectResources.generated.h"
 
 /**
@@ -19,4 +20,6 @@ public:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual FString GetStaticDescription() const override;
 	bool FindResource(EResourceType resType, TArray<AActor*> actors);
+	AActor* FindClosestResource(ADecay_of_environmentCharacter* Character, TArray<AActor*> ResourceActors);
+	TArray<AActor*> ResourceActors;
 };

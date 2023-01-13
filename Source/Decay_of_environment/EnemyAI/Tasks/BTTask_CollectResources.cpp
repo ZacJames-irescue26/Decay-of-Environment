@@ -7,6 +7,7 @@
 #include "../../DamagableInterface.h"
 #include "../../Enums_Structs.h"
 #include <Kismet/GameplayStatics.h>
+#include <Math/UnrealMathUtility.h>
 
 #define MIN(a,b)(a<b)?(a):(b)
 #define MAX(a,b)(a>b)?(a):(b)
@@ -21,17 +22,23 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	APawn* AIPawn{ MyController->GetPawn() };
 	ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(AIPawn);
-	MyController->MoveToLocation(FVector(380.0, -150.0, 110.0));
+	//MyController->MoveToLocation(FVector(380.0, -150.0, 110.0));
 	//IResourceInterface* ri = Cast<IResourceInterface>(GetTargetActor());
 	int32 amount;
-	int32 space = MyController->GetRTSCharacter()->GetCarryWeight() - MyController->GetRTSCharacter()->GetWeight();
-	TArray<AActor*> ResourceActors;
+	
+	
 	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UResourceInterface::StaticClass(), ResourceActors);
 
 	// Does the target have resources left
-	for (auto Resource : ResourceActors)
+	AActor* ClosestResource = FindClosestResource(Character, ResourceActors);
+	if (MyController->GetRTSCharacter()->GetStats().unitID != 0)
 	{
-		IResourceInterface* ri = Cast<IResourceInterface>(Resource);
+		return EBTNodeResult::Failed;
+	}
+	if (ClosestResource != nullptr)
+	{
+		IResourceInterface* ri = Cast<IResourceInterface>(ClosestResource);
+		int32 space = MyController->GetRTSCharacter()->GetCarryWeight() - MyController->GetRTSCharacter()->GetWeight(); 
 		amount = ri->GetAmount();
 		if (amount > 0)
 		{
@@ -40,6 +47,7 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 			{
 
 				// Find the lowest amount to gather, either the resources has less than we can carry / gather or we lack the space to gather fully
+				MyController->MoveToActor(ClosestResource);
 				int32 amountToTake = MIN(amount, space);
 				amountToTake = MIN(MyController->GetRTSCharacter()->GetGatherAmount(), amountToTake);
 
@@ -69,8 +77,6 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 			return EBTNodeResult::Succeeded;
 		}
 	}
-
-	
 	return EBTNodeResult::Succeeded;
 }
 
@@ -94,4 +100,30 @@ bool UBTTask_CollectResources::FindResource(EResourceType resType, TArray<AActor
 	}
 
 	return resFound;
+}
+
+AActor* UBTTask_CollectResources::FindClosestResource(ADecay_of_environmentCharacter* Character, TArray<AActor*> _ResourceActors)
+{
+	if (_ResourceActors.Num() > 0)
+	{
+		AActor* Closest = _ResourceActors[0];
+		for (AActor* Resource : _ResourceActors)
+		{
+			float DistanceToClosest =
+				(FMath::Square(Character->GetActorLocation().X) - FMath::Square(Closest->GetActorLocation().X)) +
+				(FMath::Square(Character->GetActorLocation().Y) - FMath::Square(Closest->GetActorLocation().Y)) +
+				(FMath::Square(Character->GetActorLocation().Z) - FMath::Square(Closest->GetActorLocation().Z));
+
+			float DistanceToResource = 
+				(FMath::Square(Character->GetActorLocation().X) - FMath::Square(Resource->GetActorLocation().X)) +
+				(FMath::Square(Character->GetActorLocation().Y) - FMath::Square(Resource->GetActorLocation().Y)) +
+				(FMath::Square(Character->GetActorLocation().Z) - FMath::Square(Resource->GetActorLocation().Z));
+			if (DistanceToClosest > DistanceToResource)
+			{
+				Closest = Resource;
+			}
+		}
+		return Closest;
+	}
+	return nullptr;
 }

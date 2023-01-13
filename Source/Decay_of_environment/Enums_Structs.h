@@ -84,19 +84,20 @@ struct FUnitStats
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		float  currentHealth;
+	float  currentHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		float  maxHealth;
+	float  maxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		FString unitName;
+	FString unitName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	int32 unitID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	int32  team;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		int32  team;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-		int32  owner;
+	int32  owner;
 };
 
 USTRUCT(BlueprintType)

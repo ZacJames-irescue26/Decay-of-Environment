@@ -38,14 +38,13 @@ AOverseerer::AOverseerer()
 void AOverseerer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AOverseerer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input

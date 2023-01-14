@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
 #include "Overseerer.generated.h"
 
 UCLASS()
@@ -54,4 +55,5 @@ public:
 	//TODO setup player owner on spawn
 	UPROPERTY(EditAnywhere)
 	int32 ComponentsValue = 0;
+
 };

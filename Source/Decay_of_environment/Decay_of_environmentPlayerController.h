@@ -93,7 +93,9 @@ private:
 	FVector mouseStart;
 	FVector mouseEnd;
 	FHitResult hit;
-
+	FVector _Location;
+	double LocationX;
+	double LocationY;
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;

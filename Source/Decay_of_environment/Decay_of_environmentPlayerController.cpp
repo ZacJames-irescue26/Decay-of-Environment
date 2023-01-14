@@ -39,7 +39,28 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	
 	MousePos = hit.Location;
 
-
+	FVector2D ViewportSize;
+	
+	GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
+	GetMousePosition(LocationX, LocationY);
+	//dont know why its reversed
+	if ((LocationX/ViewportSize.X) >= 0.975)
+	{
+		_Location.Y += 10;
+	}
+	if ((LocationX / ViewportSize.X) <= 0.025)
+	{
+		_Location.Y -= 10;
+	}
+	if ((LocationY / ViewportSize.Y) >= 0.975)
+	{
+		_Location.X -= 10;
+	}
+	if ((LocationY / ViewportSize.Y) <= 0.025)
+	{
+		_Location.X += 10;
+	}
+	GetOverseerer()->SetActorLocation(_Location);
 
 	GetHitResultUnderCursor(ECC_Visibility, true, hit);
 	if(leftMouseDown)

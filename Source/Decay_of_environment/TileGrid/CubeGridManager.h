@@ -41,6 +41,9 @@ protected:
 	TSubclassOf<AActor> DefaultBuilding;
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> RampLeft;
+
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> Base;
 
 	UPROPERTY(EditAnywhere)

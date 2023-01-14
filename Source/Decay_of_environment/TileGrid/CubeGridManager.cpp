@@ -105,6 +105,10 @@ void ACubeGridManager::LoadLevel()
 			{
 				tiletoSpawn = WaterCubeTile;
 			}
+			if (CubeGrid2DArray[x][y] == 3)
+			{
+				tiletoSpawn = RampLeft;
+			}
 			ACubeTile* NewTile = GetWorld()->SpawnActor<ACubeTile>(tiletoSpawn, FVector(FIntPoint(xPos, yPos)), FRotator::ZeroRotator);
 			NewTile->SetActorLabel(FString::Printf(TEXT("Tile %d-%d"), x, y));
 			CubeGrid[x][y] = NewTile;

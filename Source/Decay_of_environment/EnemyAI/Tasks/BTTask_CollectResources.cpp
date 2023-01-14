@@ -31,10 +31,6 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 
 	// Does the target have resources left
 	AActor* ClosestResource = FindClosestResource(Character, ResourceActors);
-	if (MyController->GetRTSCharacter()->GetStats().unitID != 0)
-	{
-		return EBTNodeResult::Failed;
-	}
 	if (ClosestResource != nullptr)
 	{
 		IResourceInterface* ri = Cast<IResourceInterface>(ClosestResource);

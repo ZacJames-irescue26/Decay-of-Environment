@@ -95,6 +95,7 @@ void UInGameMenu::SaveLevel()
 		FinalString += TEXT(",");
 		FinalString += string.Z;
 		//FinalString += string->team;
+		FinalString += TEXT(",");
 		FinalString += LINE_TERMINATOR;
 	}
 	FString SavePath = FPaths::ProjectContentDir() + FilePathFromContent + "test.txt";

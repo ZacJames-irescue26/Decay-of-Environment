@@ -59,7 +59,7 @@ void UUserInterface::SpawnBuilding()
 	{
 		FVector Location;
 		Location = PlayerController->MousePos;
-		UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 		FRotator Rotation = {0,0,0};
 		ABuilding* Building = World->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
 		Buildings.Add(Building);

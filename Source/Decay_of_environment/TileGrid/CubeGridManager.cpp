@@ -135,43 +135,53 @@ void ACubeGridManager::LoadUnitsAndBuildings()
 
 	const TCHAR* Delims[] = { TEXT(","), TEXT("\n"), TEXT("\r") };
 	TArray<FString> Parsed;
-	//RetString.ParseIntoArray(Parsed, true);
+	RetString.ParseIntoArray(Parsed, Delims, true);
 	UE_LOG(LogTemp, Warning, TEXT("Parsed length: %i"), Parsed.Num());
 	for (int i = 0; i < Parsed.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Parsed %f"), FCString::Atof(*Parsed[i]));
+		UE_LOG(LogTemp, Warning, TEXT("Parsed atoi %i"), FCString::Atoi(*Parsed[i]));
+		UE_LOG(LogTemp, Warning, TEXT("Parsed atof %f"), FCString::Atof(*Parsed[i]));
 	}
-	/*if (!(i > Parsed.Num()))
+
+	//for (int i = 0; i < Parsed.Num(); i+= 4)
+	int i = 0;
+	while(i < (Parsed.Num()-4))
 	{
-		for (int i = 0; i < Parsed.Num(); i++)
+		if (i > Parsed.Num())
 		{
-			TSubclassOf<AActor> ActorToSpawn;
-			int unitID = FCString::Atoi(*Parsed[i]);
-			FVector Pos = { FCString::Atof(*Parsed[i+1]),FCString::Atof(*Parsed[i+2]), FCString::Atof(*Parsed[i+3])};
-			ABuilding* NewBuilding;
-			ABuilding* NewBase;
-			ADecay_of_environmentCharacter* NewCharacter;
-			switch (unitID)
-			{
-			case 0:
-				ActorToSpawn = DefaultBuilding;
-				NewBuilding = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Pos, FRotator::ZeroRotator);
-				break;
-			case 1:
-				ActorToSpawn = Base;
-				NewBase = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Pos, FRotator::ZeroRotator);
-				break;
-			case 10:
-				ActorToSpawn = DefaultCharacter;
-				NewCharacter = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(ActorToSpawn, Pos, FRotator::ZeroRotator);
-				
-				break;
-			default:
-				break;
-			}
-			i += 4;
+			break;
 		}
-	}*/
+		TSubclassOf<AActor> ActorToSpawn;
+		int unitID = FCString::Atoi(*Parsed[i]);
+		FVector Pos = { FCString::Atof(*Parsed[i+1]),FCString::Atof(*Parsed[i+2]), FCString::Atof(*Parsed[i+3])};
+		ABuilding* NewBuilding;
+		ABuilding* NewBase;
+		ADecay_of_environmentCharacter* NewCharacter;
+		switch (unitID)
+		{
+		case 0:
+			ActorToSpawn = DefaultBuilding;
+			NewBuilding = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Pos, FRotator::ZeroRotator);
+			NewBuilding->IsPlaced = true;
+			break;
+		case 1:
+			ActorToSpawn = Base;
+			NewBase = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Pos, FRotator::ZeroRotator);
+			NewBase->IsPlaced = true;
+			break;
+		case 10:
+			ActorToSpawn = DefaultCharacter;
+			NewCharacter = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(ActorToSpawn, Pos, FRotator::ZeroRotator);
+			
+			break;
+		default:
+			break;
+		}
+		UE_LOG(LogTemp, Warning, TEXT("value: %i"), i);
+		i += 4;
+		UE_LOG(LogTemp, Warning, TEXT("value: %i"), i);
+	}
+	
 
 
 

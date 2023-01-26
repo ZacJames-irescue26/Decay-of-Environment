@@ -30,8 +30,16 @@ bool UUserInterface::Initialize()
 	{
 		Buildings.Add(Cast<ABuilding>(Building));
 	}
-	return true;
+	FString Path = FString("/Game/TopDown/Textures/exit_icon");
+	UTexture2D* Texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *Path));
+
+	AbilityImage->SetVisibility(ESlateVisibility::Visible);
+	AbilityImage->SetBrushFromTexture(Texture);
+	/*Ability_One = NewObject<UButton>(UButton::StaticClass());
+	Ability_One->AddChild(AbilityImage);
+	HorizontalBox->AddChild(Ability_One);*/
 	
+	return true;
 }
 
 
@@ -39,6 +47,7 @@ void UUserInterface::UpdateText()
 {
 	
 	ComponentsValue->SetText(FText::FromString(FString::FromInt(PlayerController->GetOverseerer()->ComponentsValue)));
+	
 }
 
 void UUserInterface::SpawnBuilding()

@@ -145,7 +145,7 @@ public:
 #if WITH_EDITOR
 		return EnumPtr->GetDisplayNameTextByValue(EnumValue).ToString();
 #else
-		return EnumPtr->GetNameByIndex(EnumValue);
+		return EnumPtr->GetNameByIndex(EnumValue).ToString();
 #endif
 	}
 };

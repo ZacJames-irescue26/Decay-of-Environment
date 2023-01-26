@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MenuWidget.h"
 #include "Components/Button.h"
+#include "../TileGrid/CubeGridManager.h"
 #include "InGameMenu.generated.h"
 
 /**
@@ -50,6 +51,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* LoadButton;
 
+	ACubeGridManager* GridManager;
 	UFUNCTION()
 	void CancelPressed();
 
@@ -58,4 +60,7 @@ private:
 
 	UFUNCTION()
 	void SaveLevel();
+
+	UFUNCTION()
+	void LoadUnitsAndBuildings();
 };

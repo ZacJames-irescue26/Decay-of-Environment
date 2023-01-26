@@ -122,6 +122,7 @@ void ADecay_of_environmentPlayerController::OnSetDestinationPressed()
 	// We flag that the input is being pressed
 	leftMouseDown = true;
 	mouseStart = hit.Location;
+	selectedUnits.Empty();
 	// Just in case the character was moving because of a previous short press we stop it
 	StopMovement();
 }
@@ -235,7 +236,7 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 	selectionArea->SetWorldLocation(mouseEnd);
 	selectionArea->SetBoxExtent(selectionSize);
 	TArray<AActor*> actors;
-
+	selectedUnits.Empty();
 	selectionArea->GetOverlappingActors(actors);
 
 	if (actors.Num() > 0)

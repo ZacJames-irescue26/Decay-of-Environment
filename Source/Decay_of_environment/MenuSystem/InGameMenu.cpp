@@ -11,6 +11,7 @@
 bool UInGameMenu::Initialize()
 {
 	bool Success = Super::Initialize();
+	GridManager = Cast<ACubeGridManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACubeGridManager::StaticClass()));
 	if (!Success)
 	{
 		return false;
@@ -23,6 +24,10 @@ bool UInGameMenu::Initialize()
 
 	if (!ensure(SaveButton != nullptr)) return false;
 	SaveButton->OnClicked.AddDynamic(this, &UInGameMenu::SaveLevel);
+
+	if (!ensure(LoadButton != nullptr)) return false;
+	LoadButton->OnClicked.AddDynamic(this, &UInGameMenu::LoadUnitsAndBuildings);
+
 	return true;
 }
 
@@ -100,4 +105,9 @@ void UInGameMenu::SaveLevel()
 	}
 	FString SavePath = FPaths::ProjectContentDir() + FilePathFromContent + "test.txt";
 	FFileHelper::SaveStringToFile(FinalString, *SavePath);
+}
+
+void UInGameMenu::LoadUnitsAndBuildings()
+{
+	GridManager->LoadUnitsAndBuildings();
 }

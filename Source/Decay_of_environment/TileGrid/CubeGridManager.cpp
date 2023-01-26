@@ -46,10 +46,12 @@ void ACubeGridManager::LoadLevel()
 	if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*FilePath))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("File doesnt exist"));
+		return;
 	}
 	if (!FFileHelper::LoadFileToString(RetString, *FilePath))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to read file"));
+		return;
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("File: %s"), *RetString);
@@ -110,7 +112,7 @@ void ACubeGridManager::LoadLevel()
 				tiletoSpawn = RampLeft;
 			}
 			ACubeTile* NewTile = GetWorld()->SpawnActor<ACubeTile>(tiletoSpawn, FVector(FIntPoint(xPos, yPos)), FRotator::ZeroRotator);
-			NewTile->SetActorLabel(FString::Printf(TEXT("Tile %d-%d"), x, y));
+			//NewTile->SetActorLabel(FString::Printf(TEXT("Tile %d-%d"), x, y));
 			CubeGrid[x][y] = NewTile;
 		}
 	}
@@ -126,10 +128,12 @@ void ACubeGridManager::LoadUnitsAndBuildings()
 	if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*FilePath))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("File doesnt exist"));
+		return;
 	}
 	if (!FFileHelper::LoadFileToString(RetString, *FilePath))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to read file"));
+		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Ret string length: %i"), RetString.Len());
 

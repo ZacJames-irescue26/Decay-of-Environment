@@ -43,7 +43,7 @@ void ABuilding::Tick(float DeltaTime)
 		GridManager->GridPos.Y = GridManager->AlignToGrid(mPos.Y, GridManager->TileVerticalOffset);
 		GridManager->GridPos.Z = mPos.Z;
 
-		UE_LOG(LogTemp, Warning, TEXT("X: %f Y: %f Z: %f"), GridManager->GridPos.X, GridManager->GridPos.Y, GridManager->GridPos.Z);
+		//UE_LOG(LogTemp, Warning, TEXT("X: %f Y: %f Z: %f"), GridManager->GridPos.X, GridManager->GridPos.Y, GridManager->GridPos.Z);
 		if (GridManager->GridPos.X / GridManager->TileHorizontalOffset >= 0 && GridManager->GridPos.Y/GridManager->TileVerticalOffset >= 0)
 		{
 			SetActorLocation(GridManager->GridPos);

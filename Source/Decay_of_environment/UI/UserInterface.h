@@ -14,6 +14,8 @@
 #include "../Decay_of_environmentPlayerController.h"
 #include "../Building.h"
 #include <Components/TextBlock.h>
+#include "Components/Image.h"
+#include <Components/HorizontalBox.h>
 #include "UserInterface.generated.h"
 
 /**
@@ -46,6 +48,13 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ComponentsValue;
+
+	UPROPERTY(meta = (BindWidget))
+	class UImage* AbilityImage;
+	UPROPERTY(meta = (BindWidget))
+	class UHorizontalBox* HorizontalBox;
+	UPROPERTY()
+	UButton* Ability_One;
 
 	UFUNCTION()
 	void SpawnBuilding();

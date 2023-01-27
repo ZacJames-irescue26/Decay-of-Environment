@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "UserInterface.h"
+#include "../Decay_of_environmentCharacter.h"
 #include "TestHUD.generated.h"
 
 /**
@@ -14,12 +15,19 @@ UCLASS()
 class DECAY_OF_ENVIRONMENT_API ATestHUD : public AHUD
 {
 	GENERATED_BODY()
-	ATestHUD();
+public:
 
-	
+	ATestHUD();
+	virtual void DrawHUD() override;
+	ADecay_of_environmentPlayerController* PlayerController;
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
 	TSubclassOf<class UUserWidget> UserInterfaceClass;
 	class UUserInterface* UserInterface;
+	void StartDraw();
+	double StartX;
+	double StartY;
+	TSubclassOf<ADecay_of_environmentCharacter> ActorClass;
+	TArray<AActor*> SelectedActors;
 };

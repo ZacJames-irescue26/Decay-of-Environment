@@ -29,7 +29,7 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	AIControllerClass = ABaseAI::StaticClass();
-
+	
 	stats.currentHealth = 100;
 	stats.maxHealth =  100;
 	stats.gatherAmount = 5;

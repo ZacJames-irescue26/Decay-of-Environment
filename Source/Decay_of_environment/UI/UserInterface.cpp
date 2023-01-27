@@ -25,6 +25,8 @@ bool UUserInterface::Initialize()
 	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
 	if (!ensure(UnitButton != nullptr)) return false;
 	UnitButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnUnit);
+	
+
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),ABuilding::StaticClass(), ActorBuildings);
 	for (auto& Building : ActorBuildings)
 	{
@@ -35,14 +37,13 @@ bool UUserInterface::Initialize()
 
 	AbilityImage->SetVisibility(ESlateVisibility::Visible);
 	AbilityImage->SetBrushFromTexture(Texture);
-	/*Ability_One = NewObject<UButton>(UButton::StaticClass());
-	Ability_One->AddChild(AbilityImage);
-	HorizontalBox->AddChild(Ability_One);*/
 	
 	return true;
 }
-
-
+void UUserInterface::SwitchAbilities(UWidget* Widget)
+{
+	AbilitySwitcher->SetActiveWidget(Widget);
+}
 void UUserInterface::UpdateText()
 {
 	

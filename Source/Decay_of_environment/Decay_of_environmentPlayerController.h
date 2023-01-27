@@ -41,6 +41,12 @@ public:
 	UFUNCTION(Client, Reliable)
 	void MoveUnits(FVector loc);
 	AOverseerer* GetOverseerer();
+	TArray<ADecay_of_environmentCharacter*> GetUnitsArray() {return selectedUnits;};
+	double MouseStartX;
+	double MouseStartY;
+	double MouseEndX;
+	double MouseEndY;
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -67,7 +73,6 @@ protected:
 	void ZoomOut();
 	IDamagableInterface* GetDamagable(AActor* other);
 
-	
 
 
 private:
@@ -96,6 +101,9 @@ private:
 	FVector _Location;
 	double LocationX;
 	double LocationY;
+
+	
+
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;

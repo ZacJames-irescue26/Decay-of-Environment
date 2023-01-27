@@ -15,6 +15,7 @@
 #include "UI/UserInterface.h"
 #include "AI/A_star_AIController.h"
 #include "TileGrid/CubeTile.h"
+#include "UI/TestHUD.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -27,10 +28,10 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(0, 0, 400));
-	/*static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
-	UserInterfaceClass = UserInterfaceBPClass.Class;*/
+	UserInterfaceClass = UserInterfaceBPClass.Class;
 }
 
 void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
@@ -67,7 +68,7 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	{
 		mouseEnd = hit.Location;
 		FollowTime += DeltaTime;
-
+		GetMousePosition(MouseEndX, MouseEndY);
 
 		FollowTime = 0.f;
 		centerMouseLocation = FVector((mouseStart+mouseEnd)/2);
@@ -77,6 +78,7 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 		DrawDebugBox(GetWorld(), centerMouseLocation, selectionSize, FQuat(0,0,0,0), FColor::Black);
 
 	}
+
 }
 
 void ADecay_of_environmentPlayerController::BeginPlay()
@@ -122,6 +124,7 @@ void ADecay_of_environmentPlayerController::OnSetDestinationPressed()
 	// We flag that the input is being pressed
 	leftMouseDown = true;
 	mouseStart = hit.Location;
+	GetMousePosition(MouseStartX, MouseStartY);
 	selectedUnits.Empty();
 	// Just in case the character was moving because of a previous short press we stop it
 	StopMovement();
@@ -233,12 +236,13 @@ void ADecay_of_environmentPlayerController::RightClick()
 
 void ADecay_of_environmentPlayerController::SelectUnits()
 {
-	selectionArea->SetWorldLocation(mouseEnd);
-	selectionArea->SetBoxExtent(selectionSize);
+	//selectionArea->SetWorldLocation(mouseEnd);
+	//selectionArea->SetBoxExtent(selectionSize);
 	TArray<AActor*> actors;
 	selectedUnits.Empty();
-	selectionArea->GetOverlappingActors(actors);
-
+	//selectionArea->GetOverlappingActors(actors);
+	ATestHUD* HUD = Cast<ATestHUD>(GetHUD());
+	actors = HUD->SelectedActors;
 	if (actors.Num() > 0)
 	{
 		for (AActor* a : actors)
@@ -251,6 +255,7 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 					if (character->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
 					{
 						selectedUnits.Add(character);
+						
 					}
 					
 				}

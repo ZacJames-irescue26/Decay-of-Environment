@@ -13,6 +13,25 @@ ATestHUD::ATestHUD()
 	UserInterfaceClass = UserInterfaceBPClass.Class;
 }
 
+void ATestHUD::DrawHUD()
+{
+	if (PlayerController->leftMouseDown)
+	{
+		SelectedActors.Empty();
+		FLinearColor SelectionBoxColor;
+		SelectionBoxColor.R = 0;
+		SelectionBoxColor.G = 255;
+		SelectionBoxColor.B = 0;
+		SelectionBoxColor.A = 0.4;
+
+		double EndPosX = PlayerController->MouseEndX - PlayerController->MouseStartX;
+		double EndPosY = PlayerController->MouseEndY - PlayerController->MouseStartY;
+		DrawRect(SelectionBoxColor, PlayerController->MouseStartX, PlayerController->MouseStartY, EndPosX, EndPosY);
+		
+		GetActorsInSelectionRectangle(FVector2D(PlayerController->MouseStartX, PlayerController->MouseStartY), FVector2D(PlayerController->MouseEndX, PlayerController->MouseEndY), SelectedActors);
+	}
+}
+
 void ATestHUD::BeginPlay()
 {
 	
@@ -24,11 +43,32 @@ void ATestHUD::BeginPlay()
 	if (!ensure(UserInterface != nullptr)) return;
 
 	UserInterface->Setup();
-	
+	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 	
 }
 
 void ATestHUD::Tick(float DeltaSeconds)
 {
+	Super::Tick(DeltaSeconds);
+	
+	
+
 	UserInterface->UpdateText();
+	for (auto character : PlayerController->GetUnitsArray())
+	{
+		switch (character->stats.unitID)
+		{
+		case 0:
+			UserInterface->SwitchAbilities(UserInterface->WorkerAbilities);
+			break;
+		case 1:
+			UserInterface->SwitchAbilities(UserInterface->ArmyAbilities);
+			break;
+		default:
+			break;
+		}
+	}
 }
+
+
+

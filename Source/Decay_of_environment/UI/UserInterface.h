@@ -16,6 +16,8 @@
 #include <Components/TextBlock.h>
 #include "Components/Image.h"
 #include <Components/HorizontalBox.h>
+#include <Components/WidgetSwitcher.h>
+#include <Components/Widget.h>
 #include "UserInterface.generated.h"
 
 /**
@@ -29,6 +31,15 @@ public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
 	void UpdateText();
 
+
+	/*////////////////Abilities//////////////////////////*/
+	void SwitchAbilities(UWidget* Widget);
+	UPROPERTY(meta = (BindWidget))
+	class UWidgetSwitcher* AbilitySwitcher;
+	UPROPERTY(meta = (BindWidget))
+	class UWidget* WorkerAbilities;
+	UPROPERTY(meta = (BindWidget))
+	class UWidget* ArmyAbilities;
 protected:
 	virtual bool Initialize() override;
 
@@ -51,10 +62,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* AbilityImage;
-	UPROPERTY(meta = (BindWidget))
-	class UHorizontalBox* HorizontalBox;
-	UPROPERTY()
-	UButton* Ability_One;
+	
+
+
 
 	UFUNCTION()
 	void SpawnBuilding();

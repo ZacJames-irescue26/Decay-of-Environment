@@ -10,16 +10,16 @@
 #include "TeamInterface.h"
 #include "Decay_of_environmentCharacter.generated.h"
 
-USTRUCT(BlueprintType)
-struct FUnitAbilities
-{
-	GENERATED_USTRUCT_BODY()
-public:
-	int32 Ability_One = 0;
-	int32 Ability_Two = 0;
-	int32 Abiltiy_Three = 0;
-	int32 Ability_Four = 0;
-};
+//USTRUCT(BlueprintType)
+//struct FUnitAbilities
+//{
+//	GENERATED_USTRUCT_BODY()
+//public:
+//	int32 Ability_One = 0;
+//	int32 Ability_Two = 0;
+//	int32 Abiltiy_Three = 0;
+//	int32 Ability_Four = 0;
+//};
 
 UCLASS(Blueprintable)
 class ADecay_of_environmentCharacter : public ACharacter, public IDamagableInterface, public ITeamInterface
@@ -38,7 +38,6 @@ public:
 	FORCEINLINE ECharacterType GetType() { return stats.characterType; }
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats")
 	FCharacterStats stats;
-
 	virtual int32 GetWeight();
 	virtual int32 GetCarryWeight();
 	void ClearInventory();

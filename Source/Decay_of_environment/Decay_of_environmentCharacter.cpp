@@ -34,6 +34,7 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 	stats.maxHealth =  100;
 	stats.gatherAmount = 5;
 	stats.unitName = "Character";
+	stats.Energy = 10;
 }
 
 void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)

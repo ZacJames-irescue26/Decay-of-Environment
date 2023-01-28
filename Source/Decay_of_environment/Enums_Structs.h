@@ -90,6 +90,9 @@ public:
 	float  maxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float  Energy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FString unitName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	int32 unitID;

@@ -7,6 +7,7 @@
 #include <GameFramework/Character.h>
 #include "Kismet/GameplayStatics.h"
 #include "../Overseerer.h"
+#include "../Abilities/ShieldAblitity.h"
 
 
 UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
@@ -25,6 +26,8 @@ bool UUserInterface::Initialize()
 	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
 	if (!ensure(UnitButton != nullptr)) return false;
 	UnitButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnUnit);
+	if (!ensure(ArmyShield != nullptr)) return false;
+	ArmyShield->OnClicked.AddDynamic(this, &UUserInterface::SpawnArmyShield);
 	
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),ABuilding::StaticClass(), ActorBuildings);
@@ -96,5 +99,26 @@ void UUserInterface::SpawnUnit()
 
 			}
 		}
+	}
+}
+
+void UUserInterface::SpawnArmyShield()
+{
+	for (ADecay_of_environmentCharacter* units : PlayerController->GetUnitsArray())
+	{
+		if (units->stats.unitID == 1)
+		{
+			if (units->stats.Energy >= 5)
+			{
+				FVector Location = units->GetActorLocation();
+				FRotator Rotation = { 0,0,0 };
+				AShieldAblitity* Shield = GetWorld()->SpawnActor<AShieldAblitity>(AbilityToSpawn, Location, Rotation);
+				Shield->SetParentActor(units);
+				units->stats.Energy -= 5;
+				break;
+			}
+
+		}
+
 	}
 }

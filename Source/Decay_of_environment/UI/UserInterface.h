@@ -18,6 +18,7 @@
 #include <Components/HorizontalBox.h>
 #include <Components/WidgetSwitcher.h>
 #include <Components/Widget.h>
+#include "../Abilities/ShieldAblitity.h"
 #include "UserInterface.generated.h"
 
 /**
@@ -40,6 +41,8 @@ public:
 	class UWidget* WorkerAbilities;
 	UPROPERTY(meta = (BindWidget))
 	class UWidget* ArmyAbilities;
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ArmyShield;
 protected:
 	virtual bool Initialize() override;
 
@@ -72,14 +75,19 @@ private:
 	UFUNCTION()
 	void SpawnUnit();
 
+	UFUNCTION()
+	void SpawnArmyShield();
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ABuilding> BuildingToSpawn;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> UnitToSpawn;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AShieldAblitity> AbilityToSpawn;
+
 	ADecay_of_environmentPlayerController* PlayerController;
 	UWorld* World;
 
 	TArray<ABuilding*> Buildings;
 	TArray<AActor*> ActorBuildings;
-
 };

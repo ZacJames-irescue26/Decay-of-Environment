@@ -22,6 +22,7 @@ void ABuilding::BeginPlay()
 	Super::BeginPlay();
 	
 	GridManager = Cast<ACubeGridManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACubeGridManager::StaticClass()));
+	
 }
 
 // Called every frame

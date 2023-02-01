@@ -19,6 +19,7 @@
 #include <Components/WidgetSwitcher.h>
 #include <Components/Widget.h>
 #include "../Abilities/ShieldAblitity.h"
+#include "../Abilities/Dash.h"
 #include "UserInterface.generated.h"
 
 /**
@@ -43,6 +44,10 @@ public:
 	class UWidget* ArmyAbilities;
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ArmyShield;
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ArmyDash;
+
+
 protected:
 	virtual bool Initialize() override;
 
@@ -78,12 +83,18 @@ private:
 	UFUNCTION()
 	void SpawnArmyShield();
 
+	UFUNCTION()
+	void SpawnArmyDash();
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ABuilding> BuildingToSpawn;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> UnitToSpawn;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AShieldAblitity> AbilityToSpawn;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ADash> Dash;
 
 	ADecay_of_environmentPlayerController* PlayerController;
 	UWorld* World;

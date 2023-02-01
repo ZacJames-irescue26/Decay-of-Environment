@@ -25,7 +25,18 @@ void AShieldAblitity::Tick(float DeltaTime)
 	if (Parent != nullptr)
 	{
 		SetActorLocation(Parent->GetActorLocation());
+		TArray<AActor*> OverlappingActors;
+		GetOverlappingActors(OverlappingActors, ADecay_of_environmentCharacter::StaticClass());
+		for (AActor* a : OverlappingActors)
+		{
+			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
+			{
+				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
+				c->stats.currentHealth += 5;
+			}
+		}
 	}
+
 }
 
 void AShieldAblitity::SetParentActor(ADecay_of_environmentCharacter* _Parent)

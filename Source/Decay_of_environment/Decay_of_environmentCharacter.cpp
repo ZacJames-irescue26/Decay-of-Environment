@@ -18,7 +18,6 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 {
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
@@ -35,12 +34,28 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 	stats.gatherAmount = 5;
 	stats.unitName = "Character";
 	stats.Energy = 10;
+
+	
 }
 
 void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 }
+
+void ADecay_of_environmentCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	stats.currentHealth = 100;
+	stats.maxHealth = 100;
+	stats.gatherAmount = 5;
+	stats.unitName = "Character";
+	stats.Energy = 10;
+	/*FString sPath = TEXT("/Game/TopDown/Blueprints/Fog_of_war/M_FogOfWar");
+	UMaterial* mat = LoadMaterialFromPath(FName(*sPath));*/
+	
+}
+
 int32 ADecay_of_environmentCharacter::GetWeight()
 {
 	int32 weight = 0;

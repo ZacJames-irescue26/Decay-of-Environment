@@ -31,7 +31,7 @@ public:
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
-
+	virtual void BeginPlay() override;
 private:
 
 public:
@@ -54,6 +54,28 @@ public:
 	virtual int32 GetPlayerOwner() override;
 	virtual void SetPlayerTeam(int32 Value) override;
 	virtual void SetPlayerOwner(int32 Value) override;
+	
 
+	//template <typename T>
+	//static FORCEINLINE T* LoadObjFromPath(const FName& Path)
+	//{
+	//	if (Path == NAME_None)
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Failed to load texture")); 
+	//		return nullptr;
+	//	}
+	//	return Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Path.ToString()));
+	//}
+
+	//static FORCEINLINE UMaterial* LoadMaterialFromPath(const FName& Path)
+	//{
+	//	if (Path == NAME_None)
+	//	{
+	//		UE_LOG(LogTemp, Warning, TEXT("Failed to load texture"));
+	//		return nullptr;
+	//	}
+	//	return LoadObjFromPath<UMaterial>(Path);
+	//}
+	
 };
 

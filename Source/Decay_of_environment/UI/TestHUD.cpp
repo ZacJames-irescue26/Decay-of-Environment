@@ -50,7 +50,7 @@ void ATestHUD::BeginPlay()
 void ATestHUD::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+	PlayerController->AbilitySwitcher = UserInterface->GetAbilitySwitcher();
 	
 
 	UserInterface->UpdateText();
@@ -68,7 +68,13 @@ void ATestHUD::Tick(float DeltaSeconds)
 			break;
 		}
 	}
+
+	
 }
 
+void ATestHUD::PressAbiltiy1()
+{
+	UserInterface->Ability1;
+}
 
 

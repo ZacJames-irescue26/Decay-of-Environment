@@ -76,7 +76,7 @@ void ABaseAI::SetTargetActor(AActor* val)
 void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
 {
 	targetActor = nullptr;
-	MoveToLocation(loc);
+	MoveToLocation(loc,10.0f);
 	
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
 	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
@@ -99,8 +99,9 @@ void ABaseAI::Tick(float DeltaTime)
 	if (canPerformActions && GetTargetActor() != nullptr) {
 		int32 minDistance = bbExtent.GetAbsMax() + characterBBExtent.GetAbsMax();
 		float dist = FVector::Distance(GetCharacter()->GetActorLocation(), targetActor->GetActorLocation());
+		ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(GetCharacter());
 
-		if (dist < (minDistance * 1.4)) {
+		if (dist < (minDistance * _Character->stats.AttackRange)) {
 			canPerformActions = false;
 			StopMovement();
 
@@ -277,6 +278,7 @@ void ABaseAI::DepositeResource()
 
 void ABaseAI::DamageTarget()
 {
+	StopMovement();
 	IDamagableInterface* di = Cast<IDamagableInterface>(GetTargetActor());
 	if (di->GetHealth() > 0)
 	{
@@ -291,8 +293,10 @@ void ABaseAI::DamageTarget()
 
 void ABaseAI::AttackTarget(IDamagableInterface* target)
 {
+	
 	if (target->GetHealth() > 0)
 	{
+		
 		currentAction = EActionType::Attack;
 		SetTargetActor(Cast<AActor>(target));
 		MoveToActor(GetTargetActor());

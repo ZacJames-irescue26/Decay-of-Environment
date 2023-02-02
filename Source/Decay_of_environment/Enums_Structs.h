@@ -84,13 +84,16 @@ struct FUnitStats
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float  currentHealth;
+	float currentHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float  maxHealth;
+	float maxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float  Energy;
+	float Energy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float AttackRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FString unitName;

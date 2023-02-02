@@ -32,7 +32,7 @@ class DECAY_OF_ENVIRONMENT_API UUserInterface : public UUserInterfaceWidget
 public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
 	void UpdateText();
-
+	inline UWidgetSwitcher* GetAbilitySwitcher() {return AbilitySwitcher;}
 
 	/*////////////////Abilities//////////////////////////*/
 	void SwitchAbilities(UWidget* Widget);
@@ -43,9 +43,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UWidget* ArmyAbilities;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* ArmyShield;
+	class UButton* Ability1;
 	UPROPERTY(meta = (BindWidget))
-	class UButton* ArmyDash;
+	class UButton* Ability2;
+
 
 
 protected:
@@ -71,7 +72,9 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* AbilityImage;
 	
-
+		
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ADash> Dash;
 
 
 	UFUNCTION()
@@ -81,24 +84,17 @@ private:
 	void SpawnUnit();
 
 	UFUNCTION()
-	void SpawnArmyShield();
+	void Button1();
 
 	UFUNCTION()
-	void SpawnArmyDash();
+	void Button2();
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<ABuilding> BuildingToSpawn;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> UnitToSpawn;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AShieldAblitity> AbilityToSpawn;
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<ADash> Dash;
+	
+
 
 	ADecay_of_environmentPlayerController* PlayerController;
 	UWorld* World;
 
-	TArray<ABuilding*> Buildings;
-	TArray<AActor*> ActorBuildings;
+
 };

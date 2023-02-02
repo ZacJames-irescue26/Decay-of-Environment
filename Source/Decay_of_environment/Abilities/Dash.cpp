@@ -3,6 +3,8 @@
 
 #include "Dash.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "../Decay_of_environmentPlayerController.h"
+
 
 // Sets default values
 ADash::ADash()
@@ -16,9 +18,7 @@ ADash::ADash()
 void ADash::BeginPlay()
 {
 	Super::BeginPlay();
-	UWorld* World = GetWorld();
-	if (!ensure(World != nullptr)) return;
-	PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
+	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 }
 
 // Called every frame
@@ -27,15 +27,14 @@ void ADash::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(Parent != nullptr)
 	{	
-		if (!ensure(PlayerController != nullptr)) return;
-		FVector Difference;
+		
 		Difference = PlayerController->MousePos - Parent->GetActorLocation();
 
 		FVector Normal = Difference.GetSafeNormal();
 		FRotator Rot = Normal.Rotation();
 		//FRotator Rot = UKismetMathLibrary::FindLookAtRotation(Parent->GetActorLocation(), PlayerController->MousePos);
 
-		FRotator _rotation;
+		
 		_rotation.Yaw = Rot.Yaw;
 		SetActorRotation(_rotation);
 		SetActorLocation(Parent->GetActorLocation());

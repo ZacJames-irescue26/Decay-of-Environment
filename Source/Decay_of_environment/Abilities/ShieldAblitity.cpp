@@ -41,7 +41,7 @@ void AShieldAblitity::Tick(float DeltaTime)
 
 void AShieldAblitity::SetParentActor(ADecay_of_environmentCharacter* _Parent)
 {
-		Parent = _Parent; 
+	Parent = _Parent; 
 }
 void AShieldAblitity::DestroyShield()
 {

@@ -28,7 +28,7 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	AIControllerClass = ABaseAI::StaticClass();
-	
+	stats.AttackRange = 4;
 	stats.currentHealth = 100;
 	stats.maxHealth =  100;
 	stats.gatherAmount = 5;
@@ -46,11 +46,7 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 void ADecay_of_environmentCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	stats.currentHealth = 100;
-	stats.maxHealth = 100;
-	stats.gatherAmount = 5;
-	stats.unitName = "Character";
-	stats.Energy = 10;
+	
 	/*FString sPath = TEXT("/Game/TopDown/Blueprints/Fog_of_war/M_FogOfWar");
 	UMaterial* mat = LoadMaterialFromPath(FName(*sPath));*/
 	

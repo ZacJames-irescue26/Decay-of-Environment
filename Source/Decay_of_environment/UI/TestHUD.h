@@ -23,6 +23,9 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
+	void PressAbiltiy1();
+
 	TSubclassOf<class UUserWidget> UserInterfaceClass;
 	class UUserInterface* UserInterface;
 	void StartDraw();

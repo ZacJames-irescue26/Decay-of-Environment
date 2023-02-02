@@ -12,6 +12,10 @@
 #include "DamagableInterface.h"
 #include "CharacterDetails.h"
 #include "Net/UnrealNetwork.h"
+#include "Building.h"
+#include "Abilities/ShieldAblitity.h"
+//#include "Abilities/Dash.h"
+#include <Components/WidgetSwitcher.h>
 #include "Decay_of_environmentPlayerController.generated.h"
 
 
@@ -47,6 +51,24 @@ public:
 	double MouseEndX;
 	double MouseEndY;
 
+	void SpawnBuilding();
+	void SpawnUnit();
+
+	void Shield();
+	void DashAbility();
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABuilding> BuildingToSpawn;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> UnitToSpawn;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AShieldAblitity> AbilityToSpawn;
+
+	/*UPROPERTY(EditAnywhere)
+	TSubclassOf<ADash> Dash;*/
+	UPROPERTY(EditAnywhere)
+	class UWidgetSwitcher* AbilitySwitcher;
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -73,8 +95,9 @@ protected:
 	void ZoomOut();
 	IDamagableInterface* GetDamagable(AActor* other);
 
-
-
+	void Button1();
+	void Button2();
+	void Button3();
 private:
 	
 	void SelectUnits();
@@ -101,9 +124,10 @@ private:
 	FVector _Location;
 	double LocationX;
 	double LocationY;
+	TArray<ABuilding*> Buildings;
+	TArray<AActor*> ActorBuildings;
 
 	
-
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;

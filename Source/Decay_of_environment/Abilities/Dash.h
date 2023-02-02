@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "../Decay_of_environmentCharacter.h"
 #include "../Decay_of_environmentPlayerController.h"
-
 #include "Dash.generated.h"
 
 UCLASS()
@@ -27,7 +26,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	ADecay_of_environmentCharacter* Parent;
-	ADecay_of_environmentPlayerController* PlayerController;
+	FVector MousePos;
 	FRotator rotation;
-
+	ADecay_of_environmentPlayerController* PlayerController;
+	FVector Difference;
+	FRotator _rotation;
 };

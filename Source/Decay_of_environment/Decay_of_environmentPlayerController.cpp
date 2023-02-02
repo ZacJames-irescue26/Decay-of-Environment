@@ -16,6 +16,8 @@
 #include "AI/A_star_AIController.h"
 #include "TileGrid/CubeTile.h"
 #include "UI/TestHUD.h"
+#include <Kismet/GameplayStatics.h>
+#include "Abilities/ShieldAblitity.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -28,10 +30,10 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(0, 0, 400));
-	static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
+	/*static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
-	UserInterfaceClass = UserInterfaceBPClass.Class;
+	UserInterfaceClass = UserInterfaceBPClass.Class;*/
 }
 
 void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
@@ -96,7 +98,11 @@ void ADecay_of_environmentPlayerController::BeginPlay()
 	//if (!ensure(UserInterface != nullptr)) return;
 
 	//UserInterface->Setup();
-
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), ActorBuildings);
+	for (auto& Building : ActorBuildings)
+	{
+		Buildings.Add(Cast<ABuilding>(Building));
+	}
 }
 
 void ADecay_of_environmentPlayerController::SetupInputComponent()
@@ -109,6 +115,8 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
+
+	InputComponent->BindAction("Button1", IE_Pressed, this, &ADecay_of_environmentPlayerController::Button1);
 
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomIn);
 	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
@@ -307,6 +315,12 @@ IDamagableInterface* ADecay_of_environmentPlayerController::GetDamagable(AActor*
 {
 	return Cast<IDamagableInterface>(other);
 }
+
+void ADecay_of_environmentPlayerController::Button1()
+{
+	DashAbility();
+}
+
 IResourceInterface* ADecay_of_environmentPlayerController::GetResource(AActor* other)
 {
 	return Cast<IResourceInterface>(other);
@@ -346,4 +360,83 @@ void ADecay_of_environmentPlayerController::ZoomOut()
 	}
 }
 
+void ADecay_of_environmentPlayerController::SpawnBuilding()
+{
+
+	if (GetOverseerer()->ComponentsValue >= 10)
+	{
+		FVector Location;
+		Location = MousePos;
+		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+		FRotator Rotation = { 0,0,0 };
+		ABuilding* Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
+		Buildings.Add(Building);
+		GetOverseerer()->ComponentsValue -= 10;
+	}
+
+}
+
+void ADecay_of_environmentPlayerController::SpawnUnit()
+{
+	for (auto& Building : Buildings)
+	{
+		if (Building->IsMainBuilding)
+		{
+			if (GetOverseerer()->ComponentsValue >= 10)
+			{
+				FVector Location = Building->GetActorLocation();
+				Location.X = Location.X + 20;
+				UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+				FRotator Rotation = { 0,0,0 };
+				GetWorld()->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
+				GetOverseerer()->ComponentsValue -= 10;
+				break;
+
+			}
+		}
+	}
+}
+
+void ADecay_of_environmentPlayerController::Shield()
+{
+	for (ADecay_of_environmentCharacter* units : selectedUnits)
+	{
+		if (units->stats.unitID == 1)
+		{
+			if (units->stats.Energy >= 5)
+			{
+				FVector Location = units->GetActorLocation();
+				FRotator Rotation = { 0,0,0 };
+				AShieldAblitity* _Shield = GetWorld()->SpawnActor<AShieldAblitity>(AbilityToSpawn, Location, Rotation);
+				_Shield->SetParentActor(units);
+				units->stats.Energy -= 5;
+				break;
+			}
+
+		}
+
+	}
+}
+
+void ADecay_of_environmentPlayerController::DashAbility()
+{
+	//for (ADecay_of_environmentCharacter* units : selectedUnits)
+	//{
+	//	if (units->stats.unitID == 1)
+	//	{
+	//		if (units->stats.Energy >= 5)
+	//		{
+	//			FVector Location = units->GetActorLocation();
+	//			FRotator Rotation = { 0,0,0 };
+	//			ADash* _Dash = GetWorld()->SpawnActor<ADash>(Dash, Location, Rotation);
+	//			_Dash->SetParentActor(units);
+	//			units->stats.Energy -= 5;
+	//			//units->SetActorLocation(FVector(100,100,1));
+	//			break;
+	//		}
+
+	//	}
+
+	//}
+}
 

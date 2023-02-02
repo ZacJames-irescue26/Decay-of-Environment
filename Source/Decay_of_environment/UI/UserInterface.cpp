@@ -7,8 +7,7 @@
 #include <GameFramework/Character.h>
 #include "Kismet/GameplayStatics.h"
 #include "../Overseerer.h"
-#include "../Abilities/ShieldAblitity.h"
-#include "../Abilities/Dash.h"
+
 
 
 UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
@@ -27,28 +26,31 @@ bool UUserInterface::Initialize()
 	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
 	if (!ensure(UnitButton != nullptr)) return false;
 	UnitButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnUnit);
-	if (!ensure(ArmyShield != nullptr)) return false;
-	ArmyShield->OnClicked.AddDynamic(this, &UUserInterface::SpawnArmyShield);
-	if (!ensure(ArmyDash != nullptr)) return false;
-	ArmyDash->OnClicked.AddDynamic(this, &UUserInterface::SpawnArmyDash);
+	if (!ensure(Ability1 != nullptr)) return false;
+	Ability1->OnClicked.AddDynamic(this, &UUserInterface::Button1);
+	if (!ensure(Ability2 != nullptr)) return false;
+	Ability2->OnClicked.AddDynamic(this, &UUserInterface::Button2);
 
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(),ABuilding::StaticClass(), ActorBuildings);
-	for (auto& Building : ActorBuildings)
-	{
-		Buildings.Add(Cast<ABuilding>(Building));
-	}
+
 	FString Path = FString("/Game/TopDown/Textures/exit_icon");
 	UTexture2D* Texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *Path));
 
 	AbilityImage->SetVisibility(ESlateVisibility::Visible);
 	AbilityImage->SetBrushFromTexture(Texture);
-	
 	return true;
 }
+
+void UUserInterface::SpawnBuilding()
+{
+	PlayerController->SpawnBuilding();
+}
+
 void UUserInterface::SwitchAbilities(UWidget* Widget)
 {
 	AbilitySwitcher->SetActiveWidget(Widget);
 }
+
+
 void UUserInterface::UpdateText()
 {
 	
@@ -56,77 +58,40 @@ void UUserInterface::UpdateText()
 	
 }
 
-void UUserInterface::SpawnBuilding()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Spawning Building"));
-	
-	UE_LOG(LogTemp, Warning, TEXT("Controllers: %d"), World->GetNumPlayerControllers());
-	//for (auto Player : World->GetPlayerControllerIterator())
-	//{
-	//	if (Player == PlayerController->GetLocalPlayer()->player)
-	//	{
-	//		PlayerController->Player->
-	//		UE_LOG(LogTemp, Warning, TEXT("Same");
-	//	}
-	//}
-	if (!ensure(PlayerController != nullptr)) return;
-	if (PlayerController->GetOverseerer()->ComponentsValue >= 10)
-	{
-		FVector Location;
-		Location = PlayerController->MousePos;
-		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-		FRotator Rotation = {0,0,0};
-		ABuilding* Building = World->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
-		Buildings.Add(Building);
-		PlayerController->GetOverseerer()->ComponentsValue -= 10;
-	}
-	
-}
+
 
 void UUserInterface::SpawnUnit()
 {
-	for (auto& Building : Buildings)
-	{
-		if (Building->IsMainBuilding)
-		{
-			if (PlayerController->GetOverseerer()->ComponentsValue >= 10)
-			{
-				FVector Location = Building->GetActorLocation();
-				Location.X = Location.X + 20;
-				UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-				FRotator Rotation = {0,0,0};
-				World->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
-				PlayerController->GetOverseerer()->ComponentsValue -= 10;
-				break;
-
-			}
-		}
-	}
+	PlayerController->SpawnUnit();
 }
 
-void UUserInterface::SpawnArmyShield()
+void UUserInterface::Button1()
 {
-	for (ADecay_of_environmentCharacter* units : PlayerController->GetUnitsArray())
+	switch (AbilitySwitcher->GetActiveWidgetIndex())
 	{
-		if (units->stats.unitID == 1)
-		{
-			if (units->stats.Energy >= 5)
-			{
-				FVector Location = units->GetActorLocation();
-				FRotator Rotation = { 0,0,0 };
-				AShieldAblitity* Shield = GetWorld()->SpawnActor<AShieldAblitity>(AbilityToSpawn, Location, Rotation);
-				Shield->SetParentActor(units);
-				units->stats.Energy -= 5;
-				break;
-			}
-
-		}
-
+	case 0:
+		break;
+	case 1:
+		PlayerController->Shield();
+		break;
+	default:
+		break;
 	}
+
 }
 
-void UUserInterface::SpawnArmyDash()
+void UUserInterface::Button2()
 {
+	/*switch (AbilitySwitcher->GetActiveWidgetIndex())
+	{
+	case 0:
+		break;
+	case 1:
+		PlayerController->DashAbility();
+		break;
+	default:
+		break;
+	}*/
 	for (ADecay_of_environmentCharacter* units : PlayerController->GetUnitsArray())
 	{
 		if (units->stats.unitID == 1)
@@ -146,3 +111,4 @@ void UUserInterface::SpawnArmyDash()
 
 	}
 }
+

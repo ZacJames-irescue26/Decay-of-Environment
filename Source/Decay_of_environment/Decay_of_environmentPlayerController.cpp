@@ -118,6 +118,8 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("Button1", IE_Pressed, this, &ADecay_of_environmentPlayerController::Button1);
 
+	InputComponent->BindAction("MoveAttack", IE_Pressed, this, &ADecay_of_environmentPlayerController::Moveattack);
+
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomIn);
 	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
 
@@ -175,6 +177,27 @@ void ADecay_of_environmentPlayerController::AttackTarget(IDamagableInterface* ta
 		}
 	}
 }
+
+void ADecay_of_environmentPlayerController::Moveattack()
+{
+	if (selectedUnits.Num() > 0)
+	{
+		for (AActor* a : selectedUnits)
+		{
+			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
+			{
+				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
+				if (c->GetPlayerOwner() != -1) {
+					ABaseAI* con = Cast<ABaseAI>(c->GetController());
+					con->Patrol(hit.Location, c);
+				}
+			}
+
+		}
+	}
+}
+
+
 
 void ADecay_of_environmentPlayerController::GatherResources(IResourceInterface* res)
 {
@@ -318,7 +341,16 @@ IDamagableInterface* ADecay_of_environmentPlayerController::GetDamagable(AActor*
 
 void ADecay_of_environmentPlayerController::Button1()
 {
-	DashAbility();
+	switch (AbilitySwitcher->GetActiveWidgetIndex())
+	{
+	case 0:
+		break;
+	case 1:
+		Shield();
+		break;
+	default:
+		break;
+	}
 }
 
 IResourceInterface* ADecay_of_environmentPlayerController::GetResource(AActor* other)

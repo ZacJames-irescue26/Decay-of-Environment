@@ -30,6 +30,8 @@ public:
 	void Gather();
 	bool FindResource(EResourceType resType, TArray<AActor*> actors);
 	void GetNearbyActors(TArray<AActor*>& actors);
+	void Patrol(FVector Location, AActor* c);
+	void AttackMove();
 	void DamageTarget();
 	void AttackTarget(IDamagableInterface* target);
 	void GatherResource(IResourceInterface* resource);

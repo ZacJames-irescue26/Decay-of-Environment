@@ -96,6 +96,10 @@ void ABaseAI::OnPossess(APawn* InPawn)
 void ABaseAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (currentAction == EActionType::patrol)
+	{
+		AttackMove();
+	}
 	if (canPerformActions && GetTargetActor() != nullptr) {
 		int32 minDistance = bbExtent.GetAbsMax() + characterBBExtent.GetAbsMax();
 		float dist = FVector::Distance(GetCharacter()->GetActorLocation(), targetActor->GetActorLocation());
@@ -115,6 +119,7 @@ void ABaseAI::Tick(float DeltaTime)
 			case EActionType::DepositeResources:
 				DepositeResource();
 				break;
+
 			case EActionType::Build:
 				break;
 			case EActionType::End:
@@ -331,4 +336,29 @@ void ABaseAI::CanPerformActions()
 void ABaseAI::GetNearbyActors(TArray<AActor*>& actors) {
 	selectionArea->SetWorldLocation(GetRTSCharacter()->GetActorLocation());
 	selectionArea->GetOverlappingActors(actors);
+}
+
+void ABaseAI::Patrol(FVector Location, AActor* c)
+{
+	
+	currentAction = EActionType::patrol;
+	//UE_LOG(LogTemp, Warning, TEXT("Current Action: %i"), currentAction);
+	MoveToLocation(Location, 10.0f);
+
+}
+void ABaseAI::AttackMove()
+{
+	TArray<AActor*> NearActors;
+	GetRTSCharacter()->GetOverlappingActors(NearActors, ADecay_of_environmentCharacter::StaticClass());
+	UE_LOG(LogTemp, Warning, TEXT("Actors in range %i"), NearActors.Num());
+	for (AActor* Near : NearActors)
+	{
+		ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(Near);
+		if(!_Character) return;
+		if (_Character->stats.owner != GetRTSCharacter()->GetPlayerOwner() && _Character->stats.team != GetRTSCharacter()->GetPlayerTeam())
+		{
+			SetTargetActor(_Character);
+			currentAction = EActionType::Attack;
+		}
+	}
 }

@@ -86,6 +86,7 @@ protected:
 	void OnTouchReleased(const ETouchIndex::Type FingerIndex, const FVector Location);
 
 	void AttackTarget(IDamagableInterface* target);
+	void Moveattack();
 	void RightClick();
 	void GatherResources(IResourceInterface* res);
 

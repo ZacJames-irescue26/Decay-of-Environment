@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
 #include "../../Decay_of_environmentCharacter.h"
+#include "../EnemyAIController.h"
 #include "BTTask_DepositResources.generated.h"
 
 /**
@@ -18,5 +19,10 @@ public:
 	UBTTask_DepositResources();
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual FString GetStaticDescription() const override;
-	AActor* FindClosestBase(ADecay_of_environmentCharacter* Character, TArray<AActor*> _storageActors);
+	
+	EBTNodeResult::Type RepeatFunction(ADecay_of_environmentCharacter* Character, AEnemyAIController* MyController);
+	
+	int32 minDistance;
+	float dist;
+
 };

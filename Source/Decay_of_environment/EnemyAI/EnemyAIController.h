@@ -26,9 +26,9 @@ public:
 	ADecay_of_environmentCharacter* rtsCharacter;
 	ADecay_of_environmentCharacter* GetRTSCharacter();
 	void SetTargetActor(AActor* val);
+	AActor* GetTargetActor() const { return targetActor; }
 	TSubclassOf<class ADecay_of_environmentCharacter> UnitClass;
 	URTSGameInstance* GameInstance;
-
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI", meta = (AllowprivateAccess = true))
 	TObjectPtr<UBehaviorTree> BehaviourTree;
@@ -39,7 +39,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowprivateAccess = true))
 	TObjectPtr<UBlackboardComponent> BlackboardComponent;
 
+public:
+
 	AActor* previousTarget;
 	AActor* targetActor;
+	
+	FVector characterBBLocation;
+	FVector characterBBExtent;
 
+	FVector bbLocation;
+	FVector bbExtent;
 };

@@ -53,10 +53,11 @@ void AEnemyAIController::BeginPlay()
 void AEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
+	InPawn->GetActorBounds(true, characterBBLocation, characterBBExtent);
 	if (IsValid(Blackboard) && IsValid(BehaviourTree))
 	{
 		Blackboard->InitializeBlackboard(*BehaviourTree->BlackboardAsset);
+
 	}
 }
 
@@ -73,4 +74,8 @@ void AEnemyAIController::SetTargetActor(AActor* val)
 {
 	previousTarget = targetActor;
 	targetActor = val;
+	if (targetActor != nullptr) {
+		targetActor->GetActorBounds(true, bbLocation, bbExtent);
+	}
+	
 }

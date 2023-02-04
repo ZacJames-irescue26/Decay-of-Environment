@@ -28,8 +28,8 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 	MinZoom = 500;
 	ZoomRate = 100;
 
-	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
-	selectionArea->SetBoxExtent(FVector(0, 0, 400));
+	/*selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
+	selectionArea->SetBoxExtent(FVector(0, 0, 400));*/
 	/*static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 

@@ -350,7 +350,7 @@ void ABaseAI::AttackMove()
 {
 	TArray<AActor*> NearActors;
 	GetRTSCharacter()->GetOverlappingActors(NearActors, ADecay_of_environmentCharacter::StaticClass());
-	UE_LOG(LogTemp, Warning, TEXT("Actors in range %i"), NearActors.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("Actors in range %i"), NearActors.Num());
 	for (AActor* Near : NearActors)
 	{
 		ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(Near);

@@ -18,13 +18,14 @@ bool UBTDecorator_IsInRange::CalculateRawConditionValue(UBehaviorTreeComponent& 
 	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	APawn* AIPawn{ MyController->GetPawn() };
 	ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(AIPawn);
-	if (MyController->targetActor != nullptr)
+	if (MyController->GetTargetActor() != nullptr)
 	{
 		float minDistance = MyController->bbExtent.GetAbsMax() + MyController->characterBBExtent.GetAbsMax();
-		float dist = FVector::Distance(MyController->GetCharacter()->GetActorLocation(), MyController->targetActor->GetActorLocation());
+		float dist = FVector::Distance(MyController->GetCharacter()->GetActorLocation(), MyController->GetTargetActor()->GetActorLocation());
 
 		if (dist < (minDistance * Character->stats.AttackRange))
 		{
+			MyController->StopMovement();
 			return true;
 		}
 

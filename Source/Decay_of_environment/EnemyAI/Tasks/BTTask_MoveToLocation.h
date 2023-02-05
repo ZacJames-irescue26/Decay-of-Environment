@@ -4,21 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "../../Enums_Structs.h"
-#include "../../Decay_of_environmentCharacter.h"
-#include "BTTask_CollectResources.generated.h"
+#include "BTTask_MoveToLocation.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API UBTTask_CollectResources : public UBTTask_BlackboardBase
+class DECAY_OF_ENVIRONMENT_API UBTTask_MoveToLocation : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 public:
-	UBTTask_CollectResources();
+	UBTTask_MoveToLocation();
+private:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	virtual FString GetStaticDescription() const override;
-	
-	
 };

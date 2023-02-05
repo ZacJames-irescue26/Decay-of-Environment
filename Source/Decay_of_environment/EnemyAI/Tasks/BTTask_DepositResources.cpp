@@ -5,6 +5,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "../EnemyAIController.h"
 #include "../../Enums_Structs.h"
+#include "../../Base.h"
 
 UBTTask_DepositResources::UBTTask_DepositResources()
 {
@@ -15,9 +16,8 @@ EBTNodeResult::Type UBTTask_DepositResources::ExecuteTask(UBehaviorTreeComponent
 {
 	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 
-	if (MyController->GetTargetActor() != nullptr)
+	if (MyController->GetTargetActor()->IsA(ABase::StaticClass()))
 	{
-		MyController->MoveToActor(MyController->GetTargetActor());
 		for (FItem& item : MyController->GetRTSCharacter()->GetStats().inventory.items)
 		{
 			MyController->GameInstance->EnemyComponentValue += item.amount;

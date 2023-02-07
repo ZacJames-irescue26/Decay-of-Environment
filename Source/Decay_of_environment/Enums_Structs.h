@@ -132,6 +132,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		FInventory inventory;
 };
+
+
+
 /**
  * 
  */

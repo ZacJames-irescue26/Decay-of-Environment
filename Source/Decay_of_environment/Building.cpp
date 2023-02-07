@@ -60,6 +60,7 @@ void ABuilding::Tick(float DeltaTime)
 			}
 		}
 	}
+	
 }
 
 void ABuilding::TakeDamage(float damage)

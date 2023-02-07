@@ -12,6 +12,11 @@
 #include "Interfaces/OnlineSessionInterface.h"
 #include <GameFramework/PlayerController.h>
 #include "MenuSystem/MainMenu.h"
+#include "SaveLoadSystem/TestSaveGame.h"
+#include <Kismet/GameplayStatics.h>
+#include "Enums_Structs.h"
+#include "BaseAI.h"
+#include "EnemyAI/EnemyAIController.h"
 
 const static FName SESSION_NAME = TEXT("GameSession");
 const static FName Server_NAME_SETTINGS_KEY = TEXT("ServerName");
@@ -269,5 +274,152 @@ void URTSGameInstance::LoadMainMenu()
 	if (!ensure(PlayerController != nullptr)) return;
 
 	PlayerController->ClientTravel("/Game/TopDown/Blueprints/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
+}
+
+void URTSGameInstance::SaveGame()
+{
+	TArray<AActor*> AllCharacters;
+	TArray<AActor*> AllBuildings;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), AllCharacters);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), AllBuildings);
+	
+	UTestSaveGame* SaveGameInstance = Cast<UTestSaveGame>(UGameplayStatics::CreateSaveGameObject(UTestSaveGame::StaticClass()));
+	
+	for (AActor* a : AllCharacters)
+	{
+		ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(a);
+
+		FCharacterSaveData save;
+		save.Name = Character->GetName();
+		save.Position = Character->GetActorLocation();
+		save.Transform = Character->GetTransform();
+		//save.TargetActor = Character->GetController()->
+		save.Owner = Character->stats.owner;
+		save.team = Character->stats.team;
+		save.UnitTypeId = Character->stats.unitID;
+		if (save.Owner < 0)
+		{
+			/*Character->AIControllerClass = AEnemyAIController::StaticClass();*/
+
+			/*AEnemyAIController* EnemeyController = Cast<AEnemyAIController>(Character->AIControllerClass);
+			if (EnemeyController == nullptr)
+			{
+				return;
+			}
+			save.TargetActor = EnemeyController->GetTargetActor();*/
+		}
+		else
+		{
+			/*Character->AIControllerClass = ABaseAI::StaticClass();
+			ABaseAI* AIController = Cast<ABaseAI>(Character->AIControllerClass);
+			if (AIController == nullptr)
+			{
+				return;
+			}
+			save.TargetActor = AIController->GetTargetActor();*/
+		}
+		//save.controller = Character->AIControllerClass;
+
+		SaveGameInstance->SaveCharacter.Add(save);
+	}
+	for (AActor* a : AllBuildings)
+	{
+		
+		ABuilding* Building = Cast<ABuilding>(a);
+		FBuildingSaveData save;
+		save.Name = Building->GetName();
+		save.Position = Building->GetActorLocation();
+		save.BuildingTypeId = Building->buildingStats.BuildingTypeId;
+		save.Transform = Building->GetTransform();
+		save.Owner = Building->buildingStats.owner;
+		save.team = Building->buildingStats.team;
+		SaveGameInstance->SaveBuildings.Add(save);
+	}
+	SaveGameInstance->TestSave = 10;
+	SaveGameInstance->Test = 30;
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("TestSlot"), 0);
+
+}
+void URTSGameInstance::LoadGame()
+{
+	UTestSaveGame* SaveGameInstance = Cast<UTestSaveGame>(UGameplayStatics::CreateSaveGameObject(UTestSaveGame::StaticClass()));
+	SaveGameInstance = Cast<UTestSaveGame>(UGameplayStatics::LoadGameFromSlot("TestSlot", 0));
+	TArray<AActor*> AllCharacters;
+	TArray<AActor*> AllBuildings;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), AllCharacters);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), AllBuildings);
+	for (AActor* a : AllCharacters)
+	{
+		a->Destroy(true);
+	}
+	for (AActor* a : AllBuildings)
+	{
+		a->Destroy(true);
+	}
+
+	for (FCharacterSaveData character : SaveGameInstance->SaveCharacter)
+	{
+		
+		if (character.Owner < 0)
+		{
+			;
+			switch (character.UnitTypeId)
+			{
+			case 0:
+				CharacterSpawn = EnemyCharacter;
+				break;
+			default:
+				break;
+			}
+			ADecay_of_environmentCharacter* SpawnedCharacter = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(CharacterSpawn, character.Position, FRotator::ZeroRotator);
+			SpawnedCharacter->stats.team = character.team;
+			SpawnedCharacter->stats.owner = character.Owner;
+			/*	AEnemyAIController* EnemyController =Cast<AEnemyAIController>(SpawnedCharacter->AIControllerClass);
+				EnemyController->SetTargetActor(character.TargetActor);*/
+		}
+		else
+		{
+			switch (character.UnitTypeId)
+			{
+			case 0:
+				CharacterSpawn = DefaultCharacter;
+				break;
+			case 1: 
+				CharacterSpawn = Army;
+			default:
+				break;
+			}
+			ADecay_of_environmentCharacter* SpawnedCharacter = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(CharacterSpawn, character.Position, FRotator::ZeroRotator);
+			SpawnedCharacter->stats.team = character.team;
+			SpawnedCharacter->stats.owner = character.Owner;
+			/*ABaseAI* AIController = Cast<ABaseAI>(SpawnedCharacter->AIControllerClass);
+			AIController->SetTargetActor(character.TargetActor);*/
+			
+		}
+
+	}
+	for (FBuildingSaveData Building : SaveGameInstance->SaveBuildings)
+	{
+		TSubclassOf<AActor> ActorToSpawn;
+		switch (Building.BuildingTypeId)
+		{
+		case 0:
+			ActorToSpawn = DefaultBuilding;
+			
+			break;
+		case 1:
+			ActorToSpawn = Base;
+			break;
+		default:
+			break;
+		}
+		ABuilding* NewBuilding = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Building.Position, FRotator::ZeroRotator);
+		NewBuilding->IsPlaced = true;
+		NewBuilding->buildingStats.owner = Building.Owner;
+		NewBuilding->buildingStats.team = Building.team;
+		
+	}
+	
+
 }
 

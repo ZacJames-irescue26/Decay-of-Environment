@@ -13,7 +13,50 @@
 #include <Templates/SharedPointer.h>
 #include "OnlineSessionSettings.h"
 #include <Interfaces/OnlineSessionInterface.h>
+#include <AIController.h>
+#include <GameFramework/Controller.h>
 #include "RTSGameInstance.generated.h"
+
+
+USTRUCT(BlueprintType)
+struct FCharacterSaveData
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+		FString Name;
+	UPROPERTY(EditAnywhere)
+		FTransform Transform;
+	UPROPERTY(EditAnywhere)
+		FVector Position;
+	UPROPERTY(EditAnywhere)
+		AActor* TargetActor;
+	UPROPERTY(EditAnywhere)
+		int32 team;
+	UPROPERTY(EditAnywhere)
+		int32 Owner;
+	UPROPERTY(EditAnywhere)
+		int32 UnitTypeId;
+};
+
+USTRUCT(BlueprintType)
+struct FBuildingSaveData
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+		FString Name;
+	UPROPERTY(EditAnywhere)
+		FTransform Transform;
+	UPROPERTY(EditAnywhere)
+		FVector Position;
+	UPROPERTY(EditAnywhere)
+		int32 team;
+	UPROPERTY(EditAnywhere)
+		int32 Owner;
+	UPROPERTY(EditAnywhere)
+		int32 BuildingTypeId;
+};
 
 /**
  * 
@@ -48,6 +91,8 @@ public:
 		void InGameLoadMenu();
 
 		virtual void LoadMainMenu() override;
+		void SaveGame();
+		void LoadGame();
 		void RefreshServerList() override;
 
 private:
@@ -68,6 +113,18 @@ private:
 
 	FString DesiredServerName;
 
-
+	/**************Spawning Actors******************/
+	TSubclassOf<AActor> CharacterSpawn;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> DefaultCharacter;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> DefaultBuilding;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> Base;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> Army;
+	/***************Spawning Enemies***************************/
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> EnemyCharacter;
 };
 

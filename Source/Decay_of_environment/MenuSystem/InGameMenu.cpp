@@ -7,6 +7,7 @@
 #include "../TeamInterface.h"
 #include "../Decay_of_environmentCharacter.h"
 #include "../Building.h"
+#include "../RTSGameInstance.h"
 
 bool UInGameMenu::Initialize()
 {
@@ -48,66 +49,76 @@ void UInGameMenu::QuitPressed()
 
 void UInGameMenu::SaveLevel()
 {
-	FString FilePathFromContent = "TopDown/Maps/Map_txt_files/";
-	FString FinalString = "";
-	TArray<AActor*> AllActors;
-	TArray<AActor*> AllCharacters;
-	TArray<AActor*> AllBuildings;
-	//UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UTeamInterface::StaticClass(), AllActors);
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), AllCharacters);
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), AllBuildings);
-	TArray<FSaveData> SaveText;
-
-	for (AActor* Actor : AllCharacters)
+	URTSGameInstance* GI = Cast<URTSGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GI)
 	{
-		ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(Actor);
-		FSaveData data;
-		data.Name = Character->GetName();
-		data.X = FString::SanitizeFloat(Character->GetActorLocation().X);
-		data.Y = FString::SanitizeFloat(Character->GetActorLocation().Y);
-		data.Z = FString::SanitizeFloat(Character->GetActorLocation().Z);
-		data.team = FString::FromInt(Character->GetPlayerTeam());
-		data.Owner = FString::FromInt(Character->GetPlayerOwner());
-		
-		data.UnitTypeId = TEXT("10");
-		SaveText.Add(data);
-		
-		/*UGameplayStatics::GetPlayerController()
-		UGameplayStatics::SaveGameToSlot()*/
+		GI->SaveGame();
+	}
+	//FString FilePathFromContent = "TopDown/Maps/Map_txt_files/";
+	//FString FinalString = "";
+	//TArray<AActor*> AllActors;
+	//TArray<AActor*> AllCharacters;
+	//TArray<AActor*> AllBuildings;
+	////UGameplayStatics::GetAllActorsWithInterface( GetWorld(), UTeamInterface::StaticClass(), AllActors);
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADecay_of_environmentCharacter::StaticClass(), AllCharacters);
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), AllBuildings);
+	//TArray<FSaveData> SaveText;
 
-	}
-	for (AActor* Actor : AllBuildings)
-	{
-		ABuilding* Building = Cast<ABuilding>(Actor);
-		FSaveData data;
-		data.Name = Building->GetName();
-		data.X = FString::SanitizeFloat(Building->GetActorLocation().X);
-		data.Y = FString::SanitizeFloat(Building->GetActorLocation().Y);
-		data.Z = FString::SanitizeFloat(Building->GetActorLocation().Z);
-		data.team = FString::FromInt(Building->GetPlayerTeam());
-		data.Owner = FString::FromInt(Building->GetPlayerOwner());
-		data.UnitTypeId = FString::FromInt(Building->buildingStats.BuildingTypeId);
-		SaveText.Add(data);
+	//for (AActor* Actor : AllCharacters)
+	//{
+	//	ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(Actor);
+	//	FSaveData data;
+	//	data.Name = Character->GetName();
+	//	data.X = FString::SanitizeFloat(Character->GetActorLocation().X);
+	//	data.Y = FString::SanitizeFloat(Character->GetActorLocation().Y);
+	//	data.Z = FString::SanitizeFloat(Character->GetActorLocation().Z);
+	//	data.team = FString::FromInt(Character->GetPlayerTeam());
+	//	data.Owner = FString::FromInt(Character->GetPlayerOwner());
+	//	
+	//	data.UnitTypeId = TEXT("10");
+	//	SaveText.Add(data);
+	//	
+	//	/*UGameplayStatics::GetPlayerController()
+	//	UGameplayStatics::SaveGameToSlot()*/
 
-	}
-	for (FSaveData& string : SaveText)
-	{
-		FinalString += string.UnitTypeId;
-		FinalString += TEXT(",");
-		FinalString += string.X;
-		FinalString += TEXT(",");
-		FinalString += string.Y;
-		FinalString += TEXT(",");
-		FinalString += string.Z;
-		//FinalString += string->team;
-		FinalString += TEXT(",");
-		FinalString += LINE_TERMINATOR;
-	}
-	FString SavePath = FPaths::ProjectContentDir() + FilePathFromContent + "test.txt";
-	FFileHelper::SaveStringToFile(FinalString, *SavePath);
+	//}
+	//for (AActor* Actor : AllBuildings)
+	//{
+	//	ABuilding* Building = Cast<ABuilding>(Actor);
+	//	FSaveData data;
+	//	data.Name = Building->GetName();
+	//	data.X = FString::SanitizeFloat(Building->GetActorLocation().X);
+	//	data.Y = FString::SanitizeFloat(Building->GetActorLocation().Y);
+	//	data.Z = FString::SanitizeFloat(Building->GetActorLocation().Z);
+	//	data.team = FString::FromInt(Building->GetPlayerTeam());
+	//	data.Owner = FString::FromInt(Building->GetPlayerOwner());
+	//	data.UnitTypeId = FString::FromInt(Building->buildingStats.BuildingTypeId);
+	//	SaveText.Add(data);
+
+	//}
+	//for (FSaveData& string : SaveText)
+	//{
+	//	FinalString += string.UnitTypeId;
+	//	FinalString += TEXT(",");
+	//	FinalString += string.X;
+	//	FinalString += TEXT(",");
+	//	FinalString += string.Y;
+	//	FinalString += TEXT(",");
+	//	FinalString += string.Z;
+	//	//FinalString += string->team;
+	//	FinalString += TEXT(",");
+	//	FinalString += LINE_TERMINATOR;
+	//}
+	//FString SavePath = FPaths::ProjectContentDir() + FilePathFromContent + "test.txt";
+	//FFileHelper::SaveStringToFile(FinalString, *SavePath);
 }
 
 void UInGameMenu::LoadUnitsAndBuildings()
 {
-	GridManager->LoadUnitsAndBuildings();
+	URTSGameInstance* GI = Cast<URTSGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GI)
+	{
+		GI->LoadGame();
+	}
+	//GridManager->LoadUnitsAndBuildings();
 }

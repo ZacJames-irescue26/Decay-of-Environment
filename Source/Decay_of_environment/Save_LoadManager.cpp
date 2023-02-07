@@ -22,6 +22,5 @@ void ASave_LoadManager::BeginPlay()
 void ASave_LoadManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

@@ -27,6 +27,10 @@ ABaseAI::ABaseAI()
 
 void ABaseAI::SetTargetActor(AActor* val)
 {
+	if (previousTarget == nullptr)
+	{
+
+	}
 	previousTarget = targetActor;
 	targetActor = val;
 

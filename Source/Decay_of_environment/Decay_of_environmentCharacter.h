@@ -8,6 +8,7 @@
 #include "Enums_Structs.h"
 #include "ResourceInterface.h"
 #include "TeamInterface.h"
+#include <Components/DecalComponent.h>
 #include "Decay_of_environmentCharacter.generated.h"
 
 //USTRUCT(BlueprintType)
@@ -32,6 +33,8 @@ public:
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
+
+	UDecalComponent* Decal;
 private:
 
 public:

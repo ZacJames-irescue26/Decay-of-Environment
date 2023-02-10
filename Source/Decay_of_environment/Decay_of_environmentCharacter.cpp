@@ -13,6 +13,7 @@
 #include "BaseAI.h"
 #include "Enums_Structs.h"
 #include "ResourceInterface.h"
+#include <Engine/StaticMesh.h>
 
 ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 {
@@ -50,6 +51,8 @@ void ADecay_of_environmentCharacter::BeginPlay()
 	/*FString sPath = TEXT("/Game/TopDown/Blueprints/Fog_of_war/M_FogOfWar");
 	UMaterial* mat = LoadMaterialFromPath(FName(*sPath));*/
 	
+	//UActorComponent
+	Decal = Cast<UDecalComponent>(GetComponentByClass(UDecalComponent::StaticClass()));
 }
 
 int32 ADecay_of_environmentCharacter::GetWeight()
@@ -133,4 +136,5 @@ void ADecay_of_environmentCharacter::SetPlayerTeam(int32 Value)
 void ADecay_of_environmentCharacter::SetPlayerOwner(int32 Value)
 {
 	stats.owner = Value;
+	
 }

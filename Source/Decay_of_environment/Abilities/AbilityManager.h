@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Dash.h"
+#include "ShieldAblitity.h"
 #include "../Decay_of_environmentCharacter.h"
-#include "Dash.generated.h"
+#include "AbilityManager.generated.h"
 
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API ADash : public AActor
+class DECAY_OF_ENVIRONMENT_API AAbilityManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADash();
-	void SetParentActor(ADecay_of_environmentCharacter* _Parent);
-	void DestroyDash();
+	AAbilityManager();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -24,9 +25,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	ADecay_of_environmentCharacter* Parent;
-	FVector MousePos;
-	FRotator rotation;
-	FVector Difference;
-	FRotator _rotation;
+
+	void DashAbility(TArray<ADecay_of_environmentCharacter*> selectedUnits);
+	void Shield(TArray<ADecay_of_environmentCharacter*> selectedUnits);
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ADash> Dash;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AShieldAblitity> AbilityToSpawn;
 };

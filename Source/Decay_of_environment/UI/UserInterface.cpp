@@ -31,10 +31,9 @@ bool UUserInterface::Initialize()
 	if (!ensure(Ability2 != nullptr)) return false;
 	Ability2->OnClicked.AddDynamic(this, &UUserInterface::Button2);
 
-
+	
 	FString Path = FString("/Game/TopDown/Textures/exit_icon");
 	UTexture2D* Texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *Path));
-
 	AbilityImage->SetVisibility(ESlateVisibility::Visible);
 	AbilityImage->SetBrushFromTexture(Texture);
 	return true;
@@ -82,7 +81,7 @@ void UUserInterface::Button1()
 
 void UUserInterface::Button2()
 {
-	/*switch (AbilitySwitcher->GetActiveWidgetIndex())
+	switch (AbilitySwitcher->GetActiveWidgetIndex())
 	{
 	case 0:
 		break;
@@ -91,24 +90,24 @@ void UUserInterface::Button2()
 		break;
 	default:
 		break;
-	}*/
-	for (ADecay_of_environmentCharacter* units : PlayerController->GetUnitsArray())
-	{
-		if (units->stats.unitID == 1)
-		{
-			if (units->stats.Energy >= 5)
-			{
-				FVector Location = units->GetActorLocation();
-				FRotator Rotation = { 0,0,0 };
-				ADash* _Dash = GetWorld()->SpawnActor<ADash>(Dash, Location, Rotation);
-				_Dash->SetParentActor(units);
-				units->stats.Energy -= 5;
-				//units->SetActorLocation(FVector(100,100,1));
-				break;
-			}
-
-		}
-
 	}
+	//for (ADecay_of_environmentCharacter* units : PlayerController->GetUnitsArray())
+	//{
+	//	if (units->stats.unitID == 1)
+	//	{
+	//		if (units->stats.Energy >= 5)
+	//		{
+	//			FVector Location = units->GetActorLocation();
+	//			FRotator Rotation = { 0,0,0 };
+	//			ADash* _Dash = GetWorld()->SpawnActor<ADash>(Dash, Location, Rotation);
+	//			_Dash->SetParentActor(units);
+	//			units->stats.Energy -= 5;
+	//			//units->SetActorLocation(FVector(100,100,1));
+	//			break;
+	//		}
+
+	//	}
+
+	//}
 }
 

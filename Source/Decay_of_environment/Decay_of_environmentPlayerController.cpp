@@ -17,7 +17,6 @@
 #include "TileGrid/CubeTile.h"
 #include "UI/TestHUD.h"
 #include <Kismet/GameplayStatics.h>
-#include "Abilities/ShieldAblitity.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -98,6 +97,7 @@ void ADecay_of_environmentPlayerController::BeginPlay()
 	//if (!ensure(UserInterface != nullptr)) return;
 
 	//UserInterface->Setup();
+	AbilityManager = Cast<AAbilityManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AAbilityManager::StaticClass()));
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), ActorBuildings);
 	for (auto& Building : ActorBuildings)
 	{
@@ -117,6 +117,7 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
 
 	InputComponent->BindAction("Button1", IE_Pressed, this, &ADecay_of_environmentPlayerController::Button1);
+	InputComponent->BindAction("Button2", IE_Pressed, this, &ADecay_of_environmentPlayerController::Button2);
 
 	InputComponent->BindAction("MoveAttack", IE_Pressed, this, &ADecay_of_environmentPlayerController::Moveattack);
 
@@ -135,6 +136,10 @@ void ADecay_of_environmentPlayerController::OnSetDestinationPressed()
 	leftMouseDown = true;
 	mouseStart = hit.Location;
 	GetMousePosition(MouseStartX, MouseStartY);
+	for (ADecay_of_environmentCharacter* c : selectedUnits)
+	{
+		c->Decal->SetVisibility(false);
+	}
 	selectedUnits.Empty();
 	// Just in case the character was moving because of a previous short press we stop it
 	StopMovement();
@@ -270,6 +275,10 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 	//selectionArea->SetWorldLocation(mouseEnd);
 	//selectionArea->SetBoxExtent(selectionSize);
 	TArray<AActor*> actors;
+	for (ADecay_of_environmentCharacter* c : selectedUnits)
+	{
+		c->Decal->SetVisibility(false);
+	}
 	selectedUnits.Empty();
 	//selectionArea->GetOverlappingActors(actors);
 	ATestHUD* HUD = Cast<ATestHUD>(GetHUD());
@@ -286,7 +295,7 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 					if (character->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
 					{
 						selectedUnits.Add(character);
-						
+						character->Decal->SetVisibility(true);
 					}
 					
 				}
@@ -347,6 +356,20 @@ void ADecay_of_environmentPlayerController::Button1()
 		break;
 	case 1:
 		Shield();
+		break;
+	default:
+		break;
+	}
+}
+
+void ADecay_of_environmentPlayerController::Button2()
+{
+	switch (AbilitySwitcher->GetActiveWidgetIndex())
+	{
+	case 0:
+		break;
+	case 1:
+		DashAbility();
 		break;
 	default:
 		break;
@@ -431,7 +454,8 @@ void ADecay_of_environmentPlayerController::SpawnUnit()
 
 void ADecay_of_environmentPlayerController::Shield()
 {
-	for (ADecay_of_environmentCharacter* units : selectedUnits)
+	AbilityManager->Shield(selectedUnits);
+	/*for (ADecay_of_environmentCharacter* units : selectedUnits)
 	{
 		if (units->stats.unitID == 1)
 		{
@@ -447,11 +471,13 @@ void ADecay_of_environmentPlayerController::Shield()
 
 		}
 
-	}
+	}*/
 }
 
 void ADecay_of_environmentPlayerController::DashAbility()
 {
+	
+	AbilityManager->DashAbility(selectedUnits);
 	//for (ADecay_of_environmentCharacter* units : selectedUnits)
 	//{
 	//	if (units->stats.unitID == 1)

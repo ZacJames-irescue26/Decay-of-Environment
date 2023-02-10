@@ -18,7 +18,6 @@ ADash::ADash()
 void ADash::BeginPlay()
 {
 	Super::BeginPlay();
-	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 }
 
 // Called every frame
@@ -27,7 +26,7 @@ void ADash::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(Parent != nullptr)
 	{	
-		
+		ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 		Difference = PlayerController->MousePos - Parent->GetActorLocation();
 
 		FVector Normal = Difference.GetSafeNormal();
@@ -47,6 +46,7 @@ void ADash::SetParentActor(ADecay_of_environmentCharacter* _Parent)
 {
 	Parent = _Parent;
 }
+
 void ADash::DestroyDash()
 {
 	Destroy(true);

@@ -13,9 +13,8 @@
 #include "CharacterDetails.h"
 #include "Net/UnrealNetwork.h"
 #include "Building.h"
-#include "Abilities/ShieldAblitity.h"
-//#include "Abilities/Dash.h"
 #include <Components/WidgetSwitcher.h>
+#include "Abilities/AbilityManager.h"
 #include "Decay_of_environmentPlayerController.generated.h"
 
 
@@ -62,8 +61,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> UnitToSpawn;
 	
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AShieldAblitity> AbilityToSpawn;
+	/*UPROPERTY(EditAnywhere)
+	TSubclassOf<AShieldAblitity> AbilityToSpawn;*/
 
 	/*UPROPERTY(EditAnywhere)
 	TSubclassOf<ADash> Dash;*/
@@ -105,7 +104,7 @@ private:
 	
 
 private:
-	
+	AAbilityManager* AbilityManager;
 	float MaxZoom; 
 	float MinZoom;
 	float ZoomRate;

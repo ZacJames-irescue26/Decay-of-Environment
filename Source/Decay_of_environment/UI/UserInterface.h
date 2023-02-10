@@ -76,6 +76,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ADash> Dash;
 
+	UWidgetAnimation* TaskComplete;
 
 	UFUNCTION()
 	void SpawnBuilding();

@@ -40,6 +40,7 @@ public:
 	UNiagaraSystem* FXCursor;
 	FVector MousePos;
 	bool leftMouseDown; // Input is bring pressed
+	bool RightMouseDown;
 	void Test();
 	UFUNCTION(Client, Reliable)
 	void MoveUnits(FVector loc);
@@ -87,6 +88,7 @@ protected:
 	void AttackTarget(IDamagableInterface* target);
 	void Moveattack();
 	void RightClick();
+	void RightClickReleased();
 	void GatherResources(IResourceInterface* res);
 
 	ITeamInterface* GetTeam(AActor* other);
@@ -127,7 +129,7 @@ private:
 	TArray<ABuilding*> Buildings;
 	TArray<AActor*> ActorBuildings;
 
-	
+	TMap<int, TArray<ADecay_of_environmentCharacter*>> ControlGroupMap;
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;

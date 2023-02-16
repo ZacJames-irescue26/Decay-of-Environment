@@ -68,7 +68,7 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	if(leftMouseDown)
 	{
 		mouseEnd = hit.Location;
-		FollowTime += DeltaTime;
+		/*FollowTime += DeltaTime;
 		GetMousePosition(MouseEndX, MouseEndY);
 
 		FollowTime = 0.f;
@@ -76,7 +76,7 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 		dist = FVector::Dist(mouseEnd, mouseStart) / 2;
 		selectionSize = FVector(dist,dist,1000);
 
-		DrawDebugBox(GetWorld(), centerMouseLocation, selectionSize, FQuat(0,0,0,0), FColor::Black);
+		DrawDebugBox(GetWorld(), centerMouseLocation, selectionSize, FQuat(0,0,0,0), FColor::Black);*/
 
 	}
 
@@ -114,7 +114,7 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Released, this, &ADecay_of_environmentPlayerController::OnSetDestinationReleased);
 
 	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
-	InputComponent->BindAction("RightClick", IE_Pressed, this, &ADecay_of_environmentPlayerController::RightClick);
+	InputComponent->BindAction("RightClick", IE_Released, this, &ADecay_of_environmentPlayerController::RightClickReleased);
 
 	InputComponent->BindAction("Button1", IE_Pressed, this, &ADecay_of_environmentPlayerController::Button1);
 	InputComponent->BindAction("Button2", IE_Pressed, this, &ADecay_of_environmentPlayerController::Button2);
@@ -123,6 +123,12 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomIn);
 	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
+
+	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
+
+	InputComponent->BindAction("Number1", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
+	InputComponent->BindAction("ShiftNumber1", IE_Pressed, this, &ADecay_of_environmentPlayerController::ZoomOut);
+	
 
 	// support touch devices 
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ADecay_of_environmentPlayerController::OnTouchPressed);
@@ -225,6 +231,7 @@ void ADecay_of_environmentPlayerController::GatherResources(IResourceInterface* 
 void ADecay_of_environmentPlayerController::RightClick()
 {
 	//FHitResult TraceHitResult;
+	RightMouseDown = true;
 	GetHitResultUnderCursor(ECC_Visibility, true, hit);
 	if (hit.bBlockingHit)
 	{
@@ -268,6 +275,11 @@ void ADecay_of_environmentPlayerController::RightClick()
 		}
 
 	}
+}
+
+void ADecay_of_environmentPlayerController::RightClickReleased()
+{
+	RightMouseDown = false;
 }
 
 void ADecay_of_environmentPlayerController::SelectUnits()
@@ -360,6 +372,7 @@ void ADecay_of_environmentPlayerController::Button1()
 	default:
 		break;
 	}
+	
 }
 
 void ADecay_of_environmentPlayerController::Button2()

@@ -23,12 +23,17 @@ void ATestHUD::DrawHUD()
 		SelectionBoxColor.G = 255;
 		SelectionBoxColor.B = 0;
 		SelectionBoxColor.A = 0.4;
-
-		double EndPosX = PlayerController->MouseEndX - PlayerController->MouseStartX;
-		double EndPosY = PlayerController->MouseEndY - PlayerController->MouseStartY;
+		float PointBX;
+		float PointBY;
+		PlayerController->GetMousePosition(PointBX, PointBY);
+		/*double EndPosX = PlayerController->MouseEndX - PlayerController->MouseStartX;
+		double EndPosY = PlayerController->MouseEndY - PlayerController->MouseStartY;*/
+		float EndPosX = PointBX - PlayerController->MouseStartX;
+		float EndPosY = PointBY - PlayerController->MouseStartY;
 		DrawRect(SelectionBoxColor, PlayerController->MouseStartX, PlayerController->MouseStartY, EndPosX, EndPosY);
 		
-		GetActorsInSelectionRectangle(FVector2D(PlayerController->MouseStartX, PlayerController->MouseStartY), FVector2D(PlayerController->MouseEndX, PlayerController->MouseEndY), SelectedActors);
+		GetActorsInSelectionRectangle(FVector2D(PlayerController->MouseStartX, PlayerController->MouseStartY), FVector2D(PointBX, PointBY), SelectedActors, true, false);
+		//TSubclassOf<class AActor> ClassFilter, const FVector2D& FirstPoint, const FVector2D& SecondPoint, TArray<AActor*>& OutActors, bool bIncludeNonCollidingComponents, bool bActorMustBeFullyEnclosed
 	}
 }
 

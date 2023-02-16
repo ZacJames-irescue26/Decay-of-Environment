@@ -27,10 +27,6 @@ ABaseAI::ABaseAI()
 
 void ABaseAI::SetTargetActor(AActor* val)
 {
-	if (previousTarget == nullptr)
-	{
-
-	}
 	previousTarget = targetActor;
 	targetActor = val;
 
@@ -109,7 +105,9 @@ void ABaseAI::Tick(float DeltaTime)
 		float dist = FVector::Distance(GetCharacter()->GetActorLocation(), targetActor->GetActorLocation());
 		ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(GetCharacter());
 
-		if (dist < (minDistance * _Character->stats.AttackRange)) {
+		//if (dist < (minDistance * _Character->stats.AttackRange)) 
+		if (dist < (_Character->stats.AttackRange))
+		{
 			canPerformActions = false;
 			StopMovement();
 
@@ -255,11 +253,14 @@ void ABaseAI::DepositeResource()
 		UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UStorageInterface::StaticClass(), storageActors);
 		
 
-		for (AActor* store : storageActors) {
+		for (AActor* store : storageActors) 
+		{
 			ITeamInterface* team = Cast<ITeamInterface>(store);
 			if (team->GetPlayerOwner() == GetRTSCharacter()->GetPlayerOwner()) 
 			{
+				//TODO: Find the closest base
 				SetTargetActor(store);
+				break;
 			}
 		}
 	}
@@ -291,7 +292,7 @@ void ABaseAI::DamageTarget()
 	IDamagableInterface* di = Cast<IDamagableInterface>(GetTargetActor());
 	if (di->GetHealth() > 0)
 	{
-		di->TakeDamage(1);
+		di->TakeDamage(GetRTSCharacter()->stats.AttackDamage);
 	}
 	else if (GetTargetActor()->Implements<UResourceInterface>())
 	{

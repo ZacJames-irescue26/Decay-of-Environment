@@ -42,6 +42,12 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+	CollisionSphere = Cast<USphereComponent>(GetComponentByClass(USphereComponent::StaticClass()));
+	CollisionSphere->SetSphereRadius(stats.AttackRange);
+	if (stats.currentHealth <= 0)
+	{
+		Destroy(true);
+	}
 }
 
 void ADecay_of_environmentCharacter::BeginPlay()
@@ -51,8 +57,8 @@ void ADecay_of_environmentCharacter::BeginPlay()
 	/*FString sPath = TEXT("/Game/TopDown/Blueprints/Fog_of_war/M_FogOfWar");
 	UMaterial* mat = LoadMaterialFromPath(FName(*sPath));*/
 	
-	//UActorComponent
 	Decal = Cast<UDecalComponent>(GetComponentByClass(UDecalComponent::StaticClass()));
+	
 }
 
 int32 ADecay_of_environmentCharacter::GetWeight()

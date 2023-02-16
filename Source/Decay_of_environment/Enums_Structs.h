@@ -96,6 +96,9 @@ public:
 	float AttackRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float AttackDamage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FString unitName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	int32 unitID;

@@ -37,7 +37,16 @@ void ADash::Tick(float DeltaTime)
 		_rotation.Yaw = Rot.Yaw;
 		SetActorRotation(_rotation);
 		SetActorLocation(Parent->GetActorLocation());
-		
+		if (PlayerController->leftMouseDown)
+		{
+			Parent->LaunchCharacter(Normal * 1000.0f,false, false);
+			DestroyDash();
+		}
+		if (PlayerController->RightMouseDown)
+		{
+			DestroyDash();
+			Parent->stats.Energy += 5;
+		}
 	}
 
 }

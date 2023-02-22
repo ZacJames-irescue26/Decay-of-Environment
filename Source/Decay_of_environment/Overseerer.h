@@ -9,7 +9,18 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Overseerer.generated.h"
+USTRUCT(BlueprintType)
+struct FStatistics
+{
+	GENERATED_USTRUCT_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+	int32 ComponentsValue = 0;
+	
+	int32 UnitsKilled = 0;
+	int32 SpecialUnitsKilled = 0;
 
+};
 UCLASS()
 class DECAY_OF_ENVIRONMENT_API AOverseerer : public ACharacter
 {
@@ -22,9 +33,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
 
 public:	
-
+	FStatistics statistics;
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* TopDownCameraComponent;
@@ -48,12 +60,12 @@ public:
 	void SetTeam(int32 val) { team = val; }
 	int32 GetPlayerOwner() const { return PlayerOwner; }
 	void SetPlayerOwner(int32 val) { PlayerOwner = val; }
+
 	UPROPERTY(EditAnywhere)
 	int32 team;
 	UPROPERTY(EditAnywhere)
 	int32 PlayerOwner;
 	//TODO setup player owner on spawn
-	UPROPERTY(EditAnywhere)
-	int32 ComponentsValue = 0;
+	
 
 };

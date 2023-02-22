@@ -285,6 +285,8 @@ void URTSGameInstance::SaveGame()
 	
 	UTestSaveGame* SaveGameInstance = Cast<UTestSaveGame>(UGameplayStatics::CreateSaveGameObject(UTestSaveGame::StaticClass()));
 	
+
+
 	for (AActor* a : AllCharacters)
 	{
 		ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(a);
@@ -338,7 +340,7 @@ void URTSGameInstance::SaveGame()
 	SaveGameInstance->TestSave = 10;
 	SaveGameInstance->Test = 30;
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("TestSlot"), 0);
-
+	
 }
 void URTSGameInstance::LoadGame()
 {
@@ -362,7 +364,7 @@ void URTSGameInstance::LoadGame()
 		
 		if (character.Owner < 0)
 		{
-			;
+			
 			switch (character.UnitTypeId)
 			{
 			case 0:

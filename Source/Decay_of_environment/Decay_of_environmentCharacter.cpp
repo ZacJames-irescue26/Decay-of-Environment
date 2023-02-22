@@ -14,6 +14,10 @@
 #include "Enums_Structs.h"
 #include "ResourceInterface.h"
 #include <Engine/StaticMesh.h>
+#include "Overseerer.h"
+
+//TODO REMOVE
+#include "Decay_of_environmentPlayerController.h"
 
 ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 {
@@ -46,9 +50,16 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 	CollisionSphere->SetSphereRadius(stats.AttackRange);
 	if (stats.currentHealth <= 0)
 	{
+		if (stats.owner <= 0)
+		{
+		
+			ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
+			PlayerController->GetOverseerer()->statistics.UnitsKilled += 1;
+		}
 		Destroy(true);
 	}
 }
+
 
 void ADecay_of_environmentCharacter::BeginPlay()
 {

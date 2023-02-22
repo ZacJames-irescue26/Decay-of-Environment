@@ -272,7 +272,7 @@ void ABaseAI::DepositeResource()
 		{
 			storage->AddItem(item.itemName, item.amount);
 			ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
-			PlayerController->GetOverseerer()->ComponentsValue += item.amount;
+			PlayerController->GetOverseerer()->statistics.ComponentsValue += item.amount;
 
 		}
 

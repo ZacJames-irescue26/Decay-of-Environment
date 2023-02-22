@@ -75,7 +75,7 @@ public:
 	TArray<ADecay_of_environmentCharacter*> EnemyUnits;
 public:
 		virtual void Init();
-
+		
 		UFUNCTION(Exec)
 		void Host(FString Servername) override;
 

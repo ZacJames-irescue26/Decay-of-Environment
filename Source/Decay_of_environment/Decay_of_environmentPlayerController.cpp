@@ -133,7 +133,7 @@ void ADecay_of_environmentPlayerController::SetupInputComponent()
 	// support touch devices 
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &ADecay_of_environmentPlayerController::OnTouchPressed);
 	InputComponent->BindTouch(EInputEvent::IE_Released, this, &ADecay_of_environmentPlayerController::OnTouchReleased);
-
+	
 }
 
 void ADecay_of_environmentPlayerController::OnSetDestinationPressed()
@@ -431,7 +431,7 @@ void ADecay_of_environmentPlayerController::ZoomOut()
 void ADecay_of_environmentPlayerController::SpawnBuilding()
 {
 
-	if (GetOverseerer()->ComponentsValue >= 10)
+	if (GetOverseerer()->statistics.ComponentsValue >= 10)
 	{
 		FVector Location;
 		Location = MousePos;
@@ -439,7 +439,7 @@ void ADecay_of_environmentPlayerController::SpawnBuilding()
 		FRotator Rotation = { 0,0,0 };
 		ABuilding* Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
 		Buildings.Add(Building);
-		GetOverseerer()->ComponentsValue -= 10;
+		GetOverseerer()->statistics.ComponentsValue -= 10;
 	}
 
 }
@@ -450,14 +450,14 @@ void ADecay_of_environmentPlayerController::SpawnUnit()
 	{
 		if (Building->IsMainBuilding)
 		{
-			if (GetOverseerer()->ComponentsValue >= 10)
+			if (GetOverseerer()->statistics.ComponentsValue >= 10)
 			{
 				FVector Location = Building->GetActorLocation();
 				Location.X = Location.X + 20;
 				UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 				FRotator Rotation = { 0,0,0 };
 				GetWorld()->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
-				GetOverseerer()->ComponentsValue -= 10;
+				GetOverseerer()->statistics.ComponentsValue -= 10;
 				break;
 
 			}

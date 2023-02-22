@@ -7,12 +7,16 @@
 #include <GameFramework/Character.h>
 #include "Kismet/GameplayStatics.h"
 #include "../Overseerer.h"
+#include "MissionWidget.h"
 
 
 
 UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
 {
+	static ConstructorHelpers::FClassFinder<UUserWidget> MissionBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_MissionText"));
+	if (!ensure(MissionBPClass.Class != nullptr)) return;
 
+	MissionClass = MissionBPClass.Class;
 }
 
 bool UUserInterface::Initialize()
@@ -53,8 +57,23 @@ void UUserInterface::SwitchAbilities(UWidget* Widget)
 void UUserInterface::UpdateText()
 {
 	
-	ComponentsValue->SetText(FText::FromString(FString::FromInt(PlayerController->GetOverseerer()->ComponentsValue)));
+	ComponentsValue->SetText(FText::FromString(FString::FromInt(PlayerController->GetOverseerer()->statistics.ComponentsValue)));
+	FMission* LevelMission = mission->MissionMap.Find("Mission1");
+	FText text = FText::FromString(LevelMission->MissionText);
+	mission->MissionText->SetText(text);
+	int PlayerProgression = PlayerController->GetOverseerer()->statistics.UnitsKilled;
+	FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
+	mission->MissionProgress->SetText(FText::FromString(FractionText));
+}
+
+void UUserInterface::Mission()
+{	
 	
+	mission = CreateWidget<UMissionWidget>(GetWorld(), MissionClass);
+	if (!ensure(mission != nullptr)) return;
+	mission->SetupMissions();
+	UpdateText();
+	MissionBox->AddChild(mission);
 }
 
 

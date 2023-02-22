@@ -20,6 +20,8 @@
 #include <Components/Widget.h>
 #include "../Abilities/ShieldAblitity.h"
 #include "../Abilities/Dash.h"
+#include <Components/VerticalBox.h>
+#include "MissionWidget.h"
 #include "UserInterface.generated.h"
 
 /**
@@ -32,7 +34,9 @@ class DECAY_OF_ENVIRONMENT_API UUserInterface : public UUserInterfaceWidget
 public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
 	void UpdateText();
-	inline UWidgetSwitcher* GetAbilitySwitcher() {return AbilitySwitcher;}
+
+	void Mission();
+	inline UWidgetSwitcher* GetAbilitySwitcher() { return AbilitySwitcher; }
 
 	/*////////////////Abilities//////////////////////////*/
 	void SwitchAbilities(UWidget* Widget);
@@ -47,8 +51,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Ability2;
 
+	UPROPERTY(meta = (BindWidget))
+	UVerticalBox* MissionBox;
 
-
+	UMissionWidget* mission;
 protected:
 	virtual bool Initialize() override;
 
@@ -71,6 +77,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* AbilityImage;
+
+	/*UPROPERTY(meta = (BindWidget))
+	class */
 	
 		
 	UPROPERTY(EditAnywhere)
@@ -92,7 +101,7 @@ private:
 
 
 	
-
+	TSubclassOf<class UMissionWidget> MissionClass;
 
 	ADecay_of_environmentPlayerController* PlayerController;
 	UWorld* World;

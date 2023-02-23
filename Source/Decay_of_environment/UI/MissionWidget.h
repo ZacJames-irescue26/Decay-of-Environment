@@ -5,17 +5,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include <Components/TextBlock.h>
+#include "../MissionManager.h"
 #include "MissionWidget.generated.h"
 
-USTRUCT(BlueprintType)
-struct FMission
-{
-	GENERATED_USTRUCT_BODY()
-public:
-	FString MissionText;
-	int MissionObjective;
-
-};
 /**
  * 
  */
@@ -31,8 +23,5 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* MissionProgress;
-
-	TMap<FString, FMission> MissionMap;
-	void SetupMissions();
 
 };

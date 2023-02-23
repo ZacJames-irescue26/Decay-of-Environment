@@ -511,3 +511,9 @@ void ADecay_of_environmentPlayerController::DashAbility()
 	//}
 }
 
+UMissionDataAsset* ADecay_of_environmentPlayerController::GetMissionDataAsset()
+{
+	UMissionDataAsset* MissionDataAsset = LoadObject<UMissionDataAsset>(NULL, TEXT("/Game/TopDown/Blueprints/DataAssetMissions/MissionDataAsset"));
+	return MissionDataAsset;
+}
+

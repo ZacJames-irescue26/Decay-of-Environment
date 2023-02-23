@@ -15,6 +15,8 @@
 #include "Building.h"
 #include <Components/WidgetSwitcher.h>
 #include "Abilities/AbilityManager.h"
+#include "MissionManager.h"
+#include "MissionDataAsset.h"
 #include "Decay_of_environmentPlayerController.generated.h"
 
 
@@ -45,7 +47,7 @@ public:
 	UFUNCTION(Client, Reliable)
 	void MoveUnits(FVector loc);
 	AOverseerer* GetOverseerer();
-	TArray<ADecay_of_environmentCharacter*> GetUnitsArray() {return selectedUnits;};
+	TArray<ADecay_of_environmentCharacter*>& GetUnitsArray() {return selectedUnits;};
 	double MouseStartX;
 	double MouseStartY;
 	double MouseEndX;
@@ -56,6 +58,7 @@ public:
 
 	void Shield();
 	void DashAbility();
+	UMissionDataAsset* GetMissionDataAsset();
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ABuilding> BuildingToSpawn;
 	
@@ -76,6 +79,7 @@ protected:
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+	// AMissionManager* GetMissionManager();
 	virtual void SetupInputComponent() override;
 	// End PlayerController interface
 

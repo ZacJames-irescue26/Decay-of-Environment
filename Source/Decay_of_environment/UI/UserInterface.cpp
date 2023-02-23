@@ -58,12 +58,32 @@ void UUserInterface::UpdateText()
 {
 	
 	ComponentsValue->SetText(FText::FromString(FString::FromInt(PlayerController->GetOverseerer()->statistics.ComponentsValue)));
-	FMission* LevelMission = mission->MissionMap.Find("Mission1");
-	FText text = FText::FromString(LevelMission->MissionText);
-	mission->MissionText->SetText(text);
-	int PlayerProgression = PlayerController->GetOverseerer()->statistics.UnitsKilled;
-	FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
-	mission->MissionProgress->SetText(FText::FromString(FractionText));
+	
+	UMissionDataAsset* MissionData = PlayerController->GetMissionDataAsset();
+	FMission* LevelMission = MissionData->MissionMap.Find("Mission2");
+	switch(LevelMission->Objectivetype)
+	{
+	case EObjectiveType::killUnits:
+	{
+		FText text = FText::FromString(LevelMission->MissionText);
+		mission->MissionText->SetText(text);
+		int PlayerProgression =PlayerController->GetOverseerer()->statistics.UnitsKilled;
+		FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
+		mission->MissionProgress->SetText(FText::FromString(FractionText));
+		break;
+	}
+	case EObjectiveType::CollectResources:
+	{
+		FText text = FText::FromString(LevelMission->MissionText);
+		mission->MissionText->SetText(text);
+		int PlayerProgression = PlayerController->GetOverseerer()->statistics.ComponentsValue;
+		FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
+		mission->MissionProgress->SetText(FText::FromString(FractionText));
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void UUserInterface::Mission()
@@ -71,7 +91,7 @@ void UUserInterface::Mission()
 	
 	mission = CreateWidget<UMissionWidget>(GetWorld(), MissionClass);
 	if (!ensure(mission != nullptr)) return;
-	mission->SetupMissions();
+	
 	UpdateText();
 	MissionBox->AddChild(mission);
 }

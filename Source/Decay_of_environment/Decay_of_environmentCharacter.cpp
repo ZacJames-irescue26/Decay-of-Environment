@@ -48,12 +48,17 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
 	CollisionSphere = Cast<USphereComponent>(GetComponentByClass(USphereComponent::StaticClass()));
 	CollisionSphere->SetSphereRadius(stats.AttackRange);
+	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 	if (stats.currentHealth <= 0)
 	{
-		if (stats.owner <= 0)
+		if (PlayerController->GetUnitsArray().Contains(this))
+		{
+			PlayerController->GetUnitsArray().Remove(this);
+			UE_LOG(LogTemp, Warning, TEXT("Removed unit"))
+		}
+		if (stats.owner < 0)
 		{
 		
-			ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 			PlayerController->GetOverseerer()->statistics.UnitsKilled += 1;
 		}
 		Destroy(true);

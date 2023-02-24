@@ -65,6 +65,7 @@ void UUserInterface::UpdateText()
 	{
 	case EObjectiveType::killUnits:
 	{
+		mission->MissionGraphicsSwitcher = 0;
 		FText text = FText::FromString(LevelMission->MissionText);
 		mission->MissionText->SetText(text);
 		int PlayerProgression =PlayerController->GetOverseerer()->statistics.UnitsKilled;
@@ -75,10 +76,12 @@ void UUserInterface::UpdateText()
 	case EObjectiveType::CollectResources:
 	{
 		FText text = FText::FromString(LevelMission->MissionText);
-		mission->MissionText->SetText(text);
+		mission->MissionGraphicsSwitcher->ActiveWidgetIndex = 1;
+		mission->MissionText_1->SetText(text);
 		int PlayerProgression = PlayerController->GetOverseerer()->statistics.ComponentsValue;
+		mission->ComponentProgressBar->SetPercent((float)PlayerProgression / (float)(LevelMission->MissionObjective));
 		FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
-		mission->MissionProgress->SetText(FText::FromString(FractionText));
+		mission->MissionProgress_1->SetText(FText::FromString(FractionText));
 		break;
 	}
 	default:

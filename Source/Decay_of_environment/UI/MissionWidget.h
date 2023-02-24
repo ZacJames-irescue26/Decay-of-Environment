@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include <Components/TextBlock.h>
 #include "../MissionManager.h"
+#include <Components/ProgressBar.h>
+#include <Components/WidgetSwitcher.h>
 #include "MissionWidget.generated.h"
 
 /**
@@ -24,4 +26,15 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* MissionProgress;
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MissionText_1;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MissionProgress_1;
+
+	UPROPERTY(meta = (BindWidget))
+	UWidgetSwitcher* MissionGraphicsSwitcher;
+
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* ComponentProgressBar;
 };

@@ -60,7 +60,12 @@ public:
 	virtual void SetPlayerTeam(int32 Value) override;
 	virtual void SetPlayerOwner(int32 Value) override;
 	
-
+	void SetupMissionWaypoints();
+	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+	TArray<FVector> Waypoints;
+	UPROPERTY(EditAnywhere)
+	int32 WaypointCounter;
+	
 	//template <typename T>
 	//static FORCEINLINE T* LoadObjFromPath(const FName& Path)
 	//{

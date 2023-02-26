@@ -107,6 +107,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	int32  owner;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	int32 MissionWaypoint;
 };
 
 USTRUCT(BlueprintType)

@@ -25,3 +25,18 @@
 //	mission.MissionObjective = 1;
 //	MissionMap.FindOrAdd(TEXT("Mission3"), mission);
 //}
+
+
+//void AMissionManager::BeginPlay()
+//{
+//	FString WorldName =
+//		if (GetWorld()->GetMapName() == "Mission1")
+//		{
+//			UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+//			Waypoints.Add(FVector(380.0, -150.0, 110.0));
+//			UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+//			Waypoints.Add(FVector(400.0, -130.0, 110.0));
+//			UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+//			Waypoints.Add(FVector(3000.0, -110.0, 110.0));
+//		}
+//}

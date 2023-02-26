@@ -28,6 +28,7 @@ public:
 	int MissionObjective;
 	UPROPERTY(EditAnywhere, Category = "Missions")
 	EObjectiveType Objectivetype;
+	
 
 };
 /**

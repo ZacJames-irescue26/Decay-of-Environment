@@ -7,10 +7,11 @@
 #include "Dash.h"
 #include "ShieldAblitity.h"
 #include "../Decay_of_environmentCharacter.h"
+#include "../Decay_of_environmentPlayerController.h"
 #include "AbilityManager.generated.h"
 
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API AAbilityManager : public AActor
+class DECAY_OF_ENVIRONMENT_API AAbilityManager : public AActor, public ADecay_of_environmentPlayerController
 {
 	GENERATED_BODY()
 	

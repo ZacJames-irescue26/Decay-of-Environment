@@ -7,8 +7,9 @@
 
 
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API UMissionManager : public UObject
+class DECAY_OF_ENVIRONMENT_API AMissionManager : public AActor
 {
 	GENERATED_BODY()
-
+public:
+	//virtual void BeginPlay() override;
 };

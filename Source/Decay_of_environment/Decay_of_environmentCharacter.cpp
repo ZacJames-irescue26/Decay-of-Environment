@@ -18,6 +18,7 @@
 
 //TODO REMOVE
 #include "Decay_of_environmentPlayerController.h"
+#include "MissionDataAsset.h"
 
 ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 {
@@ -69,12 +70,39 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 void ADecay_of_environmentCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	//TODO REMOVE AND PLACE IN A CHaRAcTER CONTROLLER
 	
+	SetupMissionWaypoints();
 	/*FString sPath = TEXT("/Game/TopDown/Blueprints/Fog_of_war/M_FogOfWar");
 	UMaterial* mat = LoadMaterialFromPath(FName(*sPath));*/
 	
 	Decal = Cast<UDecalComponent>(GetComponentByClass(UDecalComponent::StaticClass()));
 	
+}
+
+void ADecay_of_environmentCharacter::SetupMissionWaypoints()
+{
+	FString WorldName = GetWorld()->GetMapName();
+	WorldName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *WorldName);
+	//TODO Make into objects so more easily placed
+		if (true/*WorldName.Equals(TEXT("Mission1"), ESearchCase::IgnoreCase)*/)
+		{
+			if (stats.MissionWaypoint == 1)
+			{
+				Waypoints.Add(FVector(380.0, -150.0, 110.0));
+				Waypoints.Add(FVector(400.0, -130.0, 110.0));
+				Waypoints.Add(FVector(3000.0, -110.0, 110.0));
+
+			}
+
+			if (stats.MissionWaypoint == 2)
+			{
+				Waypoints.Add(FVector(-2800.0, -710.0, 110.0));
+				Waypoints.Add(FVector(400.0, -130.0, 110.0));
+				Waypoints.Add(FVector(-2800.0, -1200.0, 110.0));
+			}
+		}
 }
 
 int32 ADecay_of_environmentCharacter::GetWeight()

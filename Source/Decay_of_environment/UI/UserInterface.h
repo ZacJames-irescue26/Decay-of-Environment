@@ -105,6 +105,7 @@ private:
 
 	ADecay_of_environmentPlayerController* PlayerController;
 	UWorld* World;
-
+	
+	bool IsPlayed = false;
 
 };

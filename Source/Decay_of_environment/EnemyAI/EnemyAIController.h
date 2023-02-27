@@ -49,4 +49,10 @@ public:
 
 	FVector bbLocation;
 	FVector bbExtent;
+	
+	bool canAttack = true;
+	bool canPerformActions = true;
+	FTimerHandle ActionRate;
+	float actionDelay = 0.5f;
+	//float actionRate = 0.5;
 };

@@ -65,6 +65,11 @@ public:
 	TArray<FVector> Waypoints;
 	UPROPERTY(EditAnywhere)
 	int32 WaypointCounter;
+
+	bool canAttack = true;
+	bool canPerformActions = true;
+	FTimerHandle ActionRate;
+	float actionDelay = 0.5f;
 	
 	//template <typename T>
 	//static FORCEINLINE T* LoadObjFromPath(const FName& Path)

@@ -4,23 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "../../Enums_Structs.h"
-#include "../../Decay_of_environmentCharacter.h"
 #include "../EnemyAIController.h"
-#include "BTTask_CollectResources.generated.h"
+#include "BTTask_Timer.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API UBTTask_CollectResources : public UBTTask_BlackboardBase
+class DECAY_OF_ENVIRONMENT_API UBTTask_Timer : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 public:
-	UBTTask_CollectResources();
+	UBTTask_Timer();
+
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	void CanPerformActions();
-	virtual FString GetStaticDescription() const override;
 	AEnemyAIController* MyController;
-	
 };

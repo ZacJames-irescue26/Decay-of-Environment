@@ -19,7 +19,7 @@ UBTTask_CollectResources::UBTTask_CollectResources()
 
 EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
+	MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	APawn* AIPawn{ MyController->GetPawn() };
 	ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(AIPawn);
 	//MyController->MoveToLocation(FVector(380.0, -150.0, 110.0));
@@ -28,57 +28,65 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 	
 	
 	
-
-	// Does the target have resources left
-	
-	if (MyController->GetTargetActor() != nullptr)
+	if (MyController->canPerformActions)
 	{
-		IResourceInterface* ri = Cast<IResourceInterface>(MyController->GetTargetActor());
-		if (ri != nullptr)
+		MyController->canPerformActions = false;
+		if (MyController->GetTargetActor() != nullptr)
 		{
-
-			int32 space = MyController->GetRTSCharacter()->GetCarryWeight() - MyController->GetRTSCharacter()->GetWeight(); 
-			amount = ri->GetAmount();
-			if (amount > 0)
+			IResourceInterface* ri = Cast<IResourceInterface>(MyController->GetTargetActor());
+			if (ri != nullptr)
 			{
-				// Do we have carry space left
-				if (space > 0)
+
+				int32 space = MyController->GetRTSCharacter()->GetCarryWeight() - MyController->GetRTSCharacter()->GetWeight(); 
+				amount = ri->GetAmount();
+				if (amount > 0)
 				{
+					// Do we have carry space left
+					if (space > 0)
+					{
 
-					// Find the lowest amount to gather, either the resources has less than we can carry / gather or we lack the space to gather fully
-					int32 amountToTake = MIN(amount, space);
-					amountToTake = MIN(MyController->GetRTSCharacter()->GetGatherAmount(), amountToTake);
+						// Find the lowest amount to gather, either the resources has less than we can carry / gather or we lack the space to gather fully
+						int32 amountToTake = MIN(amount, space);
+						amountToTake = MIN(MyController->GetRTSCharacter()->GetGatherAmount(), amountToTake);
 
-					ri->TakeResources(amountToTake);
-					MyController->GetRTSCharacter()->RecieveResources(amountToTake, ri);
+						ri->TakeResources(amountToTake);
+						MyController->GetRTSCharacter()->RecieveResources(amountToTake, ri);
+					}
+					// We ran out of space so return to storage
+					else {
+						return EBTNodeResult::Succeeded;
+					}
+				}
+				// The target ran out of resources, but we still have carry space
+				else if (space > 0) {
+					/*TArray<AActor*> resourceActors;
+
+					GetNearbyActors(resourceActors);*/
+					//ShuffleArray<AActor*>(resourceActors);
+
+					/*bool resFound = FindResource(ri->GetType(), ResourceActors);*/
+
+					if (ri == nullptr) {
+						return EBTNodeResult::Failed;
+					}
 				}
 				// We ran out of space so return to storage
 				else {
 					return EBTNodeResult::Succeeded;
 				}
 			}
-			// The target ran out of resources, but we still have carry space
-			else if (space > 0) {
-				/*TArray<AActor*> resourceActors;
-
-				GetNearbyActors(resourceActors);*/
-				//ShuffleArray<AActor*>(resourceActors);
-
-				/*bool resFound = FindResource(ri->GetType(), ResourceActors);*/
-
-				if (ri == nullptr) {
-					return EBTNodeResult::Failed;
-				}
-			}
-			// We ran out of space so return to storage
-			else {
-				return EBTNodeResult::Succeeded;
-			}
 		}
+		GetWorld()->GetTimerManager().SetTimer(Character->ActionRate, this, &UBTTask_CollectResources::CanPerformActions, Character->actionDelay);
 	}
+	// Does the target have resources left
+	
 	return EBTNodeResult::Failed;
 }
 
+void UBTTask_CollectResources::CanPerformActions()
+{
+	MyController->canPerformActions =  true;
+}
 
 FString UBTTask_CollectResources::GetStaticDescription() const
 {

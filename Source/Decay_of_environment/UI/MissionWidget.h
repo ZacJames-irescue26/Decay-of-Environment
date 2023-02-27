@@ -8,6 +8,7 @@
 #include "../MissionManager.h"
 #include <Components/ProgressBar.h>
 #include <Components/WidgetSwitcher.h>
+#include <Animation/WidgetAnimation.h>
 #include "MissionWidget.generated.h"
 
 /**
@@ -37,4 +38,9 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* ComponentProgressBar;
+
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* CompletedObjective;
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* NewAnimation;
 };

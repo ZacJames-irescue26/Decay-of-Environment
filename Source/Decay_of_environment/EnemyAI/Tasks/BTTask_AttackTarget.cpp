@@ -9,19 +9,36 @@
 UBTTask_AttackTarget::UBTTask_AttackTarget()
 {
 	NodeName = TEXT("Attack Target");
+	bCreateNodeInstance = true;
 }
 
 EBTNodeResult::Type UBTTask_AttackTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
+	MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	APawn* AIPawn{ MyController->GetPawn() };
-	ADecay_of_environmentCharacter* Character = Cast<ADecay_of_environmentCharacter>(AIPawn);
-	if (MyController->GetTargetActor()->IsA(ADecay_of_environmentCharacter::StaticClass()))
+	Character = Cast<ADecay_of_environmentCharacter>(AIPawn);
+	if (Character->canPerformActions)
 	{
-		IDamagableInterface* Damagable = Cast<IDamagableInterface>(MyController->GetTargetActor());
-		if (Damagable == nullptr) return EBTNodeResult::Failed;
-		Damagable->TakeDamage(Character->stats.AttackDamage);
+		Character->canPerformActions = false;
+		if (MyController->GetTargetActor()->IsA(ADecay_of_environmentCharacter::StaticClass()))
+		{
+			IDamagableInterface* Damagable = Cast<IDamagableInterface>(MyController->GetTargetActor());
+			ADecay_of_environmentCharacter* TargetCharacter = Cast<ADecay_of_environmentCharacter>(MyController->GetTargetActor());
+
+			if (Damagable == nullptr) return EBTNodeResult::Failed;
+			Damagable->TakeDamage(Character->stats.AttackDamage);
+			if (TargetCharacter->stats.currentHealth <= 0)
+			{
+				MyController->targetActor = nullptr;
+			}
+		}
+		GetWorld()->GetTimerManager().SetTimer(Character->ActionRate, this, &UBTTask_AttackTarget::CanPerformActions, Character->actionDelay);
 		return EBTNodeResult::Succeeded;
 	}
 	return EBTNodeResult::Failed;
+}
+
+void UBTTask_AttackTarget::CanPerformActions()
+{
+	Character->canPerformActions = true;
 }

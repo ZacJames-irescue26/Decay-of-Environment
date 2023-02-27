@@ -85,8 +85,9 @@ void ADecay_of_environmentCharacter::SetupMissionWaypoints()
 	FString WorldName = GetWorld()->GetMapName();
 	WorldName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *WorldName);
+	UE_LOG(LogTemp, Warning, TEXT("%i"), WorldName.Equals(TEXT("Mission1"), ESearchCase::IgnoreCase))
 	//TODO Make into objects so more easily placed
-		if (true/*WorldName.Equals(TEXT("Mission1"), ESearchCase::IgnoreCase)*/)
+		if (WorldName.Equals(TEXT("Mission1"), ESearchCase::IgnoreCase))
 		{
 			if (stats.MissionWaypoint == 1)
 			{

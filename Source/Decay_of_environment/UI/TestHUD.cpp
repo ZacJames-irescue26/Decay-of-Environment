@@ -50,7 +50,7 @@ void ATestHUD::BeginPlay()
 	UserInterface->Setup();
 	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 	UserInterface->Mission();
-
+	
 }
 
 void ATestHUD::Tick(float DeltaSeconds)

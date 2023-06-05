@@ -36,7 +36,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		int32 Owner;
 	UPROPERTY(EditAnywhere)
-		int32 UnitTypeId;
+		EUnitClass UnitTypeId;
 };
 
 USTRUCT(BlueprintType)
@@ -73,6 +73,7 @@ public:
 	TArray<ABuilding*> EnemyBuildings;
 	TArray<FNavLocation> Waypoint;
 	TArray<ADecay_of_environmentCharacter*> EnemyUnits;
+
 public:
 		virtual void Init();
 		
@@ -88,6 +89,9 @@ public:
 		void LoadMenuWidget();
 
 		UFUNCTION(BlueprintCallable)
+		void LoadMissionSelection();
+		
+		UFUNCTION(BlueprintCallable)
 		void InGameLoadMenu();
 
 		virtual void LoadMainMenu() override;
@@ -98,6 +102,7 @@ public:
 private:
 	TSubclassOf<class UUserWidget> MenuClass;
 	TSubclassOf<class UUserWidget> InGameMenuClass;
+	TSubclassOf<class UUserWidget> MissionSelectionClass;
 	class UMainMenu* Menu;
 
 	IOnlineSessionPtr SessionInterface;

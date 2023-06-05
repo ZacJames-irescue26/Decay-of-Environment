@@ -19,9 +19,13 @@ bool UBTDecorator_IsTargetAlly::CalculateRawConditionValue(UBehaviorTreeComponen
 		return false;
 	}
 	ADecay_of_environmentCharacter* TargetActor = Cast<ADecay_of_environmentCharacter>(MyController->GetTargetActor());
-	if (Character->stats.team != TargetActor->stats.team)
+	if (TargetActor != nullptr)
 	{
-		return true;
+		if (Character->stats.team != TargetActor->stats.team)
+		{
+			return true;
+		}
+
 	}
 	return false;
 }

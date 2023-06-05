@@ -11,7 +11,8 @@ enum class EObjectiveType : uint8
 {
 	CollectResources,
 	killUnits,
-	DestroyObjective
+	DestroyObjective,
+	ProtectObjective
 
 };
 

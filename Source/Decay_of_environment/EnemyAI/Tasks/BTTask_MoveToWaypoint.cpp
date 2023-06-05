@@ -30,7 +30,7 @@ EBTNodeResult::Type UBTTask_MoveToWaypoint::ExecuteTask(UBehaviorTreeComponent& 
 		MyController->MoveToLocation(Character->Waypoints[Character->WaypointCounter]);
 		return EBTNodeResult::Succeeded;
 	}
-	return EBTNodeResult::Failed;
+	return EBTNodeResult::Succeeded;
 
 	//MyController->GameInstance->Waypoint.Add(FNavLocation(FVector(380.0, -150.0, 110.0)));
 	//MyController->GameInstance->Waypoint.Add(FNavLocation(FVector(400.0, -150.0, 110.0)));

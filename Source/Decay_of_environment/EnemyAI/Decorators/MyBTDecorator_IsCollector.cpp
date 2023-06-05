@@ -13,7 +13,7 @@ bool UMyBTDecorator_IsCollector::CalculateRawConditionValue(UBehaviorTreeCompone
 {
 	AEnemyAIController* MyController = Cast<AEnemyAIController>(OwnerComp.GetAIOwner());
 	// Does the target have resources left
-	if (MyController->GetRTSCharacter()->GetStats().unitID != 0)
+	if (MyController->GetRTSCharacter()->GetStats().unitID != EUnitClass::worker)
 	{
 		return false;
 	}

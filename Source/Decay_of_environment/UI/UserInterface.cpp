@@ -64,40 +64,53 @@ void UUserInterface::UpdateText()
 
 	UMissionDataAsset* MissionData = PlayerController->GetMissionDataAsset();
 	FMission* LevelMission = MissionData->MissionMap.Find(WorldName);
-	switch(LevelMission->Objectivetype)
+	if (LevelMission != nullptr)
 	{
-	case EObjectiveType::killUnits:
-	{
-		mission->MissionGraphicsSwitcher = 0;
-		int PlayerProgression = PlayerController->GetOverseerer()->statistics.UnitsKilled;
-		if (PlayerProgression <= LevelMission->MissionObjective)
+
+		switch(LevelMission->Objectivetype)
+		{
+		case EObjectiveType::killUnits:
+		{
+			mission->MissionGraphicsSwitcher = 0;
+			int PlayerProgression = PlayerController->GetOverseerer()->statistics.UnitsKilled;
+			if (PlayerProgression <= LevelMission->MissionObjective)
+			{
+				FText text = FText::FromString(LevelMission->MissionText);
+				mission->MissionText->SetText(text);
+				FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
+				mission->MissionProgress->SetText(FText::FromString(FractionText));
+			}
+		
+			if (!IsPlayed && PlayerProgression >= LevelMission->MissionObjective)
+			{
+				mission->PlayAnimation(mission->CompletedObjective);
+				IsPlayed = true;
+			}
+			break;
+		}
+		case EObjectiveType::CollectResources:
 		{
 			FText text = FText::FromString(LevelMission->MissionText);
-			mission->MissionText->SetText(text);
+			mission->MissionGraphicsSwitcher->ActiveWidgetIndex = 1;
+			mission->MissionText_1->SetText(text);
+			int PlayerProgression = PlayerController->GetOverseerer()->statistics.ComponentsValue;
+			mission->ComponentProgressBar->SetPercent((float)PlayerProgression / (float)(LevelMission->MissionObjective));
 			FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
-			mission->MissionProgress->SetText(FText::FromString(FractionText));
+			mission->MissionProgress_1->SetText(FText::FromString(FractionText));
+			break;
 		}
-		
-		if (!IsPlayed && PlayerProgression >= LevelMission->MissionObjective)
+		case EObjectiveType::DestroyObjective:
 		{
-			mission->PlayAnimation(mission->CompletedObjective);
-			IsPlayed = true;
+			break;
 		}
-		break;
-	}
-	case EObjectiveType::CollectResources:
-	{
-		FText text = FText::FromString(LevelMission->MissionText);
-		mission->MissionGraphicsSwitcher->ActiveWidgetIndex = 1;
-		mission->MissionText_1->SetText(text);
-		int PlayerProgression = PlayerController->GetOverseerer()->statistics.ComponentsValue;
-		mission->ComponentProgressBar->SetPercent((float)PlayerProgression / (float)(LevelMission->MissionObjective));
-		FString FractionText = FString::Printf(TEXT("%d/%d"), PlayerProgression, LevelMission->MissionObjective);
-		mission->MissionProgress_1->SetText(FText::FromString(FractionText));
-		break;
-	}
-	default:
-		break;
+		case EObjectiveType::ProtectObjective:
+		{
+			break;
+		}
+
+		default:
+			break;
+		}
 	}
 }
 
@@ -108,6 +121,7 @@ void UUserInterface::Mission()
 	if (!ensure(mission != nullptr)) return;
 	UpdateText();
 	MissionBox->AddChild(mission);
+	
 }
 
 

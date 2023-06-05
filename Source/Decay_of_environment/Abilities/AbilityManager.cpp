@@ -30,7 +30,7 @@ void AAbilityManager::DashAbility(TArray<ADecay_of_environmentCharacter*> select
 {
 	for (ADecay_of_environmentCharacter* units : selectedUnits)
 	{
-		if (units->stats.unitID == 1)
+		if (units->stats.unitID == EUnitClass::trooper)
 		{
 			if (units->stats.Energy >= 5)
 			{
@@ -52,7 +52,7 @@ void AAbilityManager::Shield(TArray<ADecay_of_environmentCharacter*> selectedUni
 {
 	for (ADecay_of_environmentCharacter* units : selectedUnits)
 	{
-		if (units->stats.unitID == 1)
+		if (units->stats.unitID == EUnitClass::trooper)
 		{
 			if (units->stats.Energy >= 5)
 			{

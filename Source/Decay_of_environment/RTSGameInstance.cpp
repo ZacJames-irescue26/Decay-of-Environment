@@ -17,6 +17,7 @@
 #include "Enums_Structs.h"
 #include "BaseAI.h"
 #include "EnemyAI/EnemyAIController.h"
+#include "MenuSystem/MissionSelectWidget.h"
 
 const static FName SESSION_NAME = TEXT("GameSession");
 const static FName Server_NAME_SETTINGS_KEY = TEXT("ServerName");
@@ -32,8 +33,17 @@ URTSGameInstance::URTSGameInstance(const FObjectInitializer& ObjectInitializer)
 	if (!ensure(InGameMenuBPClass.Class != nullptr)) return;
 
 	InGameMenuClass = InGameMenuBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> MissionSelectionBPClass(TEXT("/Game/TopDown/Blueprints/MenuSystem/BP_MissionSelect"));
+	if (!ensure(MissionSelectionBPClass.Class != nullptr)) return;
+
+	MissionSelectionClass = MissionSelectionBPClass.Class;
+
+
 	//UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuBPClass.Class->GetName());
 }
+
+
 void URTSGameInstance::Init()
 {
 	Super::Init();
@@ -258,6 +268,8 @@ void URTSGameInstance::LoadMenuWidget()
 	Menu->SetMenuInterface(this);
 }
 
+
+
 void URTSGameInstance::InGameLoadMenu()
 {
 	if (!ensure(InGameMenuClass != nullptr)) return;
@@ -423,5 +435,20 @@ void URTSGameInstance::LoadGame()
 	}
 	
 
+}
+
+void URTSGameInstance::LoadMissionSelection()
+{
+	if (!ensure(MissionSelectionClass != nullptr)) UE_LOG(LogTemp, Warning, TEXT("Mission selection class is nullptr")); return;
+	UMissionSelectWidget* MissionSelection = CreateWidget<UMissionSelectWidget>(this, MissionSelectionClass);
+	if (!ensure(MissionSelection != nullptr))UE_LOG(LogTemp, Warning, TEXT("Mission selection is nullptr")); return;
+	//MissionSelection->AddToViewport();
+	MissionSelection->Setup();
+	//MissionSelection->MissionBoxUpdate();
+	//MissionSelection->SetMenuInterface(this);
+	
+	
+	//Menu->Setup();
+	//Menu->SetMenuInterface(this)
 }
 

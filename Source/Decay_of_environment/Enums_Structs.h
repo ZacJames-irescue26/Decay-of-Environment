@@ -78,6 +78,18 @@ public:
 	}
 };
 
+UENUM(BlueprintType)
+enum class EUnitClass : uint8
+{
+	worker,
+	trooper,
+
+
+	//objectives
+	ProtectObjective,
+	DestroyObjective
+};
+
 USTRUCT(BlueprintType)
 struct FUnitStats
 {
@@ -101,7 +113,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	FString unitName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	int32 unitID;
+	//int32 unitID;
+	EUnitClass unitID;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	int32  team;
 
@@ -110,6 +124,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	int32 MissionWaypoint;
 };
+
+
 
 USTRUCT(BlueprintType)
 struct FBuildingStats : public FUnitStats

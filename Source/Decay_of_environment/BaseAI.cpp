@@ -331,6 +331,7 @@ ADecay_of_environmentCharacter* ABaseAI::GetRTSCharacter()
 		rtsCharacter = Cast<ADecay_of_environmentCharacter>(GetCharacter());
 	}
 	return rtsCharacter;
+	
 }
 
 void ABaseAI::CanPerformActions()

@@ -54,6 +54,7 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 					}
 					// We ran out of space so return to storage
 					else {
+						GetWorld()->GetTimerManager().SetTimer(Character->ActionRate, this, &UBTTask_CollectResources::CanPerformActions, Character->actionDelay);
 						return EBTNodeResult::Succeeded;
 					}
 				}
@@ -67,16 +68,17 @@ EBTNodeResult::Type UBTTask_CollectResources::ExecuteTask(UBehaviorTreeComponent
 					/*bool resFound = FindResource(ri->GetType(), ResourceActors);*/
 
 					if (ri == nullptr) {
+						GetWorld()->GetTimerManager().SetTimer(Character->ActionRate, this, &UBTTask_CollectResources::CanPerformActions, Character->actionDelay);
 						return EBTNodeResult::Failed;
 					}
 				}
 				// We ran out of space so return to storage
 				else {
+					GetWorld()->GetTimerManager().SetTimer(Character->ActionRate, this, &UBTTask_CollectResources::CanPerformActions, Character->actionDelay);
 					return EBTNodeResult::Succeeded;
 				}
 			}
 		}
-		GetWorld()->GetTimerManager().SetTimer(Character->ActionRate, this, &UBTTask_CollectResources::CanPerformActions, Character->actionDelay);
 	}
 	// Does the target have resources left
 	

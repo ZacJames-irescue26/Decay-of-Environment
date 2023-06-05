@@ -11,6 +11,7 @@ ATestHUD::ATestHUD()
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
 	UserInterfaceClass = UserInterfaceBPClass.Class;
+	
 }
 
 void ATestHUD::DrawHUD()
@@ -41,7 +42,8 @@ void ATestHUD::BeginPlay()
 {
 	
 	Super::BeginPlay();
-	
+	FString WorldName = GetWorld()->GetMapName();
+	WorldName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
 	UE_LOG(LogTemp, Warning, TEXT("Adding player"));
 	if (!ensure(UserInterfaceClass != nullptr)) return;
 	UserInterface = CreateWidget<UUserInterface>(GetWorld(), UserInterfaceClass);
@@ -50,7 +52,15 @@ void ATestHUD::BeginPlay()
 	UserInterface->Setup();
 	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 	UserInterface->Mission();
-	
+	//UE_LOG(LogTemp, Warning, TEXT("%i"), WorldName.Equals("MainMenu", ESearchCase::IgnoreCase))
+	if (WorldName.Equals("MainMenu", ESearchCase::IgnoreCase) || WorldName.Equals("MissionSelection", ESearchCase::IgnoreCase))
+	{
+		UserInterface->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		UserInterface->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void ATestHUD::Tick(float DeltaSeconds)

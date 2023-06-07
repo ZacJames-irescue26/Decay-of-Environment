@@ -83,6 +83,7 @@ enum class EUnitClass : uint8
 {
 	worker,
 	trooper,
+	Building,
 
 
 	//objectives

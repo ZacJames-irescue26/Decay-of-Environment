@@ -8,11 +8,11 @@
 #include "DamagableInterface.h"
 #include "StorageInterface.h"
 #include "TeamInterface.h"
-#include "TileGrid/CubeGridManager.h"
+#include "BuidlingInterface.h"
 #include "Building.generated.h"
 
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API ABuilding : public AActor, public IDamagableInterface, public ITeamInterface
+class DECAY_OF_ENVIRONMENT_API ABuilding : public AActor, public IDamagableInterface, public ITeamInterface, public IBuidlingInterface
 {
 	GENERATED_BODY()
 	
@@ -22,14 +22,11 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	/*virtual void BeginPlay() override;*/
 
 public:	
 	UPROPERTY(EditAnywhere)
-	bool IsPlaced = false;
-	UPROPERTY(EditAnywhere)
 	bool IsMainBuilding = false;
-	ACubeGridManager* GridManager;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats")
 	FBuildingStats buildingStats;

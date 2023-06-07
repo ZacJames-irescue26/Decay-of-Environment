@@ -95,6 +95,7 @@ protected:
 	void RightClickReleased();
 	void GatherResources(IResourceInterface* res);
 
+	void Build(class AUnbuiltBuilding* Building);
 	ITeamInterface* GetTeam(AActor* other);
 	IResourceInterface* GetResource(AActor* other);
 	void ZoomIn();

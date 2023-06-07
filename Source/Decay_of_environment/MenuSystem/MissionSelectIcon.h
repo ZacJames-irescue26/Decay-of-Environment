@@ -18,4 +18,5 @@ public:
 	
 	UPROPERTY(meta = (BindWidget))
 	UButton* MissionButton;
+
 };

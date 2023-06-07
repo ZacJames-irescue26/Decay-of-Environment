@@ -74,6 +74,10 @@ public:
 	TArray<FNavLocation> Waypoint;
 	TArray<ADecay_of_environmentCharacter*> EnemyUnits;
 
+	UPROPERTY(VisibleAnywhere)
+	int CurrentMission = 0;
+	
+
 public:
 		virtual void Init();
 		
@@ -94,9 +98,11 @@ public:
 		UFUNCTION(BlueprintCallable)
 		void InGameLoadMenu();
 
+
 		virtual void LoadMainMenu() override;
 		void SaveGame();
 		void LoadGame();
+		UMissionDataAsset* GetMissionDataAsset();
 		void RefreshServerList() override;
 
 private:
@@ -104,7 +110,7 @@ private:
 	TSubclassOf<class UUserWidget> InGameMenuClass;
 	TSubclassOf<class UUserWidget> MissionSelectionClass;
 	class UMainMenu* Menu;
-
+	class UMissionSelectWidget* MissionSelection;
 	IOnlineSessionPtr SessionInterface;
 	
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;

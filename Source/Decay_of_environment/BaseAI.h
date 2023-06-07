@@ -32,6 +32,8 @@ public:
 	void GetNearbyActors(TArray<AActor*>& actors);
 	void Patrol(FVector Location, AActor* c);
 	void AttackMove();
+	void Build(class AUnbuiltBuilding* _Building);
+	void BuildBuilding();
 	void DamageTarget();
 	void AttackTarget(IDamagableInterface* target);
 	void GatherResource(IResourceInterface* resource);
@@ -73,5 +75,7 @@ private:
 
 	bool canPerformActions;
 	void CanPerformActions();
+
+	bool Building = false;
 	
 };

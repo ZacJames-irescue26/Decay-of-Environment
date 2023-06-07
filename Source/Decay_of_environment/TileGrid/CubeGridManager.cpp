@@ -166,12 +166,12 @@ void ACubeGridManager::LoadUnitsAndBuildings()
 		case 0:
 			ActorToSpawn = DefaultBuilding;
 			NewBuilding = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Pos, FRotator::ZeroRotator);
-			NewBuilding->IsPlaced = true;
+			
 			break;
 		case 1:
 			ActorToSpawn = Base;
 			NewBase = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Pos, FRotator::ZeroRotator);
-			NewBase->IsPlaced = true;
+			
 			break;
 		case 10:
 			ActorToSpawn = DefaultCharacter;

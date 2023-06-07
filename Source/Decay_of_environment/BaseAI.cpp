@@ -11,6 +11,7 @@
 #include "Components/BoxComponent.h"
 #include "AI/A_star_AIController.h"
 #include "Decay_of_environmentPlayerController.h"
+#include "UnbuiltBuilding.h"
 
 #define MIN(a,b)(a<b)?(a):(b)
 #define MAX(a,b)(a>b)?(a):(b)
@@ -35,44 +36,7 @@ void ABaseAI::SetTargetActor(AActor* val)
 	}
 }
 
-//void ABaseAI::MoveAI(FVector loc, AActor* a)
-//{
-//	targetActor = nullptr;
-//	MoveToLocation(loc);
-//	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
-//	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
-//	currentAction = EActionType::Move;
-//	
-//	//int XPos = a->GetActorLocation().X/GridManager->TileHorizontalOffset;
-//	//int YPos = a->GetActorLocation().Y/GridManager->TileVerticalOffset;
-//	//int FinalXPos = loc.X / GridManager->TileHorizontalOffset;
-//	//int FinalYPos = loc.Y / GridManager->TileVerticalOffset;
-//	//if (XPos > 0 && YPos > 0 && FinalXPos > 0 && FinalYPos > 0)
-//	//{
-//	//	Path = AA_star_AIController::A_star(GridManager->CubeGrid[XPos][YPos], GridManager->CubeGrid[FinalXPos][FinalYPos], GridManager->TileHorizontalOffset, GridManager->TileVerticalOffset, GridManager->GridWidth, GridManager->GridHeight, GridManager->CubeGrid);
-//	//}
-//	//Actor = a;
-//	//ACubeTile* start, ACubeTile* end, float TileHorizontalOffset, float TileVerticalOffset, int32 MapXSize, int32 MapYSize, TArray<TArray<ACubeTile*>> AllMap 
-//	//Canmove = true;
-//	//int i = 0;
-//	//while(i < Path.Num())
-//	//{
-//	//	UE_LOG(LogTemp, Warning, TEXT("CanMove: %i, Timer"), Canmove);
-//	//	//Canmove = false;
-//	//	for (float j = 0; j < 1; j = j + 0.1)
-//	//	{
-//	//		a->SetActorLocation(FMath::Lerp(a->GetActorLocation(), Path[i]->GetActorLocation(),j));
-//	//		//a->SetActorLocation(Path[i]->GetActorLocation());
-//	//		UE_LOG(LogTemp, Warning, TEXT("CanMove: %i"), Canmove);
-//	//		
-//
-//	//	}
-//	//	i++;
-//	//}
-//
-//
-//
-//}
+
 void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
 {
 	targetActor = nullptr;
@@ -121,8 +85,8 @@ void ABaseAI::Tick(float DeltaTime)
 			case EActionType::DepositeResources:
 				DepositeResource();
 				break;
-
 			case EActionType::Build:
+				BuildBuilding();
 				break;
 			case EActionType::End:
 				break;
@@ -368,3 +332,18 @@ void ABaseAI::AttackMove()
 		}
 	}
 }
+
+void ABaseAI::Build(AUnbuiltBuilding* _Building)
+{
+	SetTargetActor(_Building);
+	currentAction = EActionType::Build;
+}
+
+void ABaseAI::BuildBuilding()
+{
+	AUnbuiltBuilding* _Building = Cast<AUnbuiltBuilding>(GetTargetActor());
+	_Building->StartTimer();
+	
+
+}
+

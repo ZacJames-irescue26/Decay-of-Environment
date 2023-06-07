@@ -428,7 +428,6 @@ void URTSGameInstance::LoadGame()
 			break;
 		}
 		ABuilding* NewBuilding = GetWorld()->SpawnActor<ABuilding>(ActorToSpawn, Building.Position, FRotator::ZeroRotator);
-		NewBuilding->IsPlaced = true;
 		NewBuilding->buildingStats.owner = Building.Owner;
 		NewBuilding->buildingStats.team = Building.team;
 		
@@ -436,14 +435,26 @@ void URTSGameInstance::LoadGame()
 	
 
 }
+UMissionDataAsset* URTSGameInstance::GetMissionDataAsset()
+{
+	UMissionDataAsset* MissionDataAsset = LoadObject<UMissionDataAsset>(NULL, TEXT("/Game/TopDown/Blueprints/DataAssetMissions/MissionDataAsset"));
+	return MissionDataAsset;
+}
 
 void URTSGameInstance::LoadMissionSelection()
 {
-	if (!ensure(MissionSelectionClass != nullptr)) UE_LOG(LogTemp, Warning, TEXT("Mission selection class is nullptr")); return;
-	UMissionSelectWidget* MissionSelection = CreateWidget<UMissionSelectWidget>(this, MissionSelectionClass);
-	if (!ensure(MissionSelection != nullptr))UE_LOG(LogTemp, Warning, TEXT("Mission selection is nullptr")); return;
-	//MissionSelection->AddToViewport();
-	MissionSelection->Setup();
+	if (MissionSelectionClass != nullptr)
+	{
+		MissionSelection = CreateWidget<UMissionSelectWidget>(this, MissionSelectionClass);
+	}
+
+	if ((MissionSelection != nullptr))
+	{
+		MissionSelection->AddToViewport();
+		UMissionDataAsset* DataAsset = GetMissionDataAsset();
+		MissionSelection->MissionBoxUpdate();
+	}
+	//MissionSelection->Setup();
 	//MissionSelection->MissionBoxUpdate();
 	//MissionSelection->SetMenuInterface(this);
 	

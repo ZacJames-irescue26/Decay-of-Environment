@@ -22,8 +22,8 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UHorizontalBox* MissionSelectBox;
-
+	class UMissionSelectIcon* Mission;
 	TSubclassOf<class UMissionSelectIcon> MissionIconClass;
-
+	class UButton* button;
 	void MissionBoxUpdate();
 };

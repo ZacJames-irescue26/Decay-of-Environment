@@ -17,6 +17,7 @@
 #include "TileGrid/CubeTile.h"
 #include "UI/TestHUD.h"
 #include <Kismet/GameplayStatics.h>
+#include "UnbuiltBuilding.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -227,6 +228,23 @@ void ADecay_of_environmentPlayerController::GatherResources(IResourceInterface* 
 
 }
 
+void ADecay_of_environmentPlayerController::Build(AUnbuiltBuilding* Building)
+{
+	if (selectedUnits.Num() > 0)
+	{
+		for (AActor* a : selectedUnits)
+		{
+			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
+			{
+				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
+				ABaseAI* con = Cast<ABaseAI>(c->GetController());
+				con->Build(Building);
+			}
+		}
+	}
+
+}
+
 
 void ADecay_of_environmentPlayerController::RightClick()
 {
@@ -241,6 +259,7 @@ void ADecay_of_environmentPlayerController::RightClick()
 
 		bool isdamagable = targetFound->Implements<UDamagableInterface>();
 		bool isResource = targetFound->Implements<UResourceInterface>();
+		bool isBuilding = targetFound->Implements<UBuidlingInterface>();
 		if (isdamagable)
 		{
 
@@ -268,6 +287,14 @@ void ADecay_of_environmentPlayerController::RightClick()
 			IResourceInterface* res = GetResource(targetFound);
 			GatherResources(res);
 			//res->TakeResources(10);
+		}
+		if (isBuilding)
+		{
+			AUnbuiltBuilding* Building = Cast<AUnbuiltBuilding>(targetFound);
+			if (Building->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner()  && Building->GetPlayerTeam() == GetOverseerer()->GetTeam())
+			{
+				Build(Building);
+			}
 		}
 		else
 		{
@@ -437,7 +464,8 @@ void ADecay_of_environmentPlayerController::SpawnBuilding()
 		Location = MousePos;
 		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 		FRotator Rotation = { 0,0,0 };
-		ABuilding* Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, Location, Rotation);
+		AUnbuiltBuilding* Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingToSpawn, Location, Rotation);
+		Building->buildingStats.currentHealth = 10.0f;
 		Buildings.Add(Building);
 		GetOverseerer()->statistics.ComponentsValue -= 10;
 	}

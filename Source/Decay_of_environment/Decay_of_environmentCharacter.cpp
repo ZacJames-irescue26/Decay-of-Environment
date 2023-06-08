@@ -62,7 +62,7 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 		
 			PlayerController->GetOverseerer()->statistics.UnitsKilled += 1;
 		}
-		Destroy(true);
+		DestroyUnit();
 	}
 }
 
@@ -188,4 +188,9 @@ void ADecay_of_environmentCharacter::SetPlayerOwner(int32 Value)
 {
 	stats.owner = Value;
 	
+}
+
+void ADecay_of_environmentCharacter::DestroyUnit()
+{
+	Destroy(true);
 }

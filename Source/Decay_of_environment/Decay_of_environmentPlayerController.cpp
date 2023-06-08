@@ -18,6 +18,7 @@
 #include "UI/TestHUD.h"
 #include <Kismet/GameplayStatics.h>
 #include "UnbuiltBuilding.h"
+#include "BuildingIcon.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -429,7 +430,7 @@ ITeamInterface* ADecay_of_environmentPlayerController::GetTeam(AActor* other)
 
 AOverseerer* ADecay_of_environmentPlayerController::GetOverseerer()
 {
-	if (overseerer == NULL)
+	if (overseerer == nullptr)
 	{
 		overseerer = Cast<AOverseerer>(GetPawn());
 	}
@@ -464,9 +465,9 @@ void ADecay_of_environmentPlayerController::SpawnBuilding()
 		Location = MousePos;
 		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 		FRotator Rotation = { 0,0,0 };
-		AUnbuiltBuilding* Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingToSpawn, Location, Rotation);
-		Building->buildingStats.currentHealth = 10.0f;
-		Buildings.Add(Building);
+		ABuildingIcon* Building = GetWorld()->SpawnActor<ABuildingIcon>(BuildingToSpawn, Location, Rotation);
+		/*Building->buildingStats.currentHealth = 10.0f;
+		Buildings.Add(Building);*/
 		GetOverseerer()->statistics.ComponentsValue -= 10;
 	}
 

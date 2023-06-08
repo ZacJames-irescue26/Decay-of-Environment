@@ -60,6 +60,7 @@ public:
 	virtual void SetPlayerTeam(int32 Value) override;
 	virtual void SetPlayerOwner(int32 Value) override;
 	
+	virtual void DestroyUnit();
 	void SetupMissionWaypoints();
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
 	TArray<FVector> Waypoints;

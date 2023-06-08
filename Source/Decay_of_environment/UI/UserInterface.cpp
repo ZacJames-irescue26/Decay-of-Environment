@@ -105,6 +105,17 @@ void UUserInterface::UpdateText()
 		}
 		case EObjectiveType::ProtectObjective:
 		{
+			FText text = FText::FromString(LevelMission->MissionText);
+			mission->MissionGraphicsSwitcher->ActiveWidgetIndex = 2;
+			mission->MissionText_2->SetText(text);
+			int ObjectivesDestroyed = PlayerController->GetOverseerer()->statistics.ProtectObjectivesDestroyed;
+			int ObjectivesReachedDestination = PlayerController->GetOverseerer()->statistics.ObjectivesReachDestination;
+
+			FString ObjectivesDestroyedText = FString::Printf(TEXT("%d/%d"), ObjectivesDestroyed, LevelMission->PreventDestroy);
+			FString ObjectivesReachedDestinationText = FString::Printf(TEXT("%d/%d"), ObjectivesReachedDestination, LevelMission->MissionObjective);
+			mission->MissionProgress_2->SetText(FText::FromString(ObjectivesReachedDestinationText));
+			mission->MissionText_3->SetText(FText::FromString("Objectives Destroyed"));
+			mission->MissionProgress_3->SetText(FText::FromString(ObjectivesDestroyedText));
 			break;
 		}
 

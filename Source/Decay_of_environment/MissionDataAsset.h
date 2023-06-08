@@ -29,6 +29,9 @@ public:
 	int MissionObjective;
 	UPROPERTY(EditAnywhere, Category = "Missions")
 	EObjectiveType Objectivetype;
+	//How many objectives can be destroyed before mission failure
+	UPROPERTY(EditAnywhere, Category = "Missions")
+	int PreventDestroy;
 	
 
 };

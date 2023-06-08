@@ -19,6 +19,9 @@ public:
 	
 	int32 UnitsKilled = 0;
 	int32 SpecialUnitsKilled = 0;
+	int32 ProtectObjectivesDestroyed = 0;
+	int32 ObjectivesReachDestination = 0;
+	int32 protectObjectiveGoal = 3;
 
 };
 UCLASS()

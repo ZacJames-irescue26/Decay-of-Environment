@@ -3,6 +3,8 @@
 
 #include "MovingProtectObject.h"
 #include "Decay_of_environment/Missions/ProtectObjectiveAI.h"
+#include "../Decay_of_environmentPlayerController.h"
+#include <Kismet/GameplayStatics.h>
 // Sets default values
 AMovingProtectObject::AMovingProtectObject()
 {
@@ -55,11 +57,10 @@ void AMovingProtectObject::Tick(float DeltaTime)
 
 			if (con)
 			{
-
+				
 				con->StopMovement();
 			}
 		}
-
 	}
 	 
 	con = con == nullptr ? Cast<AProtectObjectiveAI>(this->GetController()) : con;
@@ -68,6 +69,20 @@ void AMovingProtectObject::Tick(float DeltaTime)
 
 		con->StopMovement();
 	}
+	if (WaypointCounter == Waypoints.Num())
+	{
+		// this gets all player controller if multiplayer then need to change this Need to iterate over all player controllers
+		ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(),0));
+		PlayerController->GetOverseerer()->statistics.ObjectivesReachDestination++;
+		Destroy();
+	}
 
+}
+
+void AMovingProtectObject::DestroyUnit()
+{
+	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	PlayerController->GetOverseerer()->statistics.ProtectObjectivesDestroyed++;
+	Destroy();
 }
 

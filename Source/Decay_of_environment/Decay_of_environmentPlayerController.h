@@ -60,7 +60,7 @@ public:
 	void DashAbility();
 	UMissionDataAsset* GetMissionDataAsset();
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<ABuilding> BuildingToSpawn;
+	TSubclassOf<class ABuildingIcon> BuildingToSpawn;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> UnitToSpawn;

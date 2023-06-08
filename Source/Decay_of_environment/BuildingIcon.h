@@ -4,19 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Decay_of_environment/Decay_of_environmentCharacter.h"
-#include "MovingProtectObject.generated.h"
-
-class AProtectObjectiveAI;
+#include "BuildingIcon.generated.h"
 
 UCLASS()
-class DECAY_OF_ENVIRONMENT_API AMovingProtectObject : public ADecay_of_environmentCharacter
+class DECAY_OF_ENVIRONMENT_API ABuildingIcon : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMovingProtectObject();
+	ABuildingIcon();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,7 +22,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void DestroyUnit() override;
-	TArray<AActor*> CloseActors;
-	AProtectObjectiveAI* con;
+	UPROPERTY(EditAnywhere)
+	bool IsPlaced = false;
+	class ACubeGridManager* GridManager;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AUnbuiltBuilding> BuildingToSpawn;
 };

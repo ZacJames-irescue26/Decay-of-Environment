@@ -25,9 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UPROPERTY(EditAnywhere)
-	bool IsPlaced = false;
-	class ACubeGridManager* GridManager;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void StartTimer();

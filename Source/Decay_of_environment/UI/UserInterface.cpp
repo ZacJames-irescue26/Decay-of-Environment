@@ -25,7 +25,7 @@ bool UUserInterface::Initialize()
 
 	World = GetWorld();
 	if (!ensure(World != nullptr)) return false;
-	PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
+	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetOwningPlayer());
 	if(!ensure(BuildingButton != nullptr)) return false;
 	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
 	if (!ensure(UnitButton != nullptr)) return false;

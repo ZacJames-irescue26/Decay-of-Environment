@@ -15,7 +15,7 @@ struct FStatistics
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditAnywhere)
-	int32 ComponentsValue = 0;
+	int32 ComponentsValue = 100;
 	
 	int32 UnitsKilled = 0;
 	int32 SpecialUnitsKilled = 0;
@@ -32,7 +32,10 @@ class DECAY_OF_ENVIRONMENT_API AOverseerer : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AOverseerer();
+	UFUNCTION(NetMulticast, Reliable)
+	void Server_SetPlayerOwner(int Player);
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -64,11 +67,12 @@ public:
 	int32 GetPlayerOwner() const { return PlayerOwner; }
 	void SetPlayerOwner(int32 val) { PlayerOwner = val; }
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 	int32 team;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 	int32 PlayerOwner;
-	//TODO setup player owner on spawn
+	class ADecay_of_environmentPlayerController* PlayerController;
 	
+
 
 };

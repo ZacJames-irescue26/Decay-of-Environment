@@ -2,14 +2,13 @@
 
 
 #include "Overseerer.h"
-
+#include "Decay_of_environmentPlayerController.h"
+#include "DOEPlayerState.h"
+#include "Net/UnrealNetwork.h"
 // Sets default values
 AOverseerer::AOverseerer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Don't rotate character to camera direction
@@ -34,10 +33,40 @@ AOverseerer::AOverseerer()
 
 }
 
+
+void AOverseerer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AOverseerer, PlayerOwner);
+}
+
+
+
+void AOverseerer::Server_SetPlayerOwner_Implementation(int Player)
+{
+	SetPlayerOwner(Player);
+
+}
+
 // Called when the game starts or when spawned
 void AOverseerer::BeginPlay()
 {
 	Super::BeginPlay();
+	if (IsLocallyControlled())
+	{
+		PlayerController = PlayerController == nullptr ? Cast<ADecay_of_environmentPlayerController>(this->GetController()) : PlayerController;
+		if (PlayerController)
+		{
+			ADOEPlayerState* DOEPlayerState = PlayerController->GetPlayerState<ADOEPlayerState>();
+			if (DOEPlayerState)
+			{
+				Server_SetPlayerOwner(DOEPlayerState->GetPlayerOwner());
+			}
+		}
+	}
+	
+
+
 }
 
 // Called every frame

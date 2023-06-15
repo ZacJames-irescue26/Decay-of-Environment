@@ -24,27 +24,61 @@ ABaseAI::ABaseAI()
 	selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(1500, 1500, 1000));
 	i = 0;
+	bReplicates = true;
 }
 
-void ABaseAI::SetTargetActor(AActor* val)
+
+void ABaseAI::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABaseAI, previousTarget);
+	DOREPLIFETIME(ABaseAI, targetActor);
+	DOREPLIFETIME(ABaseAI, currentAction);
+
+
+}
+
+void ABaseAI::SetTargetActor_Implementation(AActor* val)
 {
 	previousTarget = targetActor;
 	targetActor = val;
+	if (targetActor == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Target Actor is nullptr"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Target Actor modified: %s"), *targetActor->GetName());
 
+	}
 	if (targetActor != nullptr) {
 		targetActor->GetActorBounds(true, bbLocation, bbExtent);
 	}
+	
+	ServerSetTargetActor(val);
+	ClientSetTargetActor(val);
 }
 
+
+void ABaseAI::ServerSetTargetActor_Implementation(AActor* val)
+{
+	targetActor = val;
+}
+
+
+void ABaseAI::ClientSetTargetActor_Implementation(AActor* val)
+{
+	targetActor = val;
+}
 
 void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
 {
 	targetActor = nullptr;
 	MoveToLocation(loc,10.0f);
+	currentAction = EActionType::Move;
 	
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
 	//bool bCanStrafe, TSubclassOf<UNavigationQueryFilter> FilterClass, bool bAllowPartialPaths)*/
-	currentAction = EActionType::Move;
 }
 void ABaseAI::CanMove()
 {
@@ -60,11 +94,24 @@ void ABaseAI::OnPossess(APawn* InPawn)
 void ABaseAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	AIbehaviour();
+	
+
+}
+
+//void ABaseAI::OnRep_TargetActor()
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("Target Actor modified: %s"), *targetActor->GetName());
+//	AIbehaviour();
+//}
+
+void ABaseAI::AIbehaviour_Implementation()
+{
 	if (currentAction == EActionType::patrol)
 	{
 		AttackMove();
 	}
-	if (canPerformActions && GetTargetActor() != nullptr) {
+	if (canPerformActions && targetActor != nullptr) {
 		int32 minDistance = bbExtent.GetAbsMax() + characterBBExtent.GetAbsMax();
 		float dist = FVector::Distance(GetCharacter()->GetActorLocation(), targetActor->GetActorLocation());
 		ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(GetCharacter());
@@ -100,30 +147,7 @@ void ABaseAI::Tick(float DeltaTime)
 			MoveToActor(GetTargetActor());
 		}
 	}
-	//if (Actor != nullptr)
-	//{
-	//	//float JourneyLength = (Path[i]->GetActorLocation() - Actor->GetActorLocation()).Size();
-	//	FVector Location = Actor->GetActorLocation();
-	//	if (i < Path.Num())
-	//	{
-	//		FVector Direction = (Path[Path.Num() - 1 - i]->GetActorLocation() - Actor->GetActorLocation()).GetSafeNormal();
-	//		Location += Speed * DeltaTime * Direction;
-	//		Actor->SetActorLocation(Location);
-	//		if (Actor->GetActorLocation().X > Path[Path.Num() - 1 - i]->GetActorLocation().X -10 && Actor->GetActorLocation().X < Path[Path.Num() - 1 - i]->GetActorLocation().X + 10 
-	//			&& Actor->GetActorLocation().Y  > Path[Path.Num() - 1 - i]->GetActorLocation().Y - 10 && Actor->GetActorLocation().Y < Path[Path.Num() - 1 - i]->GetActorLocation().Y + 10  && i < Path.Num())
-	//		{
-	//			UE_LOG(LogTemp, Warning, TEXT("Added to i: %i"), i);
-	//			i++;
-	//		}
-	//	}
-	//	else if(i >= Path.Num())
-	//	{
-	//		i = 0;
-	//	}
-
-	//}
 }
-
 
 void ABaseAI::BeginPlay()
 {
@@ -250,13 +274,14 @@ void ABaseAI::DepositeResource()
 	}
 }
 
-void ABaseAI::DamageTarget()
+void ABaseAI::DamageTarget_Implementation()
 {
 	StopMovement();
 	IDamagableInterface* di = Cast<IDamagableInterface>(GetTargetActor());
 	if (di->GetHealth() > 0)
 	{
-		di->TakeDamage(GetRTSCharacter()->stats.AttackDamage);
+		ADecay_of_environmentCharacter* _character = GetRTSCharacter();
+		di->TakeDamage(_character->stats.AttackDamage);
 	}
 	else if (GetTargetActor()->Implements<UResourceInterface>())
 	{
@@ -265,26 +290,21 @@ void ABaseAI::DamageTarget()
 }
 
 
-void ABaseAI::AttackTarget(IDamagableInterface* target)
+void ABaseAI::AttackTarget_Implementation(AActor* target)
 {
-	
-	if (target->GetHealth() > 0)
-	{
-		
 		currentAction = EActionType::Attack;
-		SetTargetActor(Cast<AActor>(target));
+		SetTargetActor(target);
 		MoveToActor(GetTargetActor());
-	}
+		UE_LOG(LogTemp, Warning, TEXT("Attacking target %s"), *GetTargetActor()->GetName());
+		return;
 }
 
-void ABaseAI::GatherResource(IResourceInterface* resource)
+void ABaseAI::GatherResource(AActor* resource)
 {
-	if (resource->GetAmount() > 0)
-	{
 		currentAction = EActionType::Gather;
 		SetTargetActor(Cast<AActor>(resource));
 		MoveToActor(GetTargetActor());
-	}
+		return;
 }
 
 
@@ -321,14 +341,17 @@ void ABaseAI::AttackMove()
 	TArray<AActor*> NearActors;
 	GetRTSCharacter()->GetOverlappingActors(NearActors, ADecay_of_environmentCharacter::StaticClass());
 	//UE_LOG(LogTemp, Warning, TEXT("Actors in range %i"), NearActors.Num());
-	for (AActor* Near : NearActors)
+	if (NearActors.Num() > 0)
 	{
-		ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(Near);
-		if(!_Character) return;
-		if (_Character->stats.owner != GetRTSCharacter()->GetPlayerOwner() && _Character->stats.team != GetRTSCharacter()->GetPlayerTeam())
+		for (AActor* Near : NearActors)
 		{
-			SetTargetActor(_Character);
-			currentAction = EActionType::Attack;
+			ADecay_of_environmentCharacter* _Character = Cast<ADecay_of_environmentCharacter>(Near);
+			if(!_Character) return;
+			if (_Character->stats.owner != GetRTSCharacter()->GetPlayerOwner() && _Character->stats.team != GetRTSCharacter()->GetPlayerTeam())
+			{
+				SetTargetActor(_Character);
+				currentAction = EActionType::Attack;
+			}
 		}
 	}
 }

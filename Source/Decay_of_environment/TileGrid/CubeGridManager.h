@@ -26,6 +26,9 @@ public:
 	FVector GridPos;
 
 	float AlignToGrid(float value, float size);
+	FVector2D WorldToGridIndex(FVector2D Pos);
+	bool CheckGridIndex(FVector2D Pos);
+	bool IsOccupied(FVector2D Pos);
 protected:
 
 	TArray<TArray<int32>> CubeGrid2DArray;

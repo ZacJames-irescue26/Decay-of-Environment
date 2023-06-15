@@ -23,7 +23,14 @@ class DECAY_OF_ENVIRONMENT_API ABaseAI : public AAIController
 	GENERATED_BODY()
 public:
 	ABaseAI();
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	virtual void Tick(float DeltaTime) override;
+	//UFUNCTION()
+	//void OnRep_TargetActor();
+	UFUNCTION(NetMulticast, Reliable)
+	void AIbehaviour();
+
 	virtual void BeginPlay() override;
 	const FString EnumToString(const TCHAR* Enum, int32 EnumValue);
 	void DepositeResource();
@@ -34,13 +41,19 @@ public:
 	void AttackMove();
 	void Build(class AUnbuiltBuilding* _Building);
 	void BuildBuilding();
+	UFUNCTION(Server, Reliable)
 	void DamageTarget();
-	void AttackTarget(IDamagableInterface* target);
-	void GatherResource(IResourceInterface* resource);
+	UFUNCTION(Server, Reliable)
+	void AttackTarget(AActor* target);
+	void GatherResource(AActor* resource);
 	ADecay_of_environmentCharacter* GetRTSCharacter();
-
 	AActor* GetTargetActor() const { return targetActor; }
+	UFUNCTION(server, Reliable)
 	void SetTargetActor(AActor* val);
+	UFUNCTION(Server, Reliable)
+	void ServerSetTargetActor(AActor* val);
+	UFUNCTION(Client, Reliable)
+	void ClientSetTargetActor(AActor* val);
 	UFUNCTION(NetMulticast, Reliable)
 	void MoveAI(FVector loc, AActor* a);
 	void CanMove();
@@ -51,8 +64,11 @@ private:
 	ACubeGridManager* GridManager;
 	FTimerHandle ActionRate;
 	FTimerHandle MoveRate;
+	UPROPERTY(Replicated)
 	AActor* previousTarget;
+	UPROPERTY(Replicated)
 	AActor* targetActor;
+	UPROPERTY(Replicated)
 	EActionType currentAction;
 	UBoxComponent* selectionArea;
 
@@ -72,7 +88,6 @@ private:
 	TArray<ACubeTile*> Path;
 	AActor* Actor;
 	ADecay_of_environmentCharacter* rtsCharacter;
-
 	bool canPerformActions;
 	void CanPerformActions();
 

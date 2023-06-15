@@ -19,7 +19,7 @@ GENERATED_BODY()
 public:	
 	// Sets default values for this actor's properties
 	AUnbuiltBuilding();
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,8 +30,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void StartTimer();
 	void PauseTimer();
-
-	void SpawnBuidling();
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnBuilding();
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_SpawnBuilding();
+	void SpawnBuilding();
 private:
 	float BuildTimer = 100.0f;
 	float CurrentTime = 0.0f;
@@ -41,4 +44,6 @@ private:
 	TSubclassOf<ABuilding> BuildingToSpawn;
 	UPROPERTY(VisibleAnywhere)
 	bool isPaused = false;
+	UPROPERTY(Replicated)
+	class ABuilding* _Building;
 };

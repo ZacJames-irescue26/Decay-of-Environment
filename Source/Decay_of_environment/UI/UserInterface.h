@@ -62,7 +62,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UGridPanel* UnitGridPanel;
-
+	
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* UnitScrollBox;
 

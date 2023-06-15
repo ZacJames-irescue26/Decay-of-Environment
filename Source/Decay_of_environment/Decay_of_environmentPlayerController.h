@@ -33,43 +33,49 @@ public:
 	
 	ADecay_of_environmentPlayerController();
 
-	/** Time Threshold to know if it was a short press */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	float ShortPressThreshold;
+	
 
-	/** FX Class that we will spawn when clicking */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UNiagaraSystem* FXCursor;
-	FVector MousePos;
-	bool leftMouseDown; // Input is bring pressed
-	bool RightMouseDown;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	void Test();
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void MoveUnits(FVector loc);
 	AOverseerer* GetOverseerer();
 	TArray<ADecay_of_environmentCharacter*>& GetUnitsArray() {return selectedUnits;};
-	double MouseStartX;
-	double MouseStartY;
-	double MouseEndX;
-	double MouseEndY;
+	
 
 	void SpawnBuilding();
 	void SpawnUnit();
-
+	void SelectUnits();
+	void AttackTarget(IDamagableInterface* target);
+	void GatherResources(IResourceInterface* res);
+	
+	UFUNCTION(Server, Reliable)
+	void Server_AttackTarget(AActor* target, ADecay_of_environmentCharacter* c);
+	UFUNCTION(Server, Reliable)
+	void Server_GatherResources(AActor* res, ADecay_of_environmentCharacter* c);
+	UFUNCTION(Server, Reliable)
+	void Server_SelectUnits(ADecay_of_environmentCharacter* _character);
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnBuilding(FVector location, FRotator rotation);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_SpawnBuilding(FVector location, FRotator rotation);
+	UFUNCTION(Client, Reliable)
+	void Client_SpawnBuilding(FVector location, FRotator rotation);
+	void SpawnUnBuiltBuilding(FVector location, FRotator rotation);
 	void Shield();
 	void DashAbility();
 	UMissionDataAsset* GetMissionDataAsset();
+	class ADOEPlayerState* DOEPlayerState;
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ABuildingIcon> BuildingToSpawn;
-	
+	TSubclassOf<class ABuildingIcon> BuildingIconToSpawn;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AUnbuiltBuilding> UnbuiltBuildingToSpawn;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ABuilding> BuildingToSpawn;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> UnitToSpawn;
-	
-	/*UPROPERTY(EditAnywhere)
-	TSubclassOf<AShieldAblitity> AbilityToSpawn;*/
 
-	/*UPROPERTY(EditAnywhere)
-	TSubclassOf<ADash> Dash;*/
 	UPROPERTY(EditAnywhere)
 	class UWidgetSwitcher* AbilitySwitcher;
 protected:
@@ -78,6 +84,8 @@ protected:
 
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
+	UFUNCTION(Server, Reliable)
+	void Server_UpdatePlayerOwner();
 	virtual void BeginPlay() override;
 	// AMissionManager* GetMissionManager();
 	virtual void SetupInputComponent() override;
@@ -88,12 +96,10 @@ protected:
 	void OnSetDestinationReleased();
 	void OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void OnTouchReleased(const ETouchIndex::Type FingerIndex, const FVector Location);
-
-	void AttackTarget(IDamagableInterface* target);
 	void Moveattack();
 	void RightClick();
 	void RightClickReleased();
-	void GatherResources(IResourceInterface* res);
+
 
 	void Build(class AUnbuiltBuilding* Building);
 	ITeamInterface* GetTeam(AActor* other);
@@ -107,9 +113,6 @@ protected:
 	void Button3();
 private:
 	
-	void SelectUnits();
-	
-
 private:
 	AAbilityManager* AbilityManager;
 	float MaxZoom; 
@@ -124,6 +127,7 @@ private:
 
 	UBoxComponent* selectionArea;
 	FVector selectionSize;
+	UPROPERTY(Replicated)
 	AOverseerer* overseerer;
 	FVector mouseStart;
 	FVector mouseEnd;
@@ -135,12 +139,33 @@ private:
 	TArray<AActor*> ActorBuildings;
 
 	TMap<int, TArray<ADecay_of_environmentCharacter*>> ControlGroupMap;
+	UPROPERTY(Replicated)
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;
 
 	TSubclassOf<class UUserWidget> UserInterfaceClass;
 	class UUserInterface* UserInterface;
+public:
+	double MouseStartX;
+	double MouseStartY;
+	double MouseEndX;
+	double MouseEndY;
+
+	/** Time Threshold to know if it was a short press */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	float ShortPressThreshold;
+
+	/** FX Class that we will spawn when clicking */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UNiagaraSystem* FXCursor;
+	FVector MousePos;
+	bool leftMouseDown; // Input is bring pressed
+	bool RightMouseDown;
+	UPROPERTY(Replicated)
+	AActor* targetFound;
+	UPROPERTY(Replicated)
+	class AUnbuiltBuilding* m_Building;
 };
 
 

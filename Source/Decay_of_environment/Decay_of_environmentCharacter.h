@@ -30,7 +30,10 @@ class ADecay_of_environmentCharacter : public ACharacter, public IDamagableInter
 
 public:
 	ADecay_of_environmentCharacter();
-
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	UFUNCTION(Server, Reliable)
+	void DestroyCharacter();
+	
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
@@ -41,7 +44,7 @@ private:
 
 public:
 	FORCEINLINE ECharacterType GetType() { return stats.characterType; }
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats", Replicated)
 	FCharacterStats stats;
 	virtual int32 GetWeight();
 	virtual int32 GetCarryWeight();
@@ -49,8 +52,10 @@ public:
 	virtual int32 GetGatherAmount();
 	virtual void RecieveResources(int32 amount, IResourceInterface* ri);
 
-
+	
 	virtual void TakeDamage(float damage) override;
+	UFUNCTION(Server, Reliable)
+	void ServerTakeDamage(float damage);
 	virtual float GetHealth() override;
 	virtual float GetMaxHealth() override;
 	virtual FCharacterStats& GetStats();
@@ -71,27 +76,7 @@ public:
 	bool canPerformActions = true;
 	FTimerHandle ActionRate;
 	float actionDelay = 0.5f;
-	
-	//template <typename T>
-	//static FORCEINLINE T* LoadObjFromPath(const FName& Path)
-	//{
-	//	if (Path == NAME_None)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Failed to load texture")); 
-	//		return nullptr;
-	//	}
-	//	return Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *Path.ToString()));
-	//}
-
-	//static FORCEINLINE UMaterial* LoadMaterialFromPath(const FName& Path)
-	//{
-	//	if (Path == NAME_None)
-	//	{
-	//		UE_LOG(LogTemp, Warning, TEXT("Failed to load texture"));
-	//		return nullptr;
-	//	}
-	//	return LoadObjFromPath<UMaterial>(Path);
-	//}
+	class ADecay_of_environmentPlayerController* m_PlayerController;
 	
 };
 

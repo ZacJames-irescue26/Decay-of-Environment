@@ -12,6 +12,7 @@ ACubeTile::ACubeTile()
 	TileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TileMesh"));
 	TileMesh->SetupAttachment(RootComponent);
 	
+	
 
 }
 

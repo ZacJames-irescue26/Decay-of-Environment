@@ -19,6 +19,8 @@
 #include <Kismet/GameplayStatics.h>
 #include "UnbuiltBuilding.h"
 #include "BuildingIcon.h"
+#include "DOEPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -37,6 +39,19 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 	UserInterfaceClass = UserInterfaceBPClass.Class;*/
 }
 
+
+void ADecay_of_environmentPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, selectedUnits);
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, targetFound);
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, overseerer);
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, m_Building);
+
+
+
+}
+
 void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
@@ -44,28 +59,38 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	MousePos = hit.Location;
 
 	FVector2D ViewportSize;
-	
-	GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
-	GetMousePosition(LocationX, LocationY);
-	//dont know why its reversed
-	if ((LocationX/ViewportSize.X) >= 0.975)
+	if (IsLocalController())
 	{
-		_Location.Y += 10;
-	}
-	if ((LocationX / ViewportSize.X) <= 0.025)
-	{
-		_Location.Y -= 10;
-	}
-	if ((LocationY / ViewportSize.Y) >= 0.975)
-	{
-		_Location.X -= 10;
-	}
-	if ((LocationY / ViewportSize.Y) <= 0.025)
-	{
-		_Location.X += 10;
-	}
-	GetOverseerer()->SetActorLocation(_Location);
+		GetWorld()->GetGameViewport()->GetViewportSize(ViewportSize);
+		GetMousePosition(LocationX, LocationY);
+		//dont know why its reversed
+		if ((LocationX/ViewportSize.X) >= 0.975)
+		{
+			_Location.Y += 10;
+		}
+		if ((LocationX / ViewportSize.X) <= 0.025)
+		{
+			_Location.Y -= 10;
+		}
+		if ((LocationY / ViewportSize.Y) >= 0.975)
+		{
+			_Location.X -= 10;
+		}
+		if ((LocationY / ViewportSize.Y) <= 0.025)
+		{
+			_Location.X += 10;
+		}
+		if (overseerer)
+		{
+			overseerer->SetActorLocation(_Location);
+		}
+		else
+		{
+			GetOverseerer();
+		}
 
+	}
+	
 	GetHitResultUnderCursor(ECC_Visibility, true, hit);
 	if(leftMouseDown)
 	{
@@ -83,11 +108,27 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	}
 
 }
-
+void ADecay_of_environmentPlayerController::Server_UpdatePlayerOwner_Implementation()
+{
+		if (overseerer == nullptr)
+		{
+			overseerer = GetOverseerer();
+		}
+		DOEPlayerState = GetPlayerState<ADOEPlayerState>();
+		if (DOEPlayerState && overseerer)
+		{
+			overseerer->SetPlayerOwner(DOEPlayerState->GetPlayerOwner());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Overseer Is nullptr"))
+		}
+}
 void ADecay_of_environmentPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	Server_UpdatePlayerOwner();
+	
 	/*for (int i = 0; i < UGameplayStatics::GetNumPlayerControllers(GetWorld()); i++)
 	{
 		auto Controller = UGameplayStatics::GetPlayerController(GetWorld(), i);
@@ -172,6 +213,16 @@ void ADecay_of_environmentPlayerController::OnTouchReleased(const ETouchIndex::T
 	OnSetDestinationReleased();
 }
 
+
+void ADecay_of_environmentPlayerController::Server_AttackTarget_Implementation(AActor* target, ADecay_of_environmentCharacter* c)
+{
+	ABaseAI* con = Cast<ABaseAI>(c->GetController());
+	con->AttackTarget(target);
+}
+
+
+
+
 void ADecay_of_environmentPlayerController::AttackTarget(IDamagableInterface* target)
 {
 	if (selectedUnits.Num() > 0)
@@ -181,9 +232,9 @@ void ADecay_of_environmentPlayerController::AttackTarget(IDamagableInterface* ta
 			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
 			{
 				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
-				if (c->GetPlayerOwner() != -1) {
-					ABaseAI* con = Cast<ABaseAI>(c->GetController());
-					con->AttackTarget(target);
+				if (c->GetPlayerOwner() != -1 && target->GetHealth() > 0) {
+					AActor* CurrentTarget = Cast<AActor>(target);
+					Server_AttackTarget(CurrentTarget,c);
 				}
 			}
 
@@ -210,7 +261,11 @@ void ADecay_of_environmentPlayerController::Moveattack()
 	}
 }
 
-
+void ADecay_of_environmentPlayerController::Server_GatherResources_Implementation(AActor* res, ADecay_of_environmentCharacter* c)
+{
+	ABaseAI* con = Cast<ABaseAI>(c->GetController());
+	con->GatherResource(res);
+}
 
 void ADecay_of_environmentPlayerController::GatherResources(IResourceInterface* res)
 {
@@ -221,12 +276,15 @@ void ADecay_of_environmentPlayerController::GatherResources(IResourceInterface* 
 			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
 			{
 				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
-				ABaseAI* con = Cast<ABaseAI>(c->GetController());
-				con->GatherResource(res);
+				
+				if (res->GetAmount() > 0)
+				{
+					AActor* TargetResource = Cast<AActor>(res);
+					Server_GatherResources(TargetResource,c);
+				}
 			}
 		}
 	}
-
 }
 
 void ADecay_of_environmentPlayerController::Build(AUnbuiltBuilding* Building)
@@ -255,7 +313,7 @@ void ADecay_of_environmentPlayerController::RightClick()
 	if (hit.bBlockingHit)
 	{
 
-		AActor* targetFound = hit.GetActor();
+		targetFound = hit.GetActor();
 
 
 		bool isdamagable = targetFound->Implements<UDamagableInterface>();
@@ -277,6 +335,14 @@ void ADecay_of_environmentPlayerController::RightClick()
 				}
 
 			}
+			if (isBuilding)
+			{
+				AUnbuiltBuilding* Building = Cast<AUnbuiltBuilding>(targetFound);
+				if (Building->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner() && Building->GetPlayerTeam() == GetOverseerer()->GetTeam())
+				{
+					Build(Building);
+				}
+			}
 			else if (isResource)
 			{
 				IResourceInterface* res = GetResource(targetFound);
@@ -289,14 +355,7 @@ void ADecay_of_environmentPlayerController::RightClick()
 			GatherResources(res);
 			//res->TakeResources(10);
 		}
-		if (isBuilding)
-		{
-			AUnbuiltBuilding* Building = Cast<AUnbuiltBuilding>(targetFound);
-			if (Building->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner()  && Building->GetPlayerTeam() == GetOverseerer()->GetTeam())
-			{
-				Build(Building);
-			}
-		}
+		
 		else
 		{
 			MoveUnits(hit.Location);
@@ -334,7 +393,7 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 				{
 					if (character->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
 					{
-						selectedUnits.Add(character);
+						Server_SelectUnits(character);
 						character->Decal->SetVisibility(true);
 					}
 					
@@ -345,24 +404,12 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 
 }
 
-//void ADecay_of_environmentPlayerController::MoveUnits(FVector loc)
-//{
-//	if (selectedUnits.Num() > 0)
-//	{
-//		for (AActor* a : selectedUnits)
-//		{
-//			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
-//			{
-//				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
-//
-//				if (c->GetPlayerOwner() != -1) {
-//					ABaseAI* con = Cast<ABaseAI>(c->GetController());
-//					con->MoveAI(loc, a);
-//				}
-//			}
-//		}
-//	}
-//}
+void ADecay_of_environmentPlayerController::Server_SelectUnits_Implementation(ADecay_of_environmentCharacter* _character)
+{
+	selectedUnits.Add(_character);
+}
+
+
 void ADecay_of_environmentPlayerController::MoveUnits_Implementation(FVector loc)
 {
 	if (selectedUnits.Num() > 0)
@@ -465,7 +512,8 @@ void ADecay_of_environmentPlayerController::SpawnBuilding()
 		Location = MousePos;
 		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 		FRotator Rotation = { 0,0,0 };
-		ABuildingIcon* Building = GetWorld()->SpawnActor<ABuildingIcon>(BuildingToSpawn, Location, Rotation);
+		ABuildingIcon* Building = GetWorld()->SpawnActor<ABuildingIcon>(BuildingIconToSpawn, Location, Rotation);
+		/*Building->spawn;*/
 		/*Building->buildingStats.currentHealth = 10.0f;
 		Buildings.Add(Building);*/
 		GetOverseerer()->statistics.ComponentsValue -= 10;
@@ -544,5 +592,31 @@ UMissionDataAsset* ADecay_of_environmentPlayerController::GetMissionDataAsset()
 {
 	UMissionDataAsset* MissionDataAsset = LoadObject<UMissionDataAsset>(NULL, TEXT("/Game/TopDown/Blueprints/DataAssetMissions/MissionDataAsset"));
 	return MissionDataAsset;
+}
+
+
+void ADecay_of_environmentPlayerController::SpawnUnBuiltBuilding(FVector location, FRotator rotation)
+{
+	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
+	Server_SpawnBuilding(location, rotation);
+}
+
+void ADecay_of_environmentPlayerController::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation)
+{
+	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
+	//Building->SetOwner(_overseerer);
+	Multicast_SpawnBuilding(location, rotation);
+
+}
+
+void ADecay_of_environmentPlayerController::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation)
+{
+	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
+	//Building->SetOwner(_overseerer);
+}
+
+void ADecay_of_environmentPlayerController::Client_SpawnBuilding_Implementation(FVector location, FRotator rotation)
+{
+	Server_SpawnBuilding(location, rotation);
 }
 

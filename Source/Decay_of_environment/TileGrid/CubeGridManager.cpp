@@ -33,6 +33,36 @@ float ACubeGridManager::AlignToGrid(float value, float size)
 	return std::floor(value / size) * size;
 }
 
+FVector2D ACubeGridManager::WorldToGridIndex(FVector2D Pos)
+{
+	int xPos = FMath::RoundHalfFromZero((Pos.X / 200)/2)-1;
+	int yPos = FMath::RoundHalfFromZero((Pos.Y/200)/2)-1;
+	//Hack for some reason wont divide by 200
+	return FVector2D(xPos, yPos);
+}
+bool ACubeGridManager::CheckGridIndex(FVector2D Pos)
+{
+	if (Pos.X >= 0 && Pos.X < CubeGrid.Num() && Pos.Y >= 0 && Pos.Y < CubeGrid[0].Num())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool ACubeGridManager::IsOccupied(FVector2D Pos)
+{
+	if (!CheckGridIndex(Pos))
+	{
+		return true;
+	}
+	
+	if (CubeGrid[Pos.X][Pos.Y]->IsOccupied)
+	{
+		return true;
+	}
+	return false;
+}
+
 void ACubeGridManager::LoadLevel()
 {
 	FString FilePathFromContent = "TopDown/Maps/Map_txt_files/";
@@ -112,7 +142,7 @@ void ACubeGridManager::LoadLevel()
 				tiletoSpawn = RampLeft;
 			}
 			ACubeTile* NewTile = GetWorld()->SpawnActor<ACubeTile>(tiletoSpawn, FVector(FIntPoint(xPos, yPos)), FRotator::ZeroRotator);
-			//NewTile->SetActorLabel(FString::Printf(TEXT("Tile %d-%d"), x, y));
+			NewTile->SetActorLabel(FString::Printf(TEXT("Tile %d-%d"), x, y));
 			CubeGrid[x][y] = NewTile;
 		}
 	}

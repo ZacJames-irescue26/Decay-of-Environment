@@ -13,6 +13,8 @@ ABuilding::ABuilding()
 	buildingStats.maxHealth = 1000;
 	buildingStats.currentHealth = buildingStats.maxHealth;
 	buildingStats.unitName = "Building";
+	bReplicates = true;
+	
 }
 
 void ABuilding::Tick(float DeltaTime)

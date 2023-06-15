@@ -16,6 +16,11 @@ ATestHUD::ATestHUD()
 
 void ATestHUD::DrawHUD()
 {
+	if (PlayerController == nullptr)
+	{
+		PlayerController = Cast<ADecay_of_environmentPlayerController>(PlayerOwner);
+
+	}
 	if (PlayerController->leftMouseDown)
 	{
 		SelectedActors.Empty();
@@ -50,7 +55,7 @@ void ATestHUD::BeginPlay()
 	if (!ensure(UserInterface != nullptr)) return;
 
 	UserInterface->Setup();
-	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
+	PlayerController = Cast<ADecay_of_environmentPlayerController>(PlayerOwner);
 	UserInterface->Mission();
 	//UE_LOG(LogTemp, Warning, TEXT("%i"), WorldName.Equals("MainMenu", ESearchCase::IgnoreCase))
 	if (WorldName.Equals("MainMenu", ESearchCase::IgnoreCase) || WorldName.Equals("MissionSelection", ESearchCase::IgnoreCase))
@@ -66,27 +71,29 @@ void ATestHUD::BeginPlay()
 void ATestHUD::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	PlayerController->AbilitySwitcher = UserInterface->GetAbilitySwitcher();
-	
-	GetWorld()->GetMapName();
-
-	UserInterface->UpdateText();
-	
-	for (auto character : PlayerController->GetUnitsArray())
+	if (PlayerController)
 	{
-		switch (character->stats.unitID)
-		{
-		case 0:
-			UserInterface->SwitchAbilities(UserInterface->WorkerAbilities);
-			break;
-		case 1:
-			UserInterface->SwitchAbilities(UserInterface->ArmyAbilities);
-			break;
-		default:
-			break;
-		}
-	}
+		PlayerController->AbilitySwitcher = UserInterface->GetAbilitySwitcher();
 
+		GetWorld()->GetMapName();
+
+		UserInterface->UpdateText();
+		for (auto character : PlayerController->GetUnitsArray())
+		{
+			/*switch (character->stats.unitID)
+			{
+			case 0:
+				UserInterface->SwitchAbilities(UserInterface->WorkerAbilities);
+				break;
+			case 1:
+				UserInterface->SwitchAbilities(UserInterface->ArmyAbilities);
+				break;
+			default:
+				break;
+			}*/
+		}
+
+	}
 	
 }
 

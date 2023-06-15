@@ -15,10 +15,11 @@
 #include "ResourceInterface.h"
 #include <Engine/StaticMesh.h>
 #include "Overseerer.h"
-
+#include "Net/UnrealNetwork.h"
 //TODO REMOVE
 #include "Decay_of_environmentPlayerController.h"
 #include "MissionDataAsset.h"
+#include "GameFramework/PlayerState.h"
 
 ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 {
@@ -41,27 +42,47 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 	stats.unitName = "Character";
 	stats.Energy = 10;
 
+	bReplicates = true;
 	
 }
 
+
+
+
+void ADecay_of_environmentCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ADecay_of_environmentCharacter, stats);
+}
+
+void ADecay_of_environmentCharacter::DestroyCharacter_Implementation()
+{
+	this->Destroy(true);
+}
 void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 	CollisionSphere = Cast<USphereComponent>(GetComponentByClass(USphereComponent::StaticClass()));
 	CollisionSphere->SetSphereRadius(stats.AttackRange);
-	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
-	if (stats.currentHealth <= 0)
+	if (m_PlayerController == nullptr)
 	{
-		if (PlayerController->GetUnitsArray().Contains(this))
+		m_PlayerController = m_PlayerController == nullptr ? Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController()) : m_PlayerController;
+
+	}
+	if (stats.currentHealth <= 0 && m_PlayerController)
+	{
+		if (m_PlayerController->GetUnitsArray().Contains(this))
 		{
-			PlayerController->GetUnitsArray().Remove(this);
-			UE_LOG(LogTemp, Warning, TEXT("Removed unit"))
+			m_PlayerController->GetUnitsArray().Remove(this);
+			UE_LOG(LogTemp, Warning, TEXT("Removed unit"));
+
 		}
 		if (stats.owner < 0)
 		{
-		
-			PlayerController->GetOverseerer()->statistics.UnitsKilled += 1;
+
+			m_PlayerController->GetOverseerer()->statistics.UnitsKilled += 1;
 		}
+		DestroyCharacter();
 		DestroyUnit();
 	}
 }
@@ -152,6 +173,13 @@ void ADecay_of_environmentCharacter::RecieveResources(int32 amount, IResourceInt
 void ADecay_of_environmentCharacter::TakeDamage(float damage)
 {
 	stats.currentHealth -= damage;
+	ServerTakeDamage(damage);
+}
+
+
+void ADecay_of_environmentCharacter::ServerTakeDamage_Implementation(float damage)
+{
+	stats.currentHealth -= damage;
 }
 
 float ADecay_of_environmentCharacter::GetHealth()
@@ -193,4 +221,11 @@ void ADecay_of_environmentCharacter::SetPlayerOwner(int32 Value)
 void ADecay_of_environmentCharacter::DestroyUnit()
 {
 	Destroy(true);
+
 }
+
+
+
+
+
+

@@ -35,8 +35,8 @@ float ACubeGridManager::AlignToGrid(float value, float size)
 
 FVector2D ACubeGridManager::WorldToGridIndex(FVector2D Pos)
 {
-	int xPos = FMath::RoundHalfFromZero((Pos.X / 200)/2)-1;
-	int yPos = FMath::RoundHalfFromZero((Pos.Y/200)/2)-1;
+	int xPos = FMath::RoundToInt((Pos.X / 200)/2);
+	int yPos = FMath::RoundToInt((Pos.Y/200)/2);
 	//Hack for some reason wont divide by 200
 	return FVector2D(xPos, yPos);
 }
@@ -53,6 +53,7 @@ bool ACubeGridManager::IsOccupied(FVector2D Pos)
 {
 	if (!CheckGridIndex(Pos))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("grid index is outside the grid"));
 		return true;
 	}
 	

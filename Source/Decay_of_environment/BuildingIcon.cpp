@@ -30,12 +30,7 @@ void ABuildingIcon::BeginPlay()
 {
 	Super::BeginPlay();
 	GridManager = Cast<ACubeGridManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACubeGridManager::StaticClass()));
-	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstLocalPlayerFromController());
-	if (PlayerController)
-	{
-		_overseerer = PlayerController->GetOverseerer();
-		this->SetOwner(_overseerer);
-	}
+	//ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstLocalPlayerFromController());
 	
 	
 }
@@ -47,9 +42,9 @@ void ABuildingIcon::Tick(float DeltaTime)
 
 	// from tutorial
 	// Get the AABB in Local space (aka Object space: such as in the Blueprint viewer). You might want to cache this result as this may be costly. 
-	const FBox Box = this->GetComponentsBoundingBox(true,true);
+	//const FBox Box = this->GetComponentsBoundingBox(true,true);
+	const FBox Box = this->CalculateComponentsBoundingBoxInLocalSpace(true, true);
 	const auto Transform = this->GetTransform();
-
 	// Get World space Location.
 	const FVector Center = Transform.TransformPosition(Box.GetCenter());
 
@@ -65,16 +60,27 @@ void ABuildingIcon::Tick(float DeltaTime)
 	const FVector ExtentsY = Up;
 	const FVector ExtentsZ = Forward;
 
+	/*Corner2 = Center + ExtentsX + ExtentsY - ExtentsZ;
+	Corner3 = Center + ExtentsX - ExtentsY - ExtentsZ;
+	Corner6 = Center - ExtentsX - ExtentsY - ExtentsZ;
+	Corner7 = Center - ExtentsX + ExtentsY - ExtentsZ;*/
+
+	Corner1 = Center + ExtentsX + ExtentsY + ExtentsZ;
 	Corner2 = Center + ExtentsX - ExtentsY + ExtentsZ;
 	Corner3 = Center - ExtentsX - ExtentsY + ExtentsZ;
+	Corner4 = Center - ExtentsX + ExtentsY + ExtentsZ;
+	Corner5 = Center + ExtentsX + ExtentsY - ExtentsZ;
 	Corner6 = Center + ExtentsX - ExtentsY - ExtentsZ;
 	Corner7 = Center - ExtentsX - ExtentsY - ExtentsZ;
-
-	/*UE_LOG(LogTemp, Warning, TEXT("2X: %f, Y: %f, Z: %f"), Corner2.X, Corner2.Y, Corner2.Z);
+	Corner8 = Center - ExtentsX + ExtentsY - ExtentsZ;
+	/*UE_LOG(LogTemp, Warning, TEXT("1X: %f, Y: %f, Z: %f"), Corner1.X, Corner1.Y, Corner1.Z);
+	UE_LOG(LogTemp, Warning, TEXT("2X: %f, Y: %f, Z: %f"), Corner2.X, Corner2.Y, Corner2.Z);
 	UE_LOG(LogTemp, Warning, TEXT("3X: %f, Y: %f, Z: %f"), Corner3.X, Corner3.Y, Corner3.Z);
+	UE_LOG(LogTemp, Warning, TEXT("4: %f, Y: %f, Z: %f"), Corner4.X, Corner4.Y, Corner4.Z);
+	UE_LOG(LogTemp, Warning, TEXT("5X: %f, Y: %f, Z: %f"), Corner5.X, Corner5.Y, Corner5.Z);
 	UE_LOG(LogTemp, Warning, TEXT("6X: %f, Y: %f, Z: %f"), Corner6.X, Corner6.Y, Corner6.Z);
-	UE_LOG(LogTemp, Warning, TEXT("7X: %f, Y: %f, Z: %f"), Corner7.X, Corner7.Y, Corner7.Z);*/
-
+	UE_LOG(LogTemp, Warning, TEXT("7X: %f, Y: %f, Z: %f"), Corner7.X, Corner7.Y, Corner7.Z);
+	UE_LOG(LogTemp, Warning, TEXT("8X: %f, Y: %f, Z: %f"), Corner8.X, Corner8.Y, Corner8.Z);*/
 	DrawDebugLine(GetWorld(), Corner2, Corner3, FColor::Red, false, 1.0f);
 	DrawDebugLine(GetWorld(), Corner3, Corner7, FColor::Red, false, 1.0f);
 	DrawDebugLine(GetWorld(), Corner7, Corner6, FColor::Red, false, 1.0f);
@@ -108,19 +114,32 @@ void ABuildingIcon::Tick(float DeltaTime)
 			{
 				if (PlayerController->leftMouseDown)
 				{
+					
+					FVector2D Coner1Grid = FVector2D(GridManager->AlignToGrid(Corner1.X, GridManager->TileHorizontalOffset),
+						GridManager->AlignToGrid(Corner1.Y, GridManager->TileVerticalOffset));
 					FVector2D Coner2Grid = FVector2D(GridManager->AlignToGrid(Corner2.X, GridManager->TileHorizontalOffset),
 						GridManager->AlignToGrid(Corner2.Y, GridManager->TileVerticalOffset));
 					FVector2D Coner3Grid = FVector2D(GridManager->AlignToGrid(Corner3.X, GridManager->TileHorizontalOffset),
 						GridManager->AlignToGrid(Corner3.Y, GridManager->TileVerticalOffset));
+					FVector2D Coner4Grid = FVector2D(GridManager->AlignToGrid(Corner4.X, GridManager->TileHorizontalOffset),
+						GridManager->AlignToGrid(Corner4.Y, GridManager->TileVerticalOffset));
+					FVector2D Coner5Grid = FVector2D(GridManager->AlignToGrid(Corner5.X, GridManager->TileHorizontalOffset),
+						GridManager->AlignToGrid(Corner5.Y, GridManager->TileVerticalOffset));
 					FVector2D Coner6Grid = FVector2D(GridManager->AlignToGrid(Corner6.X, GridManager->TileHorizontalOffset),
 						GridManager->AlignToGrid(Corner6.Y, GridManager->TileVerticalOffset));
 					FVector2D Coner7Grid = FVector2D(GridManager->AlignToGrid(Corner7.X, GridManager->TileHorizontalOffset),
 						GridManager->AlignToGrid(Corner7.Y, GridManager->TileVerticalOffset));
+					FVector2D Coner8Grid = FVector2D(GridManager->AlignToGrid(Corner8.X, GridManager->TileHorizontalOffset),
+						GridManager->AlignToGrid(Corner8.Y, GridManager->TileVerticalOffset));
 
+					FVector2D GridCorner1 = GridManager->WorldToGridIndex(FVector2D(Coner1Grid.X, Coner1Grid.Y));
 					FVector2D GridCorner2 = GridManager->WorldToGridIndex(FVector2D(Coner2Grid.X, Coner2Grid.Y));
 					FVector2D GridCorner3 = GridManager->WorldToGridIndex(FVector2D(Coner3Grid.X, Coner3Grid.Y));
+					FVector2D GridCorner4 = GridManager->WorldToGridIndex(FVector2D(Coner4Grid.X, Coner4Grid.Y));
+					FVector2D GridCorner5 = GridManager->WorldToGridIndex(FVector2D(Coner5Grid.X, Coner5Grid.Y));
 					FVector2D GridCorner6 = GridManager->WorldToGridIndex(FVector2D(Coner6Grid.X, Coner6Grid.Y));
 					FVector2D GridCorner7 = GridManager->WorldToGridIndex(FVector2D(Coner7Grid.X, Coner7Grid.Y));
+					FVector2D GridCorner8 = GridManager->WorldToGridIndex(FVector2D(Coner8Grid.X, Coner8Grid.Y));
 					/*LogTemp: Warning: 2X : 250.000000, Y : 250.000000, Z : -50.000000
 					LogTemp : Warning : 3X : 250.000000, Y : -250.000000, Z : -50.000000
 					LogTemp : Warning : 6X : -250.000000, Y : 250.000000, Z : -50.000000
@@ -156,18 +175,19 @@ void ABuildingIcon::Tick(float DeltaTime)
 							GridManager->CubeGrid[i][j]->IsOccupied = true;
 						}
 					}
-					UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f"), GridCorner2.X, GridCorner2.Y);
-					UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f"), GridCorner3.X, GridCorner3.Y);
-					UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f"), GridCorner6.X, GridCorner6.Y);
-					UE_LOG(LogTemp, Warning, TEXT("X: %f, Y: %f"), GridCorner7.X, GridCorner7.Y);
+					UE_LOG(LogTemp, Warning, TEXT("1X: %f, Y: %f"), GridCorner1.X, GridCorner1.Y);
+					UE_LOG(LogTemp, Warning, TEXT("2X: %f, Y: %f"), GridCorner2.X, GridCorner2.Y);
+					UE_LOG(LogTemp, Warning, TEXT("3X: %f, Y: %f"), GridCorner3.X, GridCorner3.Y);
+					UE_LOG(LogTemp, Warning, TEXT("4X: %f, Y: %f"), GridCorner4.X, GridCorner4.Y);
+					UE_LOG(LogTemp, Warning, TEXT("5X: %f, Y: %f"), GridCorner5.X, GridCorner5.Y);
+					UE_LOG(LogTemp, Warning, TEXT("6X: %f, Y: %f"), GridCorner6.X, GridCorner6.Y);
+					UE_LOG(LogTemp, Warning, TEXT("7X: %f, Y: %f"), GridCorner7.X, GridCorner7.Y);
+					UE_LOG(LogTemp, Warning, TEXT("8X: %f, Y: %f"), GridCorner8.X, GridCorner8.Y);
 					IsPlaced = true;
 					FVector location = GetActorLocation();
 					FRotator rotation = GetActorRotation();
 					PlayerController->SpawnUnBuiltBuilding(location, rotation);
-					
-					/*Client_SpawnBuilding(location, rotation);
-					Server_SpawnBuilding(location, rotation);
-					Server_Destroy();*/
+				
 					Destroy(true);
 				}
 
@@ -178,27 +198,5 @@ void ABuildingIcon::Tick(float DeltaTime)
 }
 
 
-//void ABuildingIcon::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-//{
-//	Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingToSpawn, location, rotation);
-//	Building->SetOwner(_overseerer);
-//	Multicast_SpawnBuilding(location, rotation);
-//	
-//}
-//
-//void ABuildingIcon::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-//{
-//	Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingToSpawn, location, rotation);
-//	Building->SetOwner(_overseerer);
-//}
-//
-//void ABuildingIcon::Client_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-//{
-//	Server_SpawnBuilding(location, rotation);
-//}
-//
-//void ABuildingIcon::Server_Destroy_Implementation()
-//{
-//	this->Destroy(true);
-//}
+
 

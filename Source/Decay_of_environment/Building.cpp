@@ -4,7 +4,13 @@
 #include "Building.h"
 #include "Decay_of_environmentPlayerController.h"
 #include "TileGrid/CubeTile.h"
+#include "Net/UnrealNetwork.h"
 
+void ABuilding::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABuilding, buildingStats);
+}
 
 ABuilding::ABuilding()
 {
@@ -35,6 +41,12 @@ float ABuilding::GetHealth()
 float ABuilding::GetMaxHealth()
 {
 	return buildingStats.maxHealth;
+}
+
+
+void ABuilding::Server_TakeDamage_Implementation(float damage)
+{
+	buildingStats.currentHealth -= damage;
 }
 
 int32 ABuilding::GetPlayerTeam()

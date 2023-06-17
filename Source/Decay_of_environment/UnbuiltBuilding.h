@@ -30,11 +30,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void StartTimer();
 	void PauseTimer();
-	UFUNCTION(Server, Reliable)
-	void Server_SpawnBuilding();
-	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_SpawnBuilding();
 	void SpawnBuilding();
+	UFUNCTION(Server, Reliable)
+	void Server_BuildHealth();
 private:
 	float BuildTimer = 100.0f;
 	float CurrentTime = 0.0f;
@@ -46,4 +44,5 @@ private:
 	bool isPaused = false;
 	UPROPERTY(Replicated)
 	class ABuilding* _Building;
+	class ADecay_of_environmentPlayerController* PlayerController;
 };

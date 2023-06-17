@@ -19,7 +19,7 @@ AUnbuiltBuilding::AUnbuiltBuilding()
 
 void AUnbuiltBuilding::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	DOREPLIFETIME(AUnbuiltBuilding, _Building);
+	DOREPLIFETIME(AUnbuiltBuilding, buildingStats);
 }
 
 // Called when the game starts or when spawned
@@ -27,6 +27,7 @@ void AUnbuiltBuilding::BeginPlay()
 {
 	Super::BeginPlay();
 	buildingStats.currentHealth = 10.0f;
+	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
 
 }
 
@@ -58,39 +59,23 @@ void AUnbuiltBuilding::PauseTimer()
 }
 
 
-void AUnbuiltBuilding::Server_SpawnBuilding_Implementation()
-{
-	AActor* BuildingOwner = this->GetOwner();
-	_Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, this->GetActorLocation(), this->GetActorRotation());
-	_Building->SetOwner(BuildingOwner);
-	Multicast_SpawnBuilding();
-	this->Destroy(true);
-}
-
-
-void AUnbuiltBuilding::Multicast_SpawnBuilding_Implementation()
-{
-	AActor* BuildingOwner = this->GetOwner();
-	_Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, this->GetActorLocation(), this->GetActorRotation());
-	_Building->SetOwner(BuildingOwner);
-}
-
 void AUnbuiltBuilding::SpawnBuilding()
 {
 	AActor* BuildingOwner = this->GetOwner();
 	CurrentTime++;
 	if (buildingStats.currentHealth < buildingStats.maxHealth)
 	{
-		buildingStats.currentHealth += buildingStats.maxHealth / BuildTimer;
+		Server_BuildHealth();
 	}
 	
 	if (BuildingToSpawn && CurrentTime >= BuildTimer)
 	{
-		
-		_Building = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn,this->GetActorLocation(),this->GetActorRotation());
-		_Building->SetOwner(BuildingOwner);
-		Server_SpawnBuilding();
-		this->Destroy();
+		PlayerController->SpawnBuiltBuilding(this->GetActorLocation(), this->GetActorRotation(), this);
 	}
+}
+
+void AUnbuiltBuilding::Server_BuildHealth_Implementation()
+{
+	buildingStats.currentHealth += buildingStats.maxHealth / BuildTimer;
 }
 

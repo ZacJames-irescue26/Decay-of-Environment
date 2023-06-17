@@ -38,7 +38,8 @@ void ATestHUD::DrawHUD()
 		float EndPosY = PointBY - PlayerController->MouseStartY;
 		DrawRect(SelectionBoxColor, PlayerController->MouseStartX, PlayerController->MouseStartY, EndPosX, EndPosY);
 		
-		GetActorsInSelectionRectangle(FVector2D(PlayerController->MouseStartX, PlayerController->MouseStartY), FVector2D(PointBX, PointBY), SelectedActors, true, false);
+		GetActorsInSelectionRectangle(FVector2D(PlayerController->MouseStartX, PlayerController->MouseStartY), FVector2D(PointBX, PointBY), SelectedActors, true, true);
+		PlayerController->CalculateUnitsInsideBox(FVector2D(PlayerController->MouseStartX, PlayerController->MouseStartY), FVector2D(PointBX, PointBY), SelectedActors);
 		//TSubclassOf<class AActor> ClassFilter, const FVector2D& FirstPoint, const FVector2D& SecondPoint, TArray<AActor*>& OutActors, bool bIncludeNonCollidingComponents, bool bActorMustBeFullyEnclosed
 	}
 }

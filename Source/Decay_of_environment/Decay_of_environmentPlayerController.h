@@ -60,12 +60,21 @@ public:
 	void Server_SpawnBuilding(FVector location, FRotator rotation);
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_SpawnBuilding(FVector location, FRotator rotation);
-	UFUNCTION(Client, Reliable)
-	void Client_SpawnBuilding(FVector location, FRotator rotation);
+	
 	void SpawnUnBuiltBuilding(FVector location, FRotator rotation);
+	void SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy);
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnBuiltBuilding(FVector location, FRotator rotation);
+	UFUNCTION(Server, Reliable)
+	void Server_DestroyUnbuiltBuilding(AUnbuiltBuilding* BuildingToDestroy);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_SpawnBuiltBuilding(FVector location, FRotator rotation);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_DestroyUnbuiltBuilding(AUnbuiltBuilding* BuildingToDestroy);
 	void Shield();
 	void DashAbility();
 	UMissionDataAsset* GetMissionDataAsset();
+	void CalculateUnitsInsideBox(FVector2D startPos, FVector2D EndPos, TArray<AActor*> SelectedUnits);
 	class ADOEPlayerState* DOEPlayerState;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABuildingIcon> BuildingIconToSpawn;
@@ -94,6 +103,7 @@ protected:
 	/** Input handlers for SetDestination action. */
 	void OnSetDestinationPressed();
 	void OnSetDestinationReleased();
+	FVector2D P2minusP1(FVector2D p1, FVector2D p2);
 	void OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void OnTouchReleased(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void Moveattack();
@@ -166,6 +176,9 @@ public:
 	AActor* targetFound;
 	UPROPERTY(Replicated)
 	class AUnbuiltBuilding* m_Building;
+	class ABuilding* m_SpawnBuilding;
+	TArray<AActor*> CorrectedActors;
+	
 };
 
 

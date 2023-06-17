@@ -201,6 +201,53 @@ void ADecay_of_environmentPlayerController::OnSetDestinationReleased()
 	SelectUnits();
 }
 
+void ADecay_of_environmentPlayerController::CalculateUnitsInsideBox(FVector2D startPos, FVector2D EndPos, TArray<AActor*> SelectedUnits)
+{
+	CorrectedActors.Empty();
+	FVector2D ModifiedEndPos;
+	if (startPos == EndPos)
+	{
+		ModifiedEndPos = FVector2D(EndPos.X + 10, EndPos.Y + 10);
+	}
+	else
+	{
+		ModifiedEndPos = EndPos;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("StartPos: X: %f, Y: %f"), startPos.X, startPos.Y);
+	UE_LOG(LogTemp, Warning, TEXT("EndPos: X: %f, Y: %f"), ModifiedEndPos.X, ModifiedEndPos.Y);
+	FVector2D TopLeft = FMath::Min(startPos, ModifiedEndPos);
+	FVector2D BottomRight = FMath::Max(startPos, ModifiedEndPos);
+	FVector2D A = TopLeft; // top left
+	FVector2D B = FVector2D(BottomRight.X, TopLeft.Y); // top right
+	FVector2D C = FVector2D(BottomRight); // Bottom Right
+	FVector2D D = FVector2D(TopLeft.X, BottomRight.Y); // Bottom Left
+	for (AActor* unit : SelectedUnits)
+	{
+		FVector2D UnitScreenPos;
+		ProjectWorldLocationToScreen(unit->GetActorLocation(), UnitScreenPos);
+		FVector2D AB = P2minusP1(A,B);
+		FVector2D AM = P2minusP1(A, UnitScreenPos);
+		FVector2D BC = P2minusP1(B, C);
+		FVector2D BM = P2minusP1(B, UnitScreenPos);
+		float DotABAM = FVector2D::DotProduct(AB, AM);
+		float DotABAB = FVector2D::DotProduct(AB, AB);
+		float DotBCBM = FVector2D::DotProduct(BC, BM);
+		float DotBCBC = FVector2D::DotProduct(BC, BC);
+		if (0 <= DotABAM && DotABAM <= DotABAB && 0 <= DotBCBM && DotBCBM <= DotBCBC)
+		//0 <= dotABAM && dotABAM <= dotABAB && 0 <= dotBCBM && dotBCBM <= dotBCBC
+		{
+			CorrectedActors.Add(unit);
+		}
+	}
+
+
+}
+
+FVector2D ADecay_of_environmentPlayerController::P2minusP1(FVector2D p1, FVector2D p2)
+{
+	return FVector2D(p2.X-p1.X, p2.Y-p1.Y);
+}
+
 void ADecay_of_environmentPlayerController::OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	bIsTouch = true;
@@ -381,7 +428,7 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 	selectedUnits.Empty();
 	//selectionArea->GetOverlappingActors(actors);
 	ATestHUD* HUD = Cast<ATestHUD>(GetHUD());
-	actors = HUD->SelectedActors;
+	actors = CorrectedActors;
 	if (actors.Num() > 0)
 	{
 		for (AActor* a : actors)
@@ -597,26 +644,54 @@ UMissionDataAsset* ADecay_of_environmentPlayerController::GetMissionDataAsset()
 
 void ADecay_of_environmentPlayerController::SpawnUnBuiltBuilding(FVector location, FRotator rotation)
 {
-	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
+	
 	Server_SpawnBuilding(location, rotation);
+}
+
+void ADecay_of_environmentPlayerController::SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy)
+{
+	Server_SpawnBuiltBuilding(location, rotation);
+	Server_DestroyUnbuiltBuilding(BuildingToDestroy);
+	Multicast_DestroyUnbuiltBuilding(BuildingToDestroy);
+}
+
+
+void ADecay_of_environmentPlayerController::Server_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation)
+{
+	m_SpawnBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, location, rotation);
+	m_SpawnBuilding->buildingStats.owner = overseerer->PlayerOwner;
+	Multicast_SpawnBuiltBuilding(location, rotation);
+}
+
+void ADecay_of_environmentPlayerController::Server_DestroyUnbuiltBuilding_Implementation(AUnbuiltBuilding* BuildingToDestroy)
+{
+	BuildingToDestroy->Destroy(true);
+}
+
+void ADecay_of_environmentPlayerController::Multicast_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation)
+{
+	m_SpawnBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, location, rotation);
+	m_SpawnBuilding->buildingStats.owner = overseerer->PlayerOwner;
+
+}
+
+void ADecay_of_environmentPlayerController::Multicast_DestroyUnbuiltBuilding_Implementation(AUnbuiltBuilding* BuildingToDestroy)
+{
+	BuildingToDestroy->Destroy(true);
 }
 
 void ADecay_of_environmentPlayerController::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation)
 {
 	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
-	//Building->SetOwner(_overseerer);
-	Multicast_SpawnBuilding(location, rotation);
+	m_Building->buildingStats.owner = overseerer->PlayerOwner;
+
 
 }
 
 void ADecay_of_environmentPlayerController::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation)
 {
 	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
-	//Building->SetOwner(_overseerer);
+	m_Building->buildingStats.owner = overseerer->PlayerOwner;
 }
 
-void ADecay_of_environmentPlayerController::Client_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-{
-	Server_SpawnBuilding(location, rotation);
-}
 

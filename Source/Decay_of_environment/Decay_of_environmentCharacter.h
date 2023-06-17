@@ -55,7 +55,7 @@ public:
 	
 	virtual void TakeDamage(float damage) override;
 	UFUNCTION(Server, Reliable)
-	void ServerTakeDamage(float damage);
+	virtual void Server_TakeDamage(float damage) override;
 	virtual float GetHealth() override;
 	virtual float GetMaxHealth() override;
 	virtual FCharacterStats& GetStats();

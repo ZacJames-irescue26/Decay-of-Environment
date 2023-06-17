@@ -15,7 +15,7 @@ UCLASS()
 class DECAY_OF_ENVIRONMENT_API ABuilding : public AActor, public IDamagableInterface, public ITeamInterface, public IBuidlingInterface
 {
 	GENERATED_BODY()
-	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:	
 	// Sets default values for this actor's properties
 	ABuilding();
@@ -28,16 +28,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool IsMainBuilding = false;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "stats", Replicated)
 	FBuildingStats buildingStats;
 	
 	FVector mPos;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
 	virtual void TakeDamage(float damage) override;
 	virtual float GetHealth()override;
 	virtual float GetMaxHealth() override;
+	UFUNCTION(Server, Reliable)
+	virtual void Server_TakeDamage(float damage) override;
 	virtual int32 GetPlayerTeam() override;
 	virtual int32 GetPlayerOwner() override;
 	virtual void SetPlayerTeam(int32 Value) override;

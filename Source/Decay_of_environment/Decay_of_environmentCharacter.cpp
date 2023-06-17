@@ -173,11 +173,11 @@ void ADecay_of_environmentCharacter::RecieveResources(int32 amount, IResourceInt
 void ADecay_of_environmentCharacter::TakeDamage(float damage)
 {
 	stats.currentHealth -= damage;
-	ServerTakeDamage(damage);
+	Server_TakeDamage(damage);
 }
 
 
-void ADecay_of_environmentCharacter::ServerTakeDamage_Implementation(float damage)
+void ADecay_of_environmentCharacter::Server_TakeDamage_Implementation(float damage)
 {
 	stats.currentHealth -= damage;
 }

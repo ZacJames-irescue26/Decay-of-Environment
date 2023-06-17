@@ -22,8 +22,10 @@ class DECAY_OF_ENVIRONMENT_API IDamagableInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	 virtual void TakeDamage(float damage);
-	 virtual float GetHealth();
-	 virtual float GetMaxHealth();
+	 virtual void TakeDamage(float damage) = 0;
+	 virtual float GetHealth() = 0;
+	 virtual float GetMaxHealth() = 0;
+	 virtual void Server_TakeDamage(float damage) = 0;
+
 
 };

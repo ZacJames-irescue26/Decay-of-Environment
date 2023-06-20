@@ -43,8 +43,10 @@ public:
 	AOverseerer* GetOverseerer();
 	TArray<ADecay_of_environmentCharacter*>& GetUnitsArray() {return selectedUnits;};
 	
-
-	void SpawnBuilding();
+	UFUNCTION(Server, Reliable)
+	void SpawnBuilding(TSubclassOf<class ABuildingIcon> IconToSpawn);
+	UFUNCTION(Server, Reliable)
+	void Server_DestroyBuildingIcon(ABuildingIcon* IconToDestroy);
 	void SpawnUnit();
 	void SelectUnits();
 	void AttackTarget(IDamagableInterface* target);
@@ -57,11 +59,13 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_SelectUnits(ADecay_of_environmentCharacter* _character);
 	UFUNCTION(Server, Reliable)
+	void Server_SelectBuilding(class ABuilding* _Building);
+	UFUNCTION(Server, Reliable)
 	void Server_SpawnBuilding(FVector location, FRotator rotation);
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_SpawnBuilding(FVector location, FRotator rotation);
 	
-	void SpawnUnBuiltBuilding(FVector location, FRotator rotation);
+	void SpawnUnBuiltBuilding(FVector location, FRotator rotation, class ABuildingIcon* IconToDestroy);
 	void SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy);
 	UFUNCTION(Server, Reliable)
 	void Server_SpawnBuiltBuilding(FVector location, FRotator rotation);
@@ -75,6 +79,7 @@ public:
 	void DashAbility();
 	UMissionDataAsset* GetMissionDataAsset();
 	void CalculateUnitsInsideBox(FVector2D startPos, FVector2D EndPos, TArray<AActor*> SelectedUnits);
+	void singleClick(AActor* actor);
 	class ADOEPlayerState* DOEPlayerState;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABuildingIcon> BuildingIconToSpawn;
@@ -98,9 +103,7 @@ protected:
 	virtual void BeginPlay() override;
 	// AMissionManager* GetMissionManager();
 	virtual void SetupInputComponent() override;
-	// End PlayerController interface
 
-	/** Input handlers for SetDestination action. */
 	void OnSetDestinationPressed();
 	void OnSetDestinationReleased();
 	FVector2D P2minusP1(FVector2D p1, FVector2D p2);
@@ -151,6 +154,7 @@ private:
 	TMap<int, TArray<ADecay_of_environmentCharacter*>> ControlGroupMap;
 	UPROPERTY(Replicated)
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
+	ABuilding* SeletedBuilding;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;
 
@@ -175,10 +179,25 @@ public:
 	UPROPERTY(Replicated)
 	AActor* targetFound;
 	UPROPERTY(Replicated)
-	class AUnbuiltBuilding* m_Building;
-	class ABuilding* m_SpawnBuilding;
+	class AUnbuiltBuilding* m_UnBuiltBuilding;
+	class ABuilding* m_Building;
 	TArray<AActor*> CorrectedActors;
-	
+	bool SpawnedBaseUI = false;
+	bool SpawnedBarrackUI = false;
+
+	TSubclassOf<class UBarracksUI> BarracksUIClass;
+	UBarracksUI* BarracksUI;
+	TSubclassOf<class UBaseUI> BaseUIClasss;
+	UBaseUI* BaseUI;
+	TSubclassOf<class URadarUI> RadarUIClass;
+	URadarUI* RadarUI;
+	TSubclassOf<class UBuilderUI> BuilderUIClass;
+	UBuilderUI* BuilderUI;
+	class ATestHUD* HUD;
+	UPROPERTY(Replicated)
+	ABuildingIcon* BuildingIcon;
+
+
 };
 
 

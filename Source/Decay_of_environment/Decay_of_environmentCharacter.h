@@ -37,7 +37,10 @@ public:
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
-
+	
+	
+	UFUNCTION()
+	void OnClick(AActor* TouchedActor, FKey ButtonPressed);
 	UDecalComponent* Decal;
 	USphereComponent* CollisionSphere;
 private:

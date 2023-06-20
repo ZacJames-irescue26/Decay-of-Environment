@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Base.h"
+#include "Barracks.h"
 
-ABase::ABase()
+ABarracks::ABarracks()
 {
-	buildingStats.BuildingTypeId = 0;
+	buildingStats.BuildingTypeId = 1;
 }

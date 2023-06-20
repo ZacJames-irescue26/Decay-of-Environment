@@ -22,7 +22,7 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
-	/*virtual void BeginPlay() override;*/
+	virtual void BeginPlay() override;
 
 public:	
 	UPROPERTY(EditAnywhere)
@@ -46,5 +46,7 @@ public:
 public:
 	FBuildingStats GetBuildingStats() const { return buildingStats; }
 	void SetBuildingStats(FBuildingStats val) { buildingStats = val; }
+	UDecalComponent* Decal;
+
 
 };

@@ -23,6 +23,13 @@ ABuilding::ABuilding()
 	
 }
 
+
+void ABuilding::BeginPlay()
+{
+	Super::BeginPlay();
+	Decal = Cast<UDecalComponent>(GetComponentByClass(UDecalComponent::StaticClass()));
+}
+
 void ABuilding::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

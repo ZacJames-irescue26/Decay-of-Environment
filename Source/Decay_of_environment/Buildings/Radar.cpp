@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Base.h"
+#include "Radar.h"
 
-ABase::ABase()
+ARadar::ARadar()
 {
-	buildingStats.BuildingTypeId = 0;
+	buildingStats.BuildingTypeId = 2;
 }

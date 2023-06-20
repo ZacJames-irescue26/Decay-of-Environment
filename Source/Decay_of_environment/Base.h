@@ -14,5 +14,5 @@ UCLASS()
 class DECAY_OF_ENVIRONMENT_API ABase : public ABuilding, public IStorageInterface
 {
 	GENERATED_BODY()
-	
+	ABase();
 };

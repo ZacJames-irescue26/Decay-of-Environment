@@ -33,13 +33,13 @@ public:
 	void SpawnBuilding();
 	UFUNCTION(Server, Reliable)
 	void Server_BuildHealth();
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABuilding> BuildingToSpawn;
 private:
 	float BuildTimer = 100.0f;
 	float CurrentTime = 0.0f;
 	FTimerHandle BuildTimerhandle;
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<ABuilding> BuildingToSpawn;
 	UPROPERTY(VisibleAnywhere)
 	bool isPaused = false;
 	UPROPERTY(Replicated)

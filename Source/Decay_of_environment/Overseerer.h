@@ -72,7 +72,8 @@ public:
 	UPROPERTY(EditAnywhere, Replicated)
 	int32 PlayerOwner;
 	class ADecay_of_environmentPlayerController* PlayerController;
-	
+	int BaseNumber = 0;
+	int BarracksNumber = 0;
 
 
 };

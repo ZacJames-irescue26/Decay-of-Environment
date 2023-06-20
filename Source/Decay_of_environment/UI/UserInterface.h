@@ -34,6 +34,7 @@ class DECAY_OF_ENVIRONMENT_API UUserInterface : public UUserInterfaceWidget
 public:
 	UUserInterface(const FObjectInitializer& ObjectInitializer);
 	void UpdateText();
+	void AddBuildingUI(UUserWidget* UIToAdd);
 
 	void Mission();
 	inline UWidgetSwitcher* GetAbilitySwitcher() { return AbilitySwitcher; }
@@ -61,8 +62,11 @@ protected:
 private:
 
 	UPROPERTY(meta = (BindWidget))
-	class UGridPanel* UnitGridPanel;
+	class UVerticalBox* VerticleBoxLeft;
 	
+	UPROPERTY(meta = (BindWidget))
+	class UVerticalBox* VerticleBoxRight;
+
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* UnitScrollBox;
 
@@ -88,12 +92,6 @@ private:
 	UWidgetAnimation* TaskComplete;
 
 	UFUNCTION()
-	void SpawnBuilding();
-
-	UFUNCTION()
-	void SpawnUnit();
-
-	UFUNCTION()
 	void Button1();
 
 	UFUNCTION()
@@ -108,4 +106,6 @@ private:
 	
 	bool IsPlayed = false;
 
+	TSubclassOf<class UBuildingUI> BuildingUIClass;
+	UBuildingUI* BuildingUI;
 };

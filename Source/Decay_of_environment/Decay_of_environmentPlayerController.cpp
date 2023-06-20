@@ -21,6 +21,12 @@
 #include "BuildingIcon.h"
 #include "DOEPlayerState.h"
 #include "Net/UnrealNetwork.h"
+#include "UI/BaseUI.h"
+#include "UI/Buildings/RadarUI.h"
+#include "UI/BarracksUI.h"
+#include "UI/Units/BuilderUI.h"
+#include "Base.h"
+#include "Buildings/Barracks.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -30,13 +36,38 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 	MaxZoom = 4000;
 	MinZoom = 500;
 	ZoomRate = 100;
-
+	
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
 	/*selectionArea = CreateDefaultSubobject<UBoxComponent>(TEXT("selectionArea"));
 	selectionArea->SetBoxExtent(FVector(0, 0, 400));*/
 	/*static ConstructorHelpers::FClassFinder<UUserWidget> UserInterfaceBPClass(TEXT("/Game/TopDown/Blueprints/BP_UserInterface"));
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
 	UserInterfaceClass = UserInterfaceBPClass.Class;*/
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> BarracksBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BarracksUI"));
+	if (!ensure(BarracksBPClass.Class != nullptr)) return;
+
+	BarracksUIClass = BarracksBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> BaseBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BaseUI"));
+	if (!ensure(BaseBPClass.Class != nullptr)) return;
+
+	BaseUIClasss = BaseBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> RadarBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_RadarUI"));
+	if (!ensure(RadarBPClass.Class != nullptr)) return;
+
+	RadarUIClass = RadarBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> BuilderBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BuilderUI"));
+	if (!ensure(BuilderBPClass.Class != nullptr)) return;
+
+	BuilderUIClass = BuilderBPClass.Class;
+
+
+
 }
 
 
@@ -46,8 +77,9 @@ void ADecay_of_environmentPlayerController::GetLifetimeReplicatedProps(TArray<FL
 	DOREPLIFETIME(ADecay_of_environmentPlayerController, selectedUnits);
 	DOREPLIFETIME(ADecay_of_environmentPlayerController, targetFound);
 	DOREPLIFETIME(ADecay_of_environmentPlayerController, overseerer);
-	DOREPLIFETIME(ADecay_of_environmentPlayerController, m_Building);
-
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, m_UnBuiltBuilding);
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, BuildingIcon);
+	
 
 
 }
@@ -57,7 +89,10 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 	
 	MousePos = hit.Location;
-
+	if (HUD == nullptr)
+	{
+		HUD = Cast<ATestHUD>(GetHUD());
+	}
 	FVector2D ViewportSize;
 	if (IsLocalController())
 	{
@@ -89,6 +124,34 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 			GetOverseerer();
 		}
 
+		if (overseerer && overseerer->BaseNumber >= 1 && !SpawnedBaseUI)
+		{
+			// spawn UI
+			if (BaseUI && BarracksUI && RadarUI && HUD)
+			{
+				HUD->UserInterface->AddBuildingUI(BaseUI);
+				HUD->UserInterface->AddBuildingUI(BarracksUI);
+				HUD->UserInterface->AddBuildingUI(RadarUI);
+
+				SpawnedBaseUI = true;
+			}
+			else
+			{
+				SpawnedBaseUI = false;
+			}
+		}
+		if (overseerer && overseerer->BarracksNumber >= 1 && !SpawnedBarrackUI)
+		{
+			if (BuilderUI && HUD)
+			{
+				HUD->UserInterface->AddBuildingUI(BuilderUI);
+				SpawnedBarrackUI = true;
+			}
+			else
+			{
+				SpawnedBarrackUI = false;
+			}
+		}
 	}
 	
 	GetHitResultUnderCursor(ECC_Visibility, true, hit);
@@ -127,25 +190,37 @@ void ADecay_of_environmentPlayerController::Server_UpdatePlayerOwner_Implementat
 void ADecay_of_environmentPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	overseerer = GetOverseerer();
+	HUD = Cast<ATestHUD>(GetHUD());
 	Server_UpdatePlayerOwner();
 	
-	/*for (int i = 0; i < UGameplayStatics::GetNumPlayerControllers(GetWorld()); i++)
-	{
-		auto Controller = UGameplayStatics::GetPlayerController(GetWorld(), i);
-		
-	}*/
-	//UE_LOG(LogTemp, Warning, TEXT("Adding player"));
-	//if (!ensure(UserInterfaceClass != nullptr)) return;
-	//UserInterface = CreateWidget<UUserInterface>(this, UserInterfaceClass);
-	//if (!ensure(UserInterface != nullptr)) return;
-
-	//UserInterface->Setup();
+	
 	AbilityManager = Cast<AAbilityManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AAbilityManager::StaticClass()));
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABuilding::StaticClass(), ActorBuildings);
-	for (auto& Building : ActorBuildings)
+	for (AActor* Building : ActorBuildings)
 	{
-		Buildings.Add(Cast<ABuilding>(Building));
+		if (Building->IsA(ABase::StaticClass()))
+		{
+			if (overseerer)
+			{
+				overseerer->BaseNumber++;
+			}
+			Buildings.Add(Cast<ABase>(Building));
+		}
+		if (Building->IsA(ABarracks::StaticClass()))
+		{
+			if (overseerer)
+			{
+				overseerer->BaseNumber++;
+			}
+			Buildings.Add(Cast<ABarracks>(Building));
+		}
 	}
+	BaseUI = CreateWidget<UBaseUI>(this, BaseUIClasss);
+	RadarUI = CreateWidget<URadarUI>(this, RadarUIClass);
+	BarracksUI = CreateWidget<UBarracksUI>(this, BarracksUIClass);
+	BuilderUI = CreateWidget<UBuilderUI>(this, BuilderUIClass);
+
 }
 
 void ADecay_of_environmentPlayerController::SetupInputComponent()
@@ -198,16 +273,39 @@ void ADecay_of_environmentPlayerController::OnSetDestinationReleased()
 {
 	// Player is no longer pressing the input
 	leftMouseDown = false;
+	
 	SelectUnits();
 }
 
 void ADecay_of_environmentPlayerController::CalculateUnitsInsideBox(FVector2D startPos, FVector2D EndPos, TArray<AActor*> SelectedUnits)
 {
 	CorrectedActors.Empty();
+	if (SeletedBuilding != nullptr && SeletedBuilding->Decal != nullptr)
+	{
+		SeletedBuilding->Decal->SetVisibility(false);
+	}
 	FVector2D ModifiedEndPos;
 	if (startPos == EndPos)
 	{
-		ModifiedEndPos = FVector2D(EndPos.X + 10, EndPos.Y + 10);
+		GetHitResultUnderCursor(ECC_Visibility, true, hit);
+		
+		if (hit.GetActor()->IsA(ABuilding::StaticClass()))
+		{
+			ABuilding* Building = Cast<ABuilding>(hit.GetActor());
+			if (Building->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
+			{
+				Server_SelectBuilding(Building);
+				if (Building->Decal != nullptr)
+				{
+					Building->Decal->SetVisibility(true);
+				}
+			}
+		}
+		else
+		{
+			CorrectedActors.Add(hit.GetActor());
+		}
+		return;
 	}
 	else
 	{
@@ -241,6 +339,11 @@ void ADecay_of_environmentPlayerController::CalculateUnitsInsideBox(FVector2D st
 	}
 
 
+}
+
+void ADecay_of_environmentPlayerController::singleClick(AActor* actor)
+{
+	CorrectedActors.Add(actor);
 }
 
 FVector2D ADecay_of_environmentPlayerController::P2minusP1(FVector2D p1, FVector2D p2)
@@ -425,9 +528,9 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 	{
 		c->Decal->SetVisibility(false);
 	}
+	
 	selectedUnits.Empty();
 	//selectionArea->GetOverlappingActors(actors);
-	ATestHUD* HUD = Cast<ATestHUD>(GetHUD());
 	actors = CorrectedActors;
 	if (actors.Num() > 0)
 	{
@@ -456,6 +559,11 @@ void ADecay_of_environmentPlayerController::Server_SelectUnits_Implementation(AD
 	selectedUnits.Add(_character);
 }
 
+
+void ADecay_of_environmentPlayerController::Server_SelectBuilding_Implementation(ABuilding* _Building)
+{
+	SeletedBuilding = _Building;
+}
 
 void ADecay_of_environmentPlayerController::MoveUnits_Implementation(FVector loc)
 {
@@ -550,20 +658,22 @@ void ADecay_of_environmentPlayerController::ZoomOut()
 	}
 }
 
-void ADecay_of_environmentPlayerController::SpawnBuilding()
+void ADecay_of_environmentPlayerController::SpawnBuilding_Implementation(TSubclassOf<ABuildingIcon> IconToSpawn)
 {
-
-	if (GetOverseerer()->statistics.ComponentsValue >= 10)
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		FVector Location;
-		Location = MousePos;
-		//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-		FRotator Rotation = { 0,0,0 };
-		ABuildingIcon* Building = GetWorld()->SpawnActor<ABuildingIcon>(BuildingIconToSpawn, Location, Rotation);
-		/*Building->spawn;*/
-		/*Building->buildingStats.currentHealth = 10.0f;
-		Buildings.Add(Building);*/
-		GetOverseerer()->statistics.ComponentsValue -= 10;
+		if (GetOverseerer()->statistics.ComponentsValue >= 10)
+		{
+			FVector Location;
+			Location = MousePos;
+			//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+			FRotator Rotation = { 0,0,0 };
+			BuildingIcon = GetWorld()->SpawnActor<ABuildingIcon>(IconToSpawn, Location, Rotation);
+			/*Building->spawn;*/
+			/*Building->buildingStats.currentHealth = 10.0f;
+			Buildings.Add(Building);*/
+			GetOverseerer()->statistics.ComponentsValue -= 10;
+		}
 	}
 
 }
@@ -642,25 +752,58 @@ UMissionDataAsset* ADecay_of_environmentPlayerController::GetMissionDataAsset()
 }
 
 
-void ADecay_of_environmentPlayerController::SpawnUnBuiltBuilding(FVector location, FRotator rotation)
+void ADecay_of_environmentPlayerController::SpawnUnBuiltBuilding(FVector location, FRotator rotation, ABuildingIcon* IconToDestroy)
 {
 	
 	Server_SpawnBuilding(location, rotation);
+	Server_DestroyBuildingIcon(IconToDestroy);
 }
+
+void ADecay_of_environmentPlayerController::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation)
+{
+	if (BuildingIcon->BuildingToSpawn != nullptr)
+	{
+		
+		m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingIcon->BuildingToSpawn, location, rotation);
+		m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
+	}
+}
+
+void ADecay_of_environmentPlayerController::Server_DestroyBuildingIcon_Implementation(ABuildingIcon* IconToDestroy)
+{
+	IconToDestroy->Destroy(true);
+}
+
+
 
 void ADecay_of_environmentPlayerController::SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy)
 {
 	Server_SpawnBuiltBuilding(location, rotation);
 	Server_DestroyUnbuiltBuilding(BuildingToDestroy);
 	Multicast_DestroyUnbuiltBuilding(BuildingToDestroy);
+
 }
 
 
 void ADecay_of_environmentPlayerController::Server_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation)
 {
-	m_SpawnBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, location, rotation);
-	m_SpawnBuilding->buildingStats.owner = overseerer->PlayerOwner;
-	Multicast_SpawnBuiltBuilding(location, rotation);
+	if (m_UnBuiltBuilding->BuildingToSpawn != nullptr)
+	{
+		m_Building = GetWorld()->SpawnActor<ABuilding>(m_UnBuiltBuilding->BuildingToSpawn, location, rotation);
+		m_Building->buildingStats.owner = overseerer->PlayerOwner;
+		switch (m_Building->buildingStats.BuildingTypeId)
+		{
+		case 0:
+			overseerer->BaseNumber += 1;
+			break;
+		case 1:
+			overseerer->BarracksNumber += 1;
+			break;
+		default:
+			break;
+		}
+		Multicast_SpawnBuiltBuilding(location, rotation);
+	}
 }
 
 void ADecay_of_environmentPlayerController::Server_DestroyUnbuiltBuilding_Implementation(AUnbuiltBuilding* BuildingToDestroy)
@@ -670,8 +813,11 @@ void ADecay_of_environmentPlayerController::Server_DestroyUnbuiltBuilding_Implem
 
 void ADecay_of_environmentPlayerController::Multicast_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation)
 {
-	m_SpawnBuilding = GetWorld()->SpawnActor<ABuilding>(BuildingToSpawn, location, rotation);
-	m_SpawnBuilding->buildingStats.owner = overseerer->PlayerOwner;
+	if (m_UnBuiltBuilding->BuildingToSpawn != nullptr)
+	{
+		m_Building = GetWorld()->SpawnActor<ABuilding>(m_UnBuiltBuilding->BuildingToSpawn, location, rotation);
+		m_Building->buildingStats.owner = overseerer->PlayerOwner;
+	}
 
 }
 
@@ -680,18 +826,12 @@ void ADecay_of_environmentPlayerController::Multicast_DestroyUnbuiltBuilding_Imp
 	BuildingToDestroy->Destroy(true);
 }
 
-void ADecay_of_environmentPlayerController::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-{
-	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
-	m_Building->buildingStats.owner = overseerer->PlayerOwner;
 
-
-}
 
 void ADecay_of_environmentPlayerController::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation)
 {
-	m_Building = GetWorld()->SpawnActor<AUnbuiltBuilding>(UnbuiltBuildingToSpawn, location, rotation);
-	m_Building->buildingStats.owner = overseerer->PlayerOwner;
+	m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingIcon->BuildingToSpawn, location, rotation);
+	m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
 }
 
 

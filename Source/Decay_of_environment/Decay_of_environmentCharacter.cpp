@@ -20,6 +20,7 @@
 #include "Decay_of_environmentPlayerController.h"
 #include "MissionDataAsset.h"
 #include "GameFramework/PlayerState.h"
+#include <Delegates/Delegate.h>
 
 ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 {
@@ -43,7 +44,8 @@ ADecay_of_environmentCharacter::ADecay_of_environmentCharacter()
 	stats.Energy = 10;
 
 	bReplicates = true;
-	
+
+
 }
 
 
@@ -63,6 +65,7 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 	CollisionSphere = Cast<USphereComponent>(GetComponentByClass(USphereComponent::StaticClass()));
+	
 	CollisionSphere->SetSphereRadius(stats.AttackRange);
 	if (m_PlayerController == nullptr)
 	{
@@ -91,6 +94,8 @@ void ADecay_of_environmentCharacter::Tick(float DeltaSeconds)
 void ADecay_of_environmentCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 	//TODO REMOVE AND PLACE IN A CHaRAcTER CONTROLLER
 	
 	SetupMissionWaypoints();
@@ -99,6 +104,12 @@ void ADecay_of_environmentCharacter::BeginPlay()
 	
 	Decal = Cast<UDecalComponent>(GetComponentByClass(UDecalComponent::StaticClass()));
 	
+}
+
+void ADecay_of_environmentCharacter::OnClick(AActor* TouchedActor, FKey ButtonPressed)
+{
+	ADecay_of_environmentPlayerController* playercontroller = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstLocalPlayerFromController());
+	playercontroller->singleClick(TouchedActor);
 }
 
 void ADecay_of_environmentCharacter::SetupMissionWaypoints()

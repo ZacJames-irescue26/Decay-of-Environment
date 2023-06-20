@@ -186,9 +186,9 @@ void ABuildingIcon::Tick(float DeltaTime)
 					IsPlaced = true;
 					FVector location = GetActorLocation();
 					FRotator rotation = GetActorRotation();
-					PlayerController->SpawnUnBuiltBuilding(location, rotation);
+					PlayerController->SpawnUnBuiltBuilding(location, rotation, this);
 				
-					Destroy(true);
+					//Destroy(true);
 				}
 
 

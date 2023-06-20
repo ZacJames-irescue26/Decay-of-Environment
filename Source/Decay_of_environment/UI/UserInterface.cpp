@@ -8,6 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Overseerer.h"
 #include "MissionWidget.h"
+#include "BuildingUI.h"
+#include "Components/VerticalBox.h"
 
 
 
@@ -17,6 +19,12 @@ UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
 	if (!ensure(MissionBPClass.Class != nullptr)) return;
 
 	MissionClass = MissionBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> BuildingBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BuildingUI"));
+	if (!ensure(BuildingBPClass.Class != nullptr)) return;
+
+	BuildingUIClass = BuildingBPClass.Class;
+
 }
 
 bool UUserInterface::Initialize()
@@ -26,10 +34,6 @@ bool UUserInterface::Initialize()
 	World = GetWorld();
 	if (!ensure(World != nullptr)) return false;
 	PlayerController = Cast<ADecay_of_environmentPlayerController>(GetOwningPlayer());
-	if(!ensure(BuildingButton != nullptr)) return false;
-	BuildingButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnBuilding);
-	if (!ensure(UnitButton != nullptr)) return false;
-	UnitButton->OnClicked.AddDynamic(this, &UUserInterface::SpawnUnit);
 	if (!ensure(Ability1 != nullptr)) return false;
 	Ability1->OnClicked.AddDynamic(this, &UUserInterface::Button1);
 	if (!ensure(Ability2 != nullptr)) return false;
@@ -40,13 +44,24 @@ bool UUserInterface::Initialize()
 	UTexture2D* Texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, *Path));
 	AbilityImage->SetVisibility(ESlateVisibility::Visible);
 	AbilityImage->SetBrushFromTexture(Texture);
+
+	BuildingUI = CreateWidget<UBuildingUI>(GetWorld(), BuildingUIClass);
+	
 	return true;
 }
-
-void UUserInterface::SpawnBuilding()
+void UUserInterface::AddBuildingUI(UUserWidget* UIToAdd)
 {
-	PlayerController->SpawnBuilding();
+	int count = VerticleBoxLeft->GetChildrenCount() + VerticleBoxRight->GetChildrenCount();
+	if (count % 2 == 0)
+	{
+		VerticleBoxLeft->AddChildToVerticalBox(UIToAdd);
+	}
+	else
+	{
+		VerticleBoxRight->AddChildToVerticalBox(UIToAdd);
+	}
 }
+
 
 void UUserInterface::SwitchAbilities(UWidget* Widget)
 {
@@ -136,12 +151,6 @@ void UUserInterface::Mission()
 }
 
 
-
-void UUserInterface::SpawnUnit()
-{
-	PlayerController->SpawnUnit();
-}
-
 void UUserInterface::Button1()
 {
 	switch (AbilitySwitcher->GetActiveWidgetIndex())
@@ -149,7 +158,7 @@ void UUserInterface::Button1()
 	case 0:
 		break;
 	case 1:
-		PlayerController->Shield();
+		//PlayerController->Shield();
 		break;
 	default:
 		break;

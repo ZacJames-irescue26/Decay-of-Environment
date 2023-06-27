@@ -59,9 +59,14 @@ void AUnbuiltBuilding::PauseTimer()
 }
 
 
+void AUnbuiltBuilding::Server_SpawnBuilding_Implementation()
+{
+	ADecay_of_environmentPlayerController* Controller = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
+	Controller->SpawnBuiltBuilding(this->GetActorLocation(), this->GetActorRotation(), this);
+}
+
 void AUnbuiltBuilding::SpawnBuilding()
 {
-	AActor* BuildingOwner = this->GetOwner();
 	CurrentTime++;
 	if (buildingStats.currentHealth < buildingStats.maxHealth)
 	{
@@ -70,7 +75,7 @@ void AUnbuiltBuilding::SpawnBuilding()
 	
 	if (BuildingToSpawn && CurrentTime >= BuildTimer)
 	{
-		PlayerController->SpawnBuiltBuilding(this->GetActorLocation(), this->GetActorRotation(), this);
+		Server_SpawnBuilding();
 	}
 }
 

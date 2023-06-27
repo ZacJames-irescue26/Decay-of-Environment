@@ -38,16 +38,26 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	void Test();
+	class ADOEPlayerState* GetState();
+	int GetPlayerID();
+	void GetStateByOwner(int _owner, class ADOEPlayerState*& OutState );
+	bool IsCurrentPlayer(int PlayerID);
 	UFUNCTION(Server, Reliable)
 	void MoveUnits(FVector loc);
 	AOverseerer* GetOverseerer();
 	TArray<ADecay_of_environmentCharacter*>& GetUnitsArray() {return selectedUnits;};
-	
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Client, Reliable)
+	void BuildingUI();
+	//UFUNCTION(Server, Reliable)
 	void SpawnBuilding(TSubclassOf<class ABuildingIcon> IconToSpawn);
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_SpawnBuildingIcon(ABuildingIcon* Icon);
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnBuildingIcon(FVector location, FRotator rotation, TSubclassOf<ABuildingIcon> Icon);
 	UFUNCTION(Server, Reliable)
 	void Server_DestroyBuildingIcon(ABuildingIcon* IconToDestroy);
-	void SpawnUnit();
+	UFUNCTION(Server, Reliable)
+	void SpawnUnit(TSubclassOf<ADecay_of_environmentCharacter> CharacterToSpawn);
 	void SelectUnits();
 	void AttackTarget(IDamagableInterface* target);
 	void GatherResources(IResourceInterface* res);
@@ -61,20 +71,31 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_SelectBuilding(class ABuilding* _Building);
 	UFUNCTION(Server, Reliable)
-	void Server_SpawnBuilding(FVector location, FRotator rotation);
+	void Server_SpawnBuilding(FVector location, FRotator rotation, ABuildingIcon* Icon);
+
 	UFUNCTION(NetMulticast, Reliable)
-	void Multicast_SpawnBuilding(FVector location, FRotator rotation);
-	
+	void Multicast_SpawnBuilding(FVector location, FRotator rotation, ABuildingIcon* IconToDestroy);
+	/*UFUNCTION(NetMulticast, Reliable)
+	void Multicast_SpawnBuilding(FVector location, FRotator rotation);*/
+	UFUNCTION(Server, Reliable)
 	void SpawnUnBuiltBuilding(FVector location, FRotator rotation, class ABuildingIcon* IconToDestroy);
+	UFUNCTION(Server, Reliable)
 	void SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy);
 	UFUNCTION(Server, Reliable)
-	void Server_SpawnBuiltBuilding(FVector location, FRotator rotation);
+	void Client_NumOfBuildings(ABuilding* Building);
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* Building);
 	UFUNCTION(Server, Reliable)
 	void Server_DestroyUnbuiltBuilding(AUnbuiltBuilding* BuildingToDestroy);
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_SpawnBuiltBuilding(FVector location, FRotator rotation);
+	UFUNCTION(Client, Reliable)
+	void Client_SpawnBuildBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy);
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_DestroyUnbuiltBuilding(AUnbuiltBuilding* BuildingToDestroy);
+	void Build(class AUnbuiltBuilding* Building);
+	UFUNCTION(Server, Reliable)
+	void Server_Build(AUnbuiltBuilding* Building, ADecay_of_environmentCharacter* c);
 	void Shield();
 	void DashAbility();
 	UMissionDataAsset* GetMissionDataAsset();
@@ -98,6 +119,8 @@ protected:
 
 	// Begin PlayerController interface
 	virtual void PlayerTick(float DeltaTime) override;
+
+
 	UFUNCTION(Server, Reliable)
 	void Server_UpdatePlayerOwner();
 	virtual void BeginPlay() override;
@@ -110,15 +133,16 @@ protected:
 	void OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void OnTouchReleased(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void Moveattack();
+	UFUNCTION(Client, Reliable)
 	void RightClick();
 	void RightClickReleased();
 
 
-	void Build(class AUnbuiltBuilding* Building);
 	ITeamInterface* GetTeam(AActor* other);
 	IResourceInterface* GetResource(AActor* other);
 	void ZoomIn();
 	void ZoomOut();
+	
 	IDamagableInterface* GetDamagable(AActor* other);
 
 	void Button1();
@@ -140,7 +164,7 @@ private:
 
 	UBoxComponent* selectionArea;
 	FVector selectionSize;
-	UPROPERTY(Replicated)
+	//UPROPERTY(Replicated)
 	AOverseerer* overseerer;
 	FVector mouseStart;
 	FVector mouseEnd;
@@ -154,7 +178,8 @@ private:
 	TMap<int, TArray<ADecay_of_environmentCharacter*>> ControlGroupMap;
 	UPROPERTY(Replicated)
 	TArray<ADecay_of_environmentCharacter*> selectedUnits;
-	ABuilding* SeletedBuilding;
+	UPROPERTY(Replicated)
+	TArray<ABuilding*> SeletedBuildings;
 	TSubclassOf<UUserWidget> characterUItemplate;
 	UCharacterDetails* characterUI;
 
@@ -182,21 +207,15 @@ public:
 	class AUnbuiltBuilding* m_UnBuiltBuilding;
 	class ABuilding* m_Building;
 	TArray<AActor*> CorrectedActors;
-	bool SpawnedBaseUI = false;
-	bool SpawnedBarrackUI = false;
 
-	TSubclassOf<class UBarracksUI> BarracksUIClass;
-	UBarracksUI* BarracksUI;
-	TSubclassOf<class UBaseUI> BaseUIClasss;
-	UBaseUI* BaseUI;
-	TSubclassOf<class URadarUI> RadarUIClass;
-	URadarUI* RadarUI;
-	TSubclassOf<class UBuilderUI> BuilderUIClass;
-	UBuilderUI* BuilderUI;
+
+	
 	class ATestHUD* HUD;
-	UPROPERTY(Replicated)
+	//UPROPERTY(Replicated)
+	TMap<ABuildingIcon*, class AOverseerer*> Server_BuildingIconQueue;
+	//UPROPERTY(Replicated)
 	ABuildingIcon* BuildingIcon;
-
+	//TSharedPtr Server_BuildIcon;
 
 };
 

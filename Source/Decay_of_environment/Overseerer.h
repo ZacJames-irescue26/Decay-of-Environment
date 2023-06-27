@@ -16,7 +16,7 @@ struct FStatistics
 public:
 	UPROPERTY(EditAnywhere)
 	int32 ComponentsValue = 100;
-	
+
 	int32 UnitsKilled = 0;
 	int32 SpecialUnitsKilled = 0;
 	int32 ProtectObjectivesDestroyed = 0;

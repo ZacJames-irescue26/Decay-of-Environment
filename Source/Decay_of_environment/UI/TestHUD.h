@@ -33,4 +33,8 @@ public:
 	double StartY;
 	TSubclassOf<ADecay_of_environmentCharacter> ActorClass;
 	TArray<AActor*> SelectedActors;
+
+	bool SpawnedBaseUI = false;
+	bool SpawnedBarrackUI = false;
+	class AOverseerer* overseeer;
 };

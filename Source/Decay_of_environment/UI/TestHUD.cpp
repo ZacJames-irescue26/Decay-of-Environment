@@ -3,7 +3,10 @@
 
 #include "TestHUD.h"
 #include "UserInterface.h"
+#include "Decay_of_environment/DOEPlayerState.h"
 #include <UObject/ConstructorHelpers.h>
+
+
 
 ATestHUD::ATestHUD()
 {
@@ -11,7 +14,7 @@ ATestHUD::ATestHUD()
 	if (!ensure(UserInterfaceBPClass.Class != nullptr)) return;
 
 	UserInterfaceClass = UserInterfaceBPClass.Class;
-	
+
 }
 
 void ATestHUD::DrawHUD()
@@ -19,7 +22,7 @@ void ATestHUD::DrawHUD()
 	if (PlayerController == nullptr)
 	{
 		PlayerController = Cast<ADecay_of_environmentPlayerController>(PlayerOwner);
-
+		
 	}
 	if (PlayerController->leftMouseDown)
 	{
@@ -67,6 +70,10 @@ void ATestHUD::BeginPlay()
 	{
 		UserInterface->SetVisibility(ESlateVisibility::Visible);
 	}
+
+	
+	overseeer = PlayerController->GetOverseerer();
+
 }
 
 void ATestHUD::Tick(float DeltaSeconds)
@@ -94,6 +101,18 @@ void ATestHUD::Tick(float DeltaSeconds)
 			}*/
 		}
 
+	}
+	if (PlayerController && PlayerController->GetState() && PlayerController->GetState()->BaseNumber >= 1 && !SpawnedBaseUI)
+	{
+		// spawn UI
+		
+			UserInterface->AddBaseUI();
+			SpawnedBaseUI = true;
+	}
+	if (PlayerController && PlayerController->GetState() && PlayerController->GetState()->BarracksNumber >= 1 && !SpawnedBarrackUI)
+	{
+			UserInterface->AddBarracksUI();
+			SpawnedBarrackUI = true;
 	}
 	
 }

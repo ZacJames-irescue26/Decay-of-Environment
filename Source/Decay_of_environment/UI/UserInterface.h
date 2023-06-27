@@ -36,6 +36,8 @@ public:
 	void UpdateText();
 	void AddBuildingUI(UUserWidget* UIToAdd);
 
+	void AddBaseUI();
+	void AddBarracksUI();
 	void Mission();
 	inline UWidgetSwitcher* GetAbilitySwitcher() { return AbilitySwitcher; }
 
@@ -59,6 +61,7 @@ public:
 protected:
 	virtual bool Initialize() override;
 
+	void CreateWidgets();
 private:
 
 	UPROPERTY(meta = (BindWidget))
@@ -69,12 +72,6 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* UnitScrollBox;
-
-	UPROPERTY(meta = (BindWidget))
-	class UButton* BuildingButton;
-
-	UPROPERTY(meta = (BindWidget))
-	class UButton* UnitButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ComponentsValue;
@@ -108,4 +105,13 @@ private:
 
 	TSubclassOf<class UBuildingUI> BuildingUIClass;
 	UBuildingUI* BuildingUI;
+
+	TSubclassOf<class UBarracksUI> BarracksUIClass;
+	UBarracksUI* BarracksUI;
+	TSubclassOf<class UBaseUI> BaseUIClasss;
+	UBaseUI* BaseUI;
+	TSubclassOf<class URadarUI> RadarUIClass;
+	URadarUI* RadarUI;
+	TSubclassOf<class UBuilderUI> BuilderUIClass;
+	UBuilderUI* BuilderUI;
 };

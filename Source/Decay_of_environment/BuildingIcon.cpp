@@ -96,6 +96,10 @@ void ABuildingIcon::Tick(float DeltaTime)
 		UWorld* World = GetWorld();
 		if (!ensure(World != nullptr)) return;
 		ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(World->GetFirstPlayerController());
+		//ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(World->);
+
+		//ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetInstigatorController());
+
 		if (!ensure(PlayerController != nullptr)) return;
 
 		//ACubeTile.GetActorLocation().X
@@ -114,7 +118,7 @@ void ABuildingIcon::Tick(float DeltaTime)
 			{
 				if (PlayerController->leftMouseDown)
 				{
-					
+
 					FVector2D Coner1Grid = FVector2D(GridManager->AlignToGrid(Corner1.X, GridManager->TileHorizontalOffset),
 						GridManager->AlignToGrid(Corner1.Y, GridManager->TileVerticalOffset));
 					FVector2D Coner2Grid = FVector2D(GridManager->AlignToGrid(Corner2.X, GridManager->TileHorizontalOffset),
@@ -186,15 +190,32 @@ void ABuildingIcon::Tick(float DeltaTime)
 					IsPlaced = true;
 					FVector location = GetActorLocation();
 					FRotator rotation = GetActorRotation();
-					PlayerController->SpawnUnBuiltBuilding(location, rotation, this);
-				
-					//Destroy(true);
+					/*for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+					{
+
+						ADecay_of_environmentPlayerController* Controller = Cast<ADecay_of_environmentPlayerController>(Iterator->Get());
+						if (Controller != nullptr)
+						{
+
+							Controller->SpawnUnBuiltBuilding(location, rotation, this);
+							UE_LOG(LogTemp, Warning, TEXT("Called player controller"));
+						}
+					}*/
+					Server_SpawnUnBuiltBuilding_Implementation(location, rotation, this);
+					
+					Destroy(true);
 				}
 
 
 			}
 		}
 	}
+}
+
+void ABuildingIcon::Server_SpawnUnBuiltBuilding_Implementation(FVector location, FRotator rotation, ABuildingIcon* Icon)
+{
+	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetWorld()->GetFirstPlayerController());
+	PlayerController->SpawnUnBuiltBuilding(location, rotation, Icon);
 }
 
 

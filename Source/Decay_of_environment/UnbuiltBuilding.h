@@ -30,6 +30,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void StartTimer();
 	void PauseTimer();
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnBuilding();
 	void SpawnBuilding();
 	UFUNCTION(Server, Reliable)
 	void Server_BuildHealth();

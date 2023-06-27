@@ -99,12 +99,6 @@ void ABaseAI::Tick(float DeltaTime)
 
 }
 
-//void ABaseAI::OnRep_TargetActor()
-//{
-//	UE_LOG(LogTemp, Warning, TEXT("Target Actor modified: %s"), *targetActor->GetName());
-//	AIbehaviour();
-//}
-
 void ABaseAI::AIbehaviour_Implementation()
 {
 	if (currentAction == EActionType::patrol)
@@ -356,13 +350,13 @@ void ABaseAI::AttackMove()
 	}
 }
 
-void ABaseAI::Build(AUnbuiltBuilding* _Building)
+void ABaseAI::Build_Implementation(AUnbuiltBuilding* _Building)
 {
 	SetTargetActor(_Building);
 	currentAction = EActionType::Build;
 }
 
-void ABaseAI::BuildBuilding()
+void ABaseAI::BuildBuilding_Implementation()
 {
 	AUnbuiltBuilding* _Building = Cast<AUnbuiltBuilding>(GetTargetActor());
 	_Building->StartTimer();

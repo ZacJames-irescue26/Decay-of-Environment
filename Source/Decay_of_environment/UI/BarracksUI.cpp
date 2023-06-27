@@ -17,9 +17,11 @@ bool UBarracksUI::Initialize()
 void UBarracksUI::SpawnBarracks()
 {
 	ADecay_of_environmentPlayerController* PlayerController = Cast<ADecay_of_environmentPlayerController>(GetOwningPlayer());
+	
 
 	if (PlayerController != nullptr)
 	{
+		
 		PlayerController->SpawnBuilding(BarracksToSpawn);
 	}
 	else

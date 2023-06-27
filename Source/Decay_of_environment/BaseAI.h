@@ -39,7 +39,9 @@ public:
 	void GetNearbyActors(TArray<AActor*>& actors);
 	void Patrol(FVector Location, AActor* c);
 	void AttackMove();
+	UFUNCTION(NetMulticast, Reliable)
 	void Build(class AUnbuiltBuilding* _Building);
+	UFUNCTION(Server, Reliable)
 	void BuildBuilding();
 	UFUNCTION(Server, Reliable)
 	void DamageTarget();

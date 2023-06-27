@@ -10,6 +10,10 @@
 #include "MissionWidget.h"
 #include "BuildingUI.h"
 #include "Components/VerticalBox.h"
+#include "Decay_of_environment/UI/BaseUI.h"
+#include "Decay_of_environment/UI/Buildings/RadarUI.h"
+#include "Decay_of_environment/UI/BarracksUI.h"
+#include "Decay_of_environment/UI/Units/BuilderUI.h"
 
 
 
@@ -25,6 +29,26 @@ UUserInterface::UUserInterface(const FObjectInitializer& ObjectInitializer)
 
 	BuildingUIClass = BuildingBPClass.Class;
 
+	static ConstructorHelpers::FClassFinder<UUserWidget> BarracksBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BarracksUI"));
+	if (!ensure(BarracksBPClass.Class != nullptr)) return;
+
+	BarracksUIClass = BarracksBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> BaseBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BaseUI"));
+	if (!ensure(BaseBPClass.Class != nullptr)) return;
+
+	BaseUIClasss = BaseBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> RadarBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_RadarUI"));
+	if (!ensure(RadarBPClass.Class != nullptr)) return;
+
+	RadarUIClass = RadarBPClass.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> BuilderBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BuilderUI"));
+	if (!ensure(BuilderBPClass.Class != nullptr)) return;
+
+	BuilderUIClass = BuilderBPClass.Class;
+	
 }
 
 bool UUserInterface::Initialize()
@@ -45,23 +69,44 @@ bool UUserInterface::Initialize()
 	AbilityImage->SetVisibility(ESlateVisibility::Visible);
 	AbilityImage->SetBrushFromTexture(Texture);
 
-	BuildingUI = CreateWidget<UBuildingUI>(GetWorld(), BuildingUIClass);
-	
+	CreateWidgets();
 	return true;
 }
+
+void UUserInterface::CreateWidgets()
+{
+	
+	
+}
+
 void UUserInterface::AddBuildingUI(UUserWidget* UIToAdd)
 {
 	int count = VerticleBoxLeft->GetChildrenCount() + VerticleBoxRight->GetChildrenCount();
 	if (count % 2 == 0)
 	{
-		VerticleBoxLeft->AddChildToVerticalBox(UIToAdd);
+		VerticleBoxLeft->AddChild(UIToAdd);
 	}
 	else
 	{
-		VerticleBoxRight->AddChildToVerticalBox(UIToAdd);
+		VerticleBoxRight->AddChild(UIToAdd);
 	}
 }
 
+void UUserInterface::AddBaseUI()
+{
+	BaseUI = CreateWidget<UBaseUI>(this, BaseUIClasss);
+	RadarUI = CreateWidget<URadarUI>(this, RadarUIClass);
+	BarracksUI = CreateWidget<UBarracksUI>(this, BarracksUIClass);
+	AddBuildingUI(BaseUI);
+	AddBuildingUI(BarracksUI);
+	AddBuildingUI(RadarUI);
+}
+
+void UUserInterface::AddBarracksUI()
+{
+	BuilderUI = CreateWidget<UBuilderUI>(this, BuilderUIClass);
+	AddBuildingUI(BuilderUI);
+}
 
 void UUserInterface::SwitchAbilities(UWidget* Widget)
 {

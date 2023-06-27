@@ -27,6 +27,7 @@
 #include "UI/Units/BuilderUI.h"
 #include "Base.h"
 #include "Buildings/Barracks.h"
+#include "GameFramework/GameState.h"
 
 ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 {
@@ -46,25 +47,7 @@ ADecay_of_environmentPlayerController::ADecay_of_environmentPlayerController()
 
 	UserInterfaceClass = UserInterfaceBPClass.Class;*/
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> BarracksBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BarracksUI"));
-	if (!ensure(BarracksBPClass.Class != nullptr)) return;
-
-	BarracksUIClass = BarracksBPClass.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> BaseBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BaseUI"));
-	if (!ensure(BaseBPClass.Class != nullptr)) return;
-
-	BaseUIClasss = BaseBPClass.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> RadarBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_RadarUI"));
-	if (!ensure(RadarBPClass.Class != nullptr)) return;
-
-	RadarUIClass = RadarBPClass.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget> BuilderBPClass(TEXT("/Game/TopDown/Blueprints/UI/BP_BuilderUI"));
-	if (!ensure(BuilderBPClass.Class != nullptr)) return;
-
-	BuilderUIClass = BuilderBPClass.Class;
+	
 
 
 
@@ -75,13 +58,54 @@ void ADecay_of_environmentPlayerController::GetLifetimeReplicatedProps(TArray<FL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ADecay_of_environmentPlayerController, selectedUnits);
+	DOREPLIFETIME(ADecay_of_environmentPlayerController, SeletedBuildings);
 	DOREPLIFETIME(ADecay_of_environmentPlayerController, targetFound);
-	DOREPLIFETIME(ADecay_of_environmentPlayerController, overseerer);
+	//DOREPLIFETIME(ADecay_of_environmentPlayerController, overseerer);
 	DOREPLIFETIME(ADecay_of_environmentPlayerController, m_UnBuiltBuilding);
-	DOREPLIFETIME(ADecay_of_environmentPlayerController, BuildingIcon);
+
+	//DOREPLIFETIME(ADecay_of_environmentPlayerController, Server_BuildingIconQueue);
+	//DOREPLIFETIME(ADecay_of_environmentPlayerController, BuildingIcon);
+
+	
 	
 
 
+}
+
+ADOEPlayerState* ADecay_of_environmentPlayerController::GetState()
+{
+	return GetPlayerState<ADOEPlayerState>();
+}
+
+int ADecay_of_environmentPlayerController::GetPlayerID()
+{
+	return GetState()->GetPlayerId();
+
+}
+
+void ADecay_of_environmentPlayerController::GetStateByOwner(int _owner, class ADOEPlayerState*& OutState)
+{
+	TArray<APlayerState*> Players = GetWorld()->GetGameState()->PlayerArray;
+	
+	for (APlayerState* p : Players)
+	{
+		ADOEPlayerState* state = Cast<ADOEPlayerState>(p);
+		if (state != nullptr && _owner == state->PlayerOwner)
+		{
+			OutState = state;
+			return;
+
+		}
+	}
+}
+
+bool ADecay_of_environmentPlayerController::IsCurrentPlayer(int PlayerID)
+{
+	if (PlayerID == GetPlayerID())
+	{
+		return true;
+	}
+	return false;
 }
 
 void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
@@ -124,35 +148,10 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 			GetOverseerer();
 		}
 
-		if (overseerer && overseerer->BaseNumber >= 1 && !SpawnedBaseUI)
-		{
-			// spawn UI
-			if (BaseUI && BarracksUI && RadarUI && HUD)
-			{
-				HUD->UserInterface->AddBuildingUI(BaseUI);
-				HUD->UserInterface->AddBuildingUI(BarracksUI);
-				HUD->UserInterface->AddBuildingUI(RadarUI);
 
-				SpawnedBaseUI = true;
-			}
-			else
-			{
-				SpawnedBaseUI = false;
-			}
-		}
-		if (overseerer && overseerer->BarracksNumber >= 1 && !SpawnedBarrackUI)
-		{
-			if (BuilderUI && HUD)
-			{
-				HUD->UserInterface->AddBuildingUI(BuilderUI);
-				SpawnedBarrackUI = true;
-			}
-			else
-			{
-				SpawnedBarrackUI = false;
-			}
-		}
 	}
+	BuildingUI();
+	
 	
 	GetHitResultUnderCursor(ECC_Visibility, true, hit);
 	if(leftMouseDown)
@@ -171,6 +170,12 @@ void ADecay_of_environmentPlayerController::PlayerTick(float DeltaTime)
 	}
 
 }
+
+void ADecay_of_environmentPlayerController::BuildingUI_Implementation()
+{
+	
+}
+
 void ADecay_of_environmentPlayerController::Server_UpdatePlayerOwner_Implementation()
 {
 		if (overseerer == nullptr)
@@ -201,26 +206,29 @@ void ADecay_of_environmentPlayerController::BeginPlay()
 	{
 		if (Building->IsA(ABase::StaticClass()))
 		{
-			if (overseerer)
+			if (GetState())
 			{
-				overseerer->BaseNumber++;
+				GetState()->BaseNumber++;
 			}
 			Buildings.Add(Cast<ABase>(Building));
 		}
 		if (Building->IsA(ABarracks::StaticClass()))
 		{
-			if (overseerer)
+			if (GetState())
 			{
-				overseerer->BaseNumber++;
+				GetState()->BaseNumber++;
 			}
 			Buildings.Add(Cast<ABarracks>(Building));
 		}
 	}
-	BaseUI = CreateWidget<UBaseUI>(this, BaseUIClasss);
-	RadarUI = CreateWidget<URadarUI>(this, RadarUIClass);
-	BarracksUI = CreateWidget<UBarracksUI>(this, BarracksUIClass);
-	BuilderUI = CreateWidget<UBuilderUI>(this, BuilderUIClass);
-
+	if (IsLocalController())
+	{
+		
+	}
+	/*if (overseerer)
+	{
+		overseerer->BarracksNumber += 1;
+	}*/
 }
 
 void ADecay_of_environmentPlayerController::SetupInputComponent()
@@ -280,10 +288,14 @@ void ADecay_of_environmentPlayerController::OnSetDestinationReleased()
 void ADecay_of_environmentPlayerController::CalculateUnitsInsideBox(FVector2D startPos, FVector2D EndPos, TArray<AActor*> SelectedUnits)
 {
 	CorrectedActors.Empty();
-	if (SeletedBuilding != nullptr && SeletedBuilding->Decal != nullptr)
+	for (ABuilding* Building : SeletedBuildings)
 	{
-		SeletedBuilding->Decal->SetVisibility(false);
+		if (Building && Building->Decal != nullptr)
+		{
+			Building->Decal->SetVisibility(false);
+		}
 	}
+	SeletedBuildings.Empty();
 	FVector2D ModifiedEndPos;
 	if (startPos == EndPos)
 	{
@@ -446,16 +458,20 @@ void ADecay_of_environmentPlayerController::Build(AUnbuiltBuilding* Building)
 			if (a->IsA(ADecay_of_environmentCharacter::StaticClass()))
 			{
 				ADecay_of_environmentCharacter* c = Cast<ADecay_of_environmentCharacter>(a);
-				ABaseAI* con = Cast<ABaseAI>(c->GetController());
-				con->Build(Building);
+				Server_Build(Building, c);
 			}
 		}
 	}
 
 }
+void ADecay_of_environmentPlayerController::Server_Build_Implementation(AUnbuiltBuilding* Building, ADecay_of_environmentCharacter* c)
+{
+	ABaseAI* con = Cast<ABaseAI>(c->GetController());
+	con->Build(Building);
+}
 
 
-void ADecay_of_environmentPlayerController::RightClick()
+void ADecay_of_environmentPlayerController::RightClick_Implementation()
 {
 	//FHitResult TraceHitResult;
 	RightMouseDown = true;
@@ -526,7 +542,10 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 	TArray<AActor*> actors;
 	for (ADecay_of_environmentCharacter* c : selectedUnits)
 	{
-		c->Decal->SetVisibility(false);
+		if (c && c->Decal != nullptr)
+		{
+			c->Decal->SetVisibility(false);
+		}
 	}
 	
 	selectedUnits.Empty();
@@ -544,7 +563,10 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 					if (character->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
 					{
 						Server_SelectUnits(character);
-						character->Decal->SetVisibility(true);
+						if (character)
+						{
+							character->Decal->SetVisibility(true);
+						}
 					}
 					
 				}
@@ -562,7 +584,7 @@ void ADecay_of_environmentPlayerController::Server_SelectUnits_Implementation(AD
 
 void ADecay_of_environmentPlayerController::Server_SelectBuilding_Implementation(ABuilding* _Building)
 {
-	SeletedBuilding = _Building;
+	SeletedBuildings.Add(_Building);
 }
 
 void ADecay_of_environmentPlayerController::MoveUnits_Implementation(FVector loc)
@@ -657,28 +679,41 @@ void ADecay_of_environmentPlayerController::ZoomOut()
 		GetOverseerer()->GetCameraBoom()->TargetArmLength = MaxZoom;
 	}
 }
-
-void ADecay_of_environmentPlayerController::SpawnBuilding_Implementation(TSubclassOf<ABuildingIcon> IconToSpawn)
+void ADecay_of_environmentPlayerController::Server_SpawnBuildingIcon_Implementation(FVector location, FRotator rotation, TSubclassOf<ABuildingIcon> Icon)
 {
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		if (GetOverseerer()->statistics.ComponentsValue >= 10)
-		{
-			FVector Location;
-			Location = MousePos;
-			//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-			FRotator Rotation = { 0,0,0 };
-			BuildingIcon = GetWorld()->SpawnActor<ABuildingIcon>(IconToSpawn, Location, Rotation);
-			/*Building->spawn;*/
-			/*Building->buildingStats.currentHealth = 10.0f;
-			Buildings.Add(Building);*/
-			GetOverseerer()->statistics.ComponentsValue -= 10;
-		}
-	}
-
+	
+	BuildingIcon = GetWorld()->SpawnActor<ABuildingIcon>(Icon, location, rotation);
+	//Hacked need to fix server side
+	BuildingIcon->IsPlaced = true;
+	BuildingIcon->SetActorHiddenInGame(true);
+	//Server_BuildingIconQueue.FindOrAdd(BuildingIcon, PlayerOverseer);
+	//Multicast_SpawnBuildingIcon(Icon);
 }
 
-void ADecay_of_environmentPlayerController::SpawnUnit()
+void ADecay_of_environmentPlayerController::SpawnBuilding/*_Implementation*/(TSubclassOf<ABuildingIcon> IconToSpawn)
+{
+		//code to only run on clients, will not run in single player / standalone
+		if (GetOverseerer()->statistics.ComponentsValue >= 10)
+		{
+				FVector Location;
+				Location = MousePos;
+				//UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+				FRotator Rotation = { 0,0,0 };
+				BuildingIcon = GetWorld()->SpawnActor<ABuildingIcon>(IconToSpawn, Location, Rotation);
+				/*Building->spawn;*/
+				/*Building->buildingStats.currentHealth = 10.0f;
+				Buildings.Add(Building);*/
+				GetOverseerer()->statistics.ComponentsValue -= 10;
+				Server_SpawnBuildingIcon(Location, Rotation, IconToSpawn);
+		}
+}
+
+void ADecay_of_environmentPlayerController::Multicast_SpawnBuildingIcon_Implementation(ABuildingIcon* Icon)
+{
+	//Server_SpawnBuildingIcon(Icon);
+}
+
+void ADecay_of_environmentPlayerController::SpawnUnit_Implementation(TSubclassOf<ADecay_of_environmentCharacter> CharacterToSpawn)
 {
 	for (auto& Building : Buildings)
 	{
@@ -690,7 +725,8 @@ void ADecay_of_environmentPlayerController::SpawnUnit()
 				Location.X = Location.X + 20;
 				UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
 				FRotator Rotation = { 0,0,0 };
-				GetWorld()->SpawnActor<AActor>(UnitToSpawn, Location, Rotation);
+				ADecay_of_environmentCharacter* unit = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(CharacterToSpawn, Location, Rotation);
+				unit->stats.owner = GetOverseerer()->PlayerOwner;
 				GetOverseerer()->statistics.ComponentsValue -= 10;
 				break;
 
@@ -751,59 +787,130 @@ UMissionDataAsset* ADecay_of_environmentPlayerController::GetMissionDataAsset()
 	return MissionDataAsset;
 }
 
-
-void ADecay_of_environmentPlayerController::SpawnUnBuiltBuilding(FVector location, FRotator rotation, ABuildingIcon* IconToDestroy)
+/*
+* Move to player state
+* 
+* 
+*/
+void ADecay_of_environmentPlayerController::SpawnUnBuiltBuilding_Implementation(FVector location, FRotator rotation, ABuildingIcon* Icon)
 {
-	
-	Server_SpawnBuilding(location, rotation);
-	Server_DestroyBuildingIcon(IconToDestroy);
-}
-
-void ADecay_of_environmentPlayerController::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-{
-	if (BuildingIcon->BuildingToSpawn != nullptr)
+	if (Icon && overseerer && Icon->BuildingToSpawn != nullptr)
 	{
-		
-		m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingIcon->BuildingToSpawn, location, rotation);
-		m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
+
+		/*m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(Icon->BuildingToSpawn, location, rotation);
+		m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;*/
+		Server_SpawnBuilding(location, rotation, Icon);
+		Server_DestroyBuildingIcon(Icon);
 	}
 }
 
+void ADecay_of_environmentPlayerController::Server_SpawnBuilding_Implementation(FVector location, FRotator rotation, ABuildingIcon* Icon)
+{
+	/*for (auto& _Icon : Server_BuildingIconQueue)
+	{*/
+		if (overseerer == nullptr)
+		{
+			GetOverseerer();
+		}
+		if (Icon && overseerer && Icon->BuildingToSpawn != nullptr)
+		{
+			
+			m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(Icon->BuildingToSpawn, location, rotation);
+			m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
+			//Multicast_SpawnBuilding(location, rotation, Icon);
+			Server_DestroyBuildingIcon(Icon);
+		}
+		
+	//}
+}
+
+
+
+
+void ADecay_of_environmentPlayerController::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation, ABuildingIcon* IconToDestroy)
+{
+	/*for (auto& _Icon : Server_BuildingIconQueue)
+	{*/
+		if (IconToDestroy && IconToDestroy->BuildingToSpawn != nullptr)
+		{
+
+			m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(IconToDestroy->BuildingToSpawn, location, rotation);
+			m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
+			//Server_DestroyBuildingIcon(Icon);
+		}
+	//}
+}
 void ADecay_of_environmentPlayerController::Server_DestroyBuildingIcon_Implementation(ABuildingIcon* IconToDestroy)
 {
-	IconToDestroy->Destroy(true);
-}
-
-
-
-void ADecay_of_environmentPlayerController::SpawnBuiltBuilding(FVector location, FRotator rotation, AUnbuiltBuilding* BuildingToDestroy)
-{
-	Server_SpawnBuiltBuilding(location, rotation);
-	Server_DestroyUnbuiltBuilding(BuildingToDestroy);
-	Multicast_DestroyUnbuiltBuilding(BuildingToDestroy);
-
-}
-
-
-void ADecay_of_environmentPlayerController::Server_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation)
-{
-	if (m_UnBuiltBuilding->BuildingToSpawn != nullptr)
+	/*for (auto& _Icon : Server_BuildingIconQueue)
+	{*/
+	if (IconToDestroy)
 	{
-		m_Building = GetWorld()->SpawnActor<ABuilding>(m_UnBuiltBuilding->BuildingToSpawn, location, rotation);
-		m_Building->buildingStats.owner = overseerer->PlayerOwner;
-		switch (m_Building->buildingStats.BuildingTypeId)
-		{
-		case 0:
-			overseerer->BaseNumber += 1;
-			break;
-		case 1:
-			overseerer->BarracksNumber += 1;
-			break;
-		default:
-			break;
-		}
-		Multicast_SpawnBuiltBuilding(location, rotation);
+		IconToDestroy->Destroy(true);
 	}
+	//}
+}
+
+
+
+void ADecay_of_environmentPlayerController::SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation, AUnbuiltBuilding* Building)
+{
+	/*if (Building && Building->BuildingToSpawn != nullptr)
+	{
+		m_Building = GetWorld()->SpawnActor<ABuilding>(Building->BuildingToSpawn, location, rotation);
+		m_Building->buildingStats.owner = overseerer->PlayerOwner;
+	}*/
+	Server_SpawnBuiltBuilding(location, rotation, Building);
+	//Client_SpawnBuildBuilding(location, rotation, Building);
+	Server_DestroyUnbuiltBuilding(Building);
+	//Multicast_DestroyUnbuiltBuilding(Building);
+
+}
+
+void ADecay_of_environmentPlayerController::Client_SpawnBuildBuilding_Implementation(FVector location, FRotator rotation, AUnbuiltBuilding* Building)
+{
+	/*if (Building && Building->BuildingToSpawn != nullptr)
+	{
+		m_Building = GetWorld()->SpawnActor<ABuilding>(Building->BuildingToSpawn, location, rotation);
+		m_Building->buildingStats.owner = overseerer->PlayerOwner;
+	}*/
+}
+
+
+void ADecay_of_environmentPlayerController::Server_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation, AUnbuiltBuilding* Building)
+{
+	if (Building && Building->BuildingToSpawn != nullptr)
+	{
+		m_Building = GetWorld()->SpawnActor<ABuilding>(Building->BuildingToSpawn, location, rotation);
+		m_Building->buildingStats.owner = Building->buildingStats.owner;
+		Client_NumOfBuildings(m_Building);
+		Buildings.Add(m_Building);
+	}
+	//Multicast_SpawnBuiltBuilding(location, rotation);
+}
+void ADecay_of_environmentPlayerController::Client_NumOfBuildings_Implementation(ABuilding* Building)
+{
+	switch (Building->buildingStats.BuildingTypeId)
+	{
+		ADOEPlayerState * state;
+	case 0:
+		GetStateByOwner(Building->buildingStats.owner, state);
+		if (state != nullptr)
+		{
+			state->BaseNumber += 1;
+		}
+		break;
+	case 1:
+		
+		GetStateByOwner(Building->buildingStats.owner, state);
+		if (state != nullptr)
+		{
+			state->BarracksNumber += 1;
+		}
+		break;
+	default:
+		break;
+	};
 }
 
 void ADecay_of_environmentPlayerController::Server_DestroyUnbuiltBuilding_Implementation(AUnbuiltBuilding* BuildingToDestroy)
@@ -813,7 +920,7 @@ void ADecay_of_environmentPlayerController::Server_DestroyUnbuiltBuilding_Implem
 
 void ADecay_of_environmentPlayerController::Multicast_SpawnBuiltBuilding_Implementation(FVector location, FRotator rotation)
 {
-	if (m_UnBuiltBuilding->BuildingToSpawn != nullptr)
+	if (m_UnBuiltBuilding && m_UnBuiltBuilding->BuildingToSpawn != nullptr)
 	{
 		m_Building = GetWorld()->SpawnActor<ABuilding>(m_UnBuiltBuilding->BuildingToSpawn, location, rotation);
 		m_Building->buildingStats.owner = overseerer->PlayerOwner;
@@ -828,10 +935,9 @@ void ADecay_of_environmentPlayerController::Multicast_DestroyUnbuiltBuilding_Imp
 
 
 
-void ADecay_of_environmentPlayerController::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation)
-{
-	m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingIcon->BuildingToSpawn, location, rotation);
-	m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
-}
-
+//void ADecay_of_environmentPlayerController::Multicast_SpawnBuilding_Implementation(FVector location, FRotator rotation)
+//{
+//	m_UnBuiltBuilding = GetWorld()->SpawnActor<AUnbuiltBuilding>(BuildingIcon->BuildingToSpawn, location, rotation);
+//	m_UnBuiltBuilding->buildingStats.owner = overseerer->PlayerOwner;
+//}
 

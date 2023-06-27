@@ -24,6 +24,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(Server, Reliable)
+	void Server_SpawnUnBuiltBuilding(FVector location, FRotator rotation, ABuildingIcon* Icon);
 	UPROPERTY(EditAnywhere)
 	bool IsPlaced = false;
 	class ACubeGridManager* GridManager;

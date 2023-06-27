@@ -14,4 +14,8 @@ void ADOEPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ADOEPlayerState, PlayerOwner);
+	DOREPLIFETIME(ADOEPlayerState, BaseNumber);
+	DOREPLIFETIME(ADOEPlayerState, BarracksNumber);
+
+	
 }

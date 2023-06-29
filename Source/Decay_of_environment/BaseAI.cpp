@@ -12,6 +12,7 @@
 #include "AI/A_star_AIController.h"
 #include "Decay_of_environmentPlayerController.h"
 #include "UnbuiltBuilding.h"
+#include "Misc/App.h"
 
 #define MIN(a,b)(a<b)?(a):(b)
 #define MAX(a,b)(a>b)?(a):(b)
@@ -74,7 +75,13 @@ void ABaseAI::ClientSetTargetActor_Implementation(AActor* val)
 void ABaseAI::MoveAI_Implementation(FVector loc, AActor* a)
 {
 	targetActor = nullptr;
-	MoveToLocation(loc,10.0f);
+	ReachedDestination = false;
+	ADecay_of_environmentCharacter* Agent = GetPawn<ADecay_of_environmentCharacter>();
+	if (Agent)
+	{
+		Agent->Velocity = FVector::ZeroVector;
+	}
+	Destination = loc;
 	currentAction = EActionType::Move;
 	
 	///*MoveToLocation(const FVector & Dest, float AcceptanceRadius, bool bStopOnOverlap, bool bUsePathfinding, bool bProjectDestinationToNavigation,
@@ -91,15 +98,64 @@ void ABaseAI::OnPossess(APawn* InPawn)
 }
 
 
+FVector ABaseAI::Seek(ADecay_of_environmentCharacter* Agent)
+{
+	if (GetTargetActor() != nullptr)
+	{
+		FVector desired = GetTargetActor()->GetActorLocation() - Agent->GetActorLocation();
+		desired = desired * (Agent->MaxSpeed/ desired.Size());
+		FVector force = desired - Agent->Velocity;
+		return force * (Agent->MaxForce / Agent->MaxSpeed);
+	}
+	return FVector::ZeroVector;
+}
+FVector ABaseAI::SeekOnLocation(FVector Location)
+{
+	ADecay_of_environmentCharacter* Agent = GetPawn<ADecay_of_environmentCharacter>();
+	if (Agent)
+	{
+		FVector desired = Location - Agent->GetActorLocation();
+		desired = desired * (Agent->MaxSpeed / desired.Size());
+		FVector force = desired - Agent->Velocity;
+		return force * (Agent->MaxForce / Agent->MaxSpeed);
+	}
+	return FVector::ZeroVector;
+}
+
 void ABaseAI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AIbehaviour();
+	AIbehaviour(DeltaTime);
+	if (!ReachedDestination)
+	{
+		ADecay_of_environmentCharacter* pawn = GetPawn<ADecay_of_environmentCharacter>();
+		if (pawn)
+		{
+			FVector seek = SeekOnLocation(Destination);
+			pawn->Velocity += seek * DeltaTime;
+			float _Speed = pawn->Velocity.Size();
+			if (_Speed > pawn->MaxSpeed)
+			{
+				pawn->Velocity = pawn->Velocity * (4.0f / Speed);
+			}
+			FVector CurrentPos = pawn->GetActorLocation();
+
+			pawn->SetActorLocation(CurrentPos + (pawn->Velocity * DeltaTime));
+		}
+		else if ((pawn->GetActorLocation() - Destination).Size() <= 10.0f)
+		{
+			ReachedDestination = true;
+		}
+		else
+		{
+			ReachedDestination = true;
+		}
+	}
 	
 
 }
 
-void ABaseAI::AIbehaviour_Implementation()
+void ABaseAI::AIbehaviour_Implementation(float DeltaTime)
 {
 	if (currentAction == EActionType::patrol)
 	{
@@ -138,10 +194,29 @@ void ABaseAI::AIbehaviour_Implementation()
 			GetWorld()->GetTimerManager().SetTimer(ActionRate, this, &ABaseAI::CanPerformActions, actionDelay);
 		}
 		else {
-			MoveToActor(GetTargetActor());
+			//MoveToActor(GetTargetActor());
+			if (targetActor)
+			{
+				ADecay_of_environmentCharacter* pawn = GetPawn<ADecay_of_environmentCharacter>();
+				if (pawn)
+				{
+					FVector seek = Seek(GetPawn<ADecay_of_environmentCharacter>());
+					pawn->Velocity += seek * DeltaTime;
+					float _Speed = pawn->Velocity.Size();
+					if (_Speed > pawn->MaxSpeed)
+					{
+						pawn->Velocity = pawn->Velocity * (4.0f/Speed);
+					}
+					FVector CurrentPos = pawn->GetActorLocation();
+
+					pawn->SetActorLocation(CurrentPos + (pawn->Velocity * DeltaTime));
+				}
+			}
 		}
 	}
 }
+
+
 
 void ABaseAI::BeginPlay()
 {

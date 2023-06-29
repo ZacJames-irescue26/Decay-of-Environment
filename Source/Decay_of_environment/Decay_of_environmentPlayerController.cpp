@@ -270,7 +270,10 @@ void ADecay_of_environmentPlayerController::OnSetDestinationPressed()
 	GetMousePosition(MouseStartX, MouseStartY);
 	for (ADecay_of_environmentCharacter* c : selectedUnits)
 	{
-		c->Decal->SetVisibility(false);
+		if (c && c->Decal != nullptr)
+		{
+			c->Decal->SetVisibility(false);
+		}
 	}
 	selectedUnits.Empty();
 	// Just in case the character was moving because of a previous short press we stop it
@@ -563,7 +566,7 @@ void ADecay_of_environmentPlayerController::SelectUnits()
 					if (character->GetPlayerOwner() == GetOverseerer()->GetPlayerOwner())
 					{
 						Server_SelectUnits(character);
-						if (character)
+						if (character && character->Decal)
 						{
 							character->Decal->SetVisibility(true);
 						}
@@ -713,23 +716,26 @@ void ADecay_of_environmentPlayerController::Multicast_SpawnBuildingIcon_Implemen
 	//Server_SpawnBuildingIcon(Icon);
 }
 
-void ADecay_of_environmentPlayerController::SpawnUnit_Implementation(TSubclassOf<ADecay_of_environmentCharacter> CharacterToSpawn)
+void ADecay_of_environmentPlayerController::SpawnUnit_Implementation(TSubclassOf<ADecay_of_environmentCharacter> CharacterToSpawn, ADOEPlayerState* state)
 {
-	for (auto& Building : Buildings)
+	if (state)
 	{
-		if (Building->IsMainBuilding)
+		for (auto& Building : state->OwnedBuildingArray)
 		{
-			if (GetOverseerer()->statistics.ComponentsValue >= 10)
+			if (Building->IsMainBuilding)
 			{
-				FVector Location = Building->GetActorLocation();
-				Location.X = Location.X + 20;
-				UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
-				FRotator Rotation = { 0,0,0 };
-				ADecay_of_environmentCharacter* unit = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(CharacterToSpawn, Location, Rotation);
-				unit->stats.owner = GetOverseerer()->PlayerOwner;
-				GetOverseerer()->statistics.ComponentsValue -= 10;
-				break;
+				if (GetOverseerer()->statistics.ComponentsValue >= 10)
+				{
+					FVector Location = Building->GetActorLocation();
+					Location.X = Location.X + 20;
+					UE_LOG(LogTemp, Warning, TEXT("Spawned at X: %d Y: %d"), Location.X, Location.Y);
+					FRotator Rotation = { 0,0,0 };
+					ADecay_of_environmentCharacter* unit = GetWorld()->SpawnActor<ADecay_of_environmentCharacter>(CharacterToSpawn, Location, Rotation);
+					unit->stats.owner = state->PlayerOwner;
+					GetOverseerer()->statistics.ComponentsValue -= 10;
+					break;
 
+				}
 			}
 		}
 	}
@@ -883,16 +889,18 @@ void ADecay_of_environmentPlayerController::Server_SpawnBuiltBuilding_Implementa
 	{
 		m_Building = GetWorld()->SpawnActor<ABuilding>(Building->BuildingToSpawn, location, rotation);
 		m_Building->buildingStats.owner = Building->buildingStats.owner;
+		m_Building->IsMainBuilding = true;
 		Client_NumOfBuildings(m_Building);
-		Buildings.Add(m_Building);
 	}
 	//Multicast_SpawnBuiltBuilding(location, rotation);
 }
 void ADecay_of_environmentPlayerController::Client_NumOfBuildings_Implementation(ABuilding* Building)
 {
+	ADOEPlayerState* state;
+	GetStateByOwner(Building->buildingStats.owner, state);
+	state->OwnedBuildingArray.Add(Building);
 	switch (Building->buildingStats.BuildingTypeId)
 	{
-		ADOEPlayerState * state;
 	case 0:
 		GetStateByOwner(Building->buildingStats.owner, state);
 		if (state != nullptr)

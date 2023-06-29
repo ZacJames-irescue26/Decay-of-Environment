@@ -57,7 +57,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_DestroyBuildingIcon(ABuildingIcon* IconToDestroy);
 	UFUNCTION(Server, Reliable)
-	void SpawnUnit(TSubclassOf<ADecay_of_environmentCharacter> CharacterToSpawn);
+	void SpawnUnit(TSubclassOf<ADecay_of_environmentCharacter> CharacterToSpawn, ADOEPlayerState* state);
 	void SelectUnits();
 	void AttackTarget(IDamagableInterface* target);
 	void GatherResources(IResourceInterface* res);

@@ -23,7 +23,7 @@ void UBuilderUI::SpawnBuilder()
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->SpawnUnit(BuilderToSpawn);
+		PlayerController->SpawnUnit(BuilderToSpawn, PlayerController->GetState());
 	}
 	else
 	{

@@ -38,6 +38,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ABuilding> BuildingToSpawn;
 private:
+	UPROPERTY(EditAnywhere)
 	float BuildTimer = 100.0f;
 	float CurrentTime = 0.0f;
 	FTimerHandle BuildTimerhandle;

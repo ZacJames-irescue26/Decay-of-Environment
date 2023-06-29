@@ -50,5 +50,10 @@ public:
 	int BaseNumber = 1;
 	UPROPERTY(EditAnywhere, Replicated)
 	int BarracksNumber = 0;
+	UPROPERTY(VisibleAnywhere, Replicated)
+	TArray<class ABuilding*> OwnedBuildingArray;
+	UPROPERTY(VisibleAnywhere, Replicated)
+	TArray<class ADecay_of_environmentCharacter*> OwnedUnitArray;
+
 
 };

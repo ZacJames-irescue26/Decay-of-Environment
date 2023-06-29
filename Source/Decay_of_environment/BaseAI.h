@@ -29,7 +29,7 @@ public:
 	//UFUNCTION()
 	//void OnRep_TargetActor();
 	UFUNCTION(NetMulticast, Reliable)
-	void AIbehaviour();
+	void AIbehaviour(float DeltaTime);
 
 	virtual void BeginPlay() override;
 	const FString EnumToString(const TCHAR* Enum, int32 EnumValue);
@@ -61,6 +61,12 @@ public:
 	void CanMove();
 	bool Canmove = false;
 	virtual void OnPossess(APawn* InPawn) override;
+
+
+	/*****Behivours*********/
+	FVector Seek(ADecay_of_environmentCharacter* Agent);
+	FVector SeekOnLocation(FVector Location);
+
 
 private:
 	ACubeGridManager* GridManager;
@@ -94,5 +100,11 @@ private:
 	void CanPerformActions();
 
 	bool Building = false;
-	
+
+	//FRotator Rotation = 0;
+	FVector Velocity = FVector::ZeroVector;
+	float MaxForce = 100;
+	float MaxSpeed = 100;
+	bool ReachedDestination = true;
+	FVector Destination;
 };

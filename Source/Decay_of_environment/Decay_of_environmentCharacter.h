@@ -80,6 +80,17 @@ public:
 	FTimerHandle ActionRate;
 	float actionDelay = 0.5f;
 	class ADecay_of_environmentPlayerController* m_PlayerController;
-	
+
+	/******Animations***********/
+	UPROPERTY(EditAnywhere)
+	class UBlendSpace1D* UnitWalkBlendSpace;
+	UPROPERTY(EditAnywhere)
+	class UAnimSequence* UnitIdleAnimSequence;
+
+	FVector Velocity = FVector::ZeroVector;
+	UPROPERTY(EditAnywhere)
+	float MaxForce = 1000;
+	UPROPERTY(EditAnywhere)
+	float MaxSpeed = 1000;
 };
 
